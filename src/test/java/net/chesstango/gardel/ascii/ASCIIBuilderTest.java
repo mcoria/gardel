@@ -28,7 +28,7 @@ public class ASCIIBuilderTest {
     }
 
     @Test
-    public void testGetPiecePlacement() {
+    public void testPrintPiecePlacement() {
         // Expected
         final ByteArrayOutputStream baosExp = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baosExp)) {
@@ -58,18 +58,18 @@ public class ASCIIBuilderTest {
 
         final ByteArrayOutputStream baosActual = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baosActual)) {
-            builder.getPiecePlacement(ps);
+            builder.printPiecePlacement(ps);
         }
 
         assertEquals(baosExp.toString(), baosActual.toString());
     }
 
     @Test
-    public void testGetState() {
+    public void testPrintFEN() {
         // Expected
         final ByteArrayOutputStream baosExp = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baosExp)) {
-            ps.println("Turn: WHITE , enPassantSquare: - , castlingWhiteQueenAllowed: true, castlingWhiteKingAllowed: true, castlingBlackQueenAllowed: true, castlingBlackKingAllowed: true");
+            ps.println("FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
             ps.flush();
         }
 
@@ -78,7 +78,7 @@ public class ASCIIBuilderTest {
 
         final ByteArrayOutputStream baosActual = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baosActual)) {
-            builder.getState(ps);
+            builder.printFEN(ps);
         }
 
         assertEquals(baosExp.toString(), baosActual.toString());
@@ -107,7 +107,7 @@ public class ASCIIBuilderTest {
             ps.println("1| R | N | B | Q | K | B | N | R |");
             ps.println("  -------------------------------");
             ps.println("   a   b   c   d   e   f   g   h");
-            ps.println("Turn: WHITE , enPassantSquare: - , castlingWhiteQueenAllowed: true, castlingWhiteKingAllowed: true, castlingBlackQueenAllowed: true, castlingBlackKingAllowed: true");
+            ps.println("FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
             ps.flush();
         }
 
@@ -142,7 +142,7 @@ public class ASCIIBuilderTest {
             ps.println("1| R |   |   | Q | K | B |   | R |");
             ps.println("  -------------------------------");
             ps.println("   a   b   c   d   e   f   g   h");
-            ps.println("Turn: WHITE , enPassantSquare: b6, castlingWhiteQueenAllowed: true, castlingWhiteKingAllowed: true, castlingBlackQueenAllowed: true, castlingBlackKingAllowed: true");
+            ps.println("FEN: rnbqkb1r/5ppp/p2ppn2/1p6/3NP3/2N1BP2/PPP3PP/R2QKB1R w KQkq b6 0 8");
             ps.flush();
         }
 
@@ -153,5 +153,6 @@ public class ASCIIBuilderTest {
 
         assertEquals(baosExp.toString(), stringRepresentation);
     }
+
 
 }

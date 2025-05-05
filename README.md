@@ -9,24 +9,73 @@ A lightweight Java library for encoding and decoding common chess notations, inc
 - **PGN**: Encode and decode Portable Game Notation, a standard format for recording chess games.
 - **SAN**: Encode and decode Standard Algebraic Notation, a notation for describing chess moves.
 
+## Prerequisites
+
+- **Java 21** or higher
+- **Maven** or **Gradle** for dependency management (optional)
+
+## Installation
+
+To use **gardel** in your project, add the dependency to your `pom.xml` (for Maven) or `build.gradle` (for Gradle).
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>net.chesstango</groupId>
+    <artifactId>gardel</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+
+### Gradle
+
+```groovy
+implementation 'net.chesstango:gardel:1.0.1'
+```
 
 ## Usage
 
-Documentation and usage examples are coming soon.
+### FEN
 
-## License
-
-This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.
+   ```
+    ...
+    ASCIIBuilder asciiBuilder = new ASCIIBuilder();
+    
+    FEN.of("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+            .export(asciiBuilder);
+    
+    String position = asciiBuilder.getPositionRepresentation();
+    
+    System.out.println(position);
+   ```
+Result:
+   ```
+      -------------------------------
+    8| r | n | b | q | k | b | n | r |
+      -------------------------------
+    7| p | p | p | p | p | p | p | p |
+      -------------------------------
+    6|   |   |   |   |   |   |   |   |
+      -------------------------------
+    5|   |   |   |   |   |   |   |   |
+      -------------------------------
+    4|   |   |   |   |   |   |   |   |
+      -------------------------------
+    3|   |   |   |   |   |   |   |   |
+      -------------------------------
+    2| P | P | P | P | P | P | P | P |
+      -------------------------------
+    1| R | N | B | Q | K | B | N | R |
+      -------------------------------
+       a   b   c   d   e   f   g   h
+    FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+   ```
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Project Links
+## License
 
-- [GitHub Repository](https://github.com/mcoria/gardel)
-- [Issue Tracker](https://github.com/mcoria/gardel/issues)
-
-## Acknowledgments
-
-Special thanks to all contributors who help improve this library.
+This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.
