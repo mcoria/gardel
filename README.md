@@ -9,6 +9,9 @@ A lightweight Java library for encoding and decoding common chess notations, inc
 - **PGN**: Encode and decode Portable Game Notation, a standard format for recording chess games.
 - **SAN**: Encode and decode Standard Algebraic Notation, a notation for describing chess moves.
 
+This library is designed to be non-intrusive, you can plug it into your existing chess engine or GUI without modifying your codebase.
+
+
 ## Prerequisites
 
 - **Java 21** or higher
@@ -38,15 +41,22 @@ implementation 'net.chesstango:gardel:1.0.1'
 
 ### FEN
 
+**FEN.of()** creates a FEN object from a string. Once you have a FEN object, you can export it using a **PositionBuilder**.
+
+#### ASCIIBuilder
    ```
     ...
+    FEN fen = FEN.of("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+
+    // ACSIIBuilder is a class that implements the PositionBuilder interface
     ASCIIBuilder asciiBuilder = new ASCIIBuilder();
-    
-    FEN.of("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-            .export(asciiBuilder);
-    
+
+    // Export FEN to the ASCII builder
+    fen.export(asciiBuilder);
+
+    // Get the ASCII representation of the position
     String position = asciiBuilder.getPositionRepresentation();
-    
+
     System.out.println(position);
    ```
 Result:
@@ -70,6 +80,47 @@ Result:
       -------------------------------
        a   b   c   d   e   f   g   h
     FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+   ```
+
+#### MirrorPositionBuilder
+   ```
+    ...
+    FEN fen = FEN.of("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+
+    ASCIIBuilder asciiBuilder = new ASCIIBuilder();
+
+    // MirrorPositionBuilder is a PositionBuilder that mirrors the position and wraps another PositionBuilder.
+    MirrorPositionBuilder<String> mirrorPositionBuilder = new MirrorPositionBuilder<>(asciiBuilder);
+
+    // Export FEN to the mirror position builder
+    fen.export(mirrorPositionBuilder);
+
+    // Get the ASCII representation of the position, but mirrored.
+    String position = asciiBuilder.getPositionRepresentation();
+
+    System.out.println(position);
+   ```
+Result:
+   ```
+      -------------------------------
+    8| R | N | B | Q | K | B | N | R |
+      -------------------------------
+    7| P | P | P | P | P | P | P | P |
+      -------------------------------
+    6|   |   |   |   |   |   |   |   |
+      -------------------------------
+    5|   |   |   |   |   |   |   |   |
+      -------------------------------
+    4|   |   |   |   |   |   |   |   |
+      -------------------------------
+    3|   |   |   |   |   |   |   |   |
+      -------------------------------
+    2| p | p | p | p | p | p | p | p |
+      -------------------------------
+    1| r | n | b | q | k | b | n | r |
+      -------------------------------
+       a   b   c   d   e   f   g   h
+    FEN: RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr b KQkq - 0 1
    ```
 
 ## Contributing
