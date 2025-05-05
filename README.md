@@ -12,7 +12,7 @@ A lightweight Java library for encoding and decoding common chess notations, inc
 
 ## Usage
 
-Documentation and usage examples coming soon.
+Documentation and usage examples are coming soon.
 
 ## License
 
@@ -21,10 +21,6 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Authors
-
-- **Mauricio Coria** - *Initial work* - [mcoria](https://github.com/mcoria)
 
 ## Project Links
 
