@@ -5,7 +5,6 @@ package net.chesstango.gardel;
  */
 public abstract class AbstractPositionBuilder<T> implements PositionBuilder<T> {
     protected boolean whiteTurn;
-    protected long enPassantSquare;
     protected boolean castlingBlackKingAllowed;
     protected boolean castlingBlackQueenAllowed;
     protected boolean castlingWhiteKingAllowed;
@@ -13,6 +12,7 @@ public abstract class AbstractPositionBuilder<T> implements PositionBuilder<T> {
     protected int halfMoveClock;
     protected int fullMoveClock;
 
+    protected long enPassantSquare = 0;
     protected long whitePositions = 0;
     protected long blackPositions = 0;
     protected long kingPositions = 0;
