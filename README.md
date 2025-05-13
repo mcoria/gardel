@@ -85,42 +85,15 @@ Result:
 #### MirrorPositionBuilder
    ```
     ...
-    FEN fen = FEN.of("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    FEN fen = FEN.of("4rr1k/pppb2bp/2q1n1p1/4p3/8/1BPPBN2/PP2QPP1/2KR3R w - - 8 20");
 
-    ASCIIBuilder asciiBuilder = new ASCIIBuilder();
+    MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENBuilder());
 
-    // MirrorPositionBuilder is a PositionBuilder that mirrors the position and wraps another PositionBuilder.
-    MirrorPositionBuilder<String> mirrorPositionBuilder = new MirrorPositionBuilder<>(asciiBuilder);
+    fen.export(mirrorChessPositionBuilder);
 
-    // Export FEN to the mirror position builder
-    fen.export(mirrorPositionBuilder);
+    FEN fenMirror = mirrorChessPositionBuilder.getPositionRepresentation();
 
-    // Get the ASCII representation of the position, but mirrored.
-    String position = asciiBuilder.getPositionRepresentation();
-
-    System.out.println(position);
-   ```
-Result:
-   ```
-      -------------------------------
-    8| R | N | B | Q | K | B | N | R |
-      -------------------------------
-    7| P | P | P | P | P | P | P | P |
-      -------------------------------
-    6|   |   |   |   |   |   |   |   |
-      -------------------------------
-    5|   |   |   |   |   |   |   |   |
-      -------------------------------
-    4|   |   |   |   |   |   |   |   |
-      -------------------------------
-    3|   |   |   |   |   |   |   |   |
-      -------------------------------
-    2| p | p | p | p | p | p | p | p |
-      -------------------------------
-    1| r | n | b | q | k | b | n | r |
-      -------------------------------
-       a   b   c   d   e   f   g   h
-    FEN: RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr b KQkq - 0 1
+    assertEquals("2kr3r/pp2qpp1/1bppbn2/8/4P3/2Q1N1P1/PPPB2BP/4RR1K b - - 8 20", fenMirror.toString());
    ```
 
 ## Contributing

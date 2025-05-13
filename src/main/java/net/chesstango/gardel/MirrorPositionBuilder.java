@@ -19,73 +19,73 @@ public class MirrorPositionBuilder<T> implements PositionBuilder<T> {
 
     @Override
     public MirrorPositionBuilder<T> withWhiteKing(int file, int rank) {
-        positionBuilder.withWhiteKing(file, 7 - rank);
-        return this;
-    }
-
-    @Override
-    public MirrorPositionBuilder<T> withWhiteQueen(int file, int rank) {
-        positionBuilder.withWhiteQueen(file, 7 - rank);
-        return this;
-    }
-
-    @Override
-    public MirrorPositionBuilder<T> withWhiteRook(int file, int rank) {
-        positionBuilder.withWhiteRook(file, 7 - rank);
-        return this;
-    }
-
-    @Override
-    public MirrorPositionBuilder<T> withWhiteBishop(int file, int rank) {
-        positionBuilder.withWhiteBishop(file, 7 - rank);
-        return this;
-    }
-
-    @Override
-    public MirrorPositionBuilder<T> withWhiteKnight(int file, int rank) {
-        positionBuilder.withWhiteKnight(file, 7 - rank);
-        return this;
-    }
-
-    @Override
-    public MirrorPositionBuilder<T> withWhitePawn(int file, int rank) {
-        positionBuilder.withWhitePawn(file, 7 - rank);
-        return this;
-    }
-
-    @Override
-    public MirrorPositionBuilder<T> withBlackKing(int file, int rank) {
         positionBuilder.withBlackKing(file, 7 - rank);
         return this;
     }
 
     @Override
-    public MirrorPositionBuilder<T> withBlackQueen(int file, int rank) {
+    public MirrorPositionBuilder<T> withWhiteQueen(int file, int rank) {
         positionBuilder.withBlackQueen(file, 7 - rank);
         return this;
     }
 
     @Override
-    public MirrorPositionBuilder<T> withBlackRook(int file, int rank) {
+    public MirrorPositionBuilder<T> withWhiteRook(int file, int rank) {
         positionBuilder.withBlackRook(file, 7 - rank);
         return this;
     }
 
     @Override
-    public MirrorPositionBuilder<T> withBlackBishop(int file, int rank) {
+    public MirrorPositionBuilder<T> withWhiteBishop(int file, int rank) {
         positionBuilder.withBlackBishop(file, 7 - rank);
         return this;
     }
 
     @Override
-    public MirrorPositionBuilder<T> withBlackKnight(int file, int rank) {
+    public MirrorPositionBuilder<T> withWhiteKnight(int file, int rank) {
         positionBuilder.withBlackKnight(file, 7 - rank);
         return this;
     }
 
     @Override
-    public MirrorPositionBuilder<T> withBlackPawn(int file, int rank) {
+    public MirrorPositionBuilder<T> withWhitePawn(int file, int rank) {
         positionBuilder.withBlackPawn(file, 7 - rank);
+        return this;
+    }
+
+    @Override
+    public MirrorPositionBuilder<T> withBlackKing(int file, int rank) {
+        positionBuilder.withWhiteKing(file, 7 - rank);
+        return this;
+    }
+
+    @Override
+    public MirrorPositionBuilder<T> withBlackQueen(int file, int rank) {
+        positionBuilder.withWhiteQueen(file, 7 - rank);
+        return this;
+    }
+
+    @Override
+    public MirrorPositionBuilder<T> withBlackRook(int file, int rank) {
+        positionBuilder.withWhiteRook(file, 7 - rank);
+        return this;
+    }
+
+    @Override
+    public MirrorPositionBuilder<T> withBlackBishop(int file, int rank) {
+        positionBuilder.withWhiteBishop(file, 7 - rank);
+        return this;
+    }
+
+    @Override
+    public MirrorPositionBuilder<T> withBlackKnight(int file, int rank) {
+        positionBuilder.withWhiteKnight(file, 7 - rank);
+        return this;
+    }
+
+    @Override
+    public MirrorPositionBuilder<T> withBlackPawn(int file, int rank) {
+        positionBuilder.withWhitePawn(file, 7 - rank);
         return this;
     }
 
