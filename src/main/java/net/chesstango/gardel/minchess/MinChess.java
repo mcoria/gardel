@@ -175,6 +175,30 @@ public class MinChess implements Cloneable {
             pawnPositions &= ~from;
             pawnPositions |= to;
         }
+
+        if ((to & whitePositions) != 0 || (to & blackPositions) != 0) {
+            if ((to & queenPositions) != 0) {
+                queenPositions &= ~to;
+            }
+            if ((to & rookPositions) != 0) {
+                rookPositions &= ~to;
+            }
+            if ((to & bishopPositions) != 0) {
+                bishopPositions &= ~to;
+            }
+            if ((to & knightPositions) != 0) {
+                knightPositions &= ~to;
+            }
+            if ((to & pawnPositions) != 0) {
+                pawnPositions &= ~to;
+            }
+            if (whiteTurn) {
+                blackPositions &= ~to;
+            } else {
+                whitePositions &= ~to;
+            }
+        }
+
         if (whiteTurn) {
             whitePositions &= ~from;
             whitePositions |= to;
