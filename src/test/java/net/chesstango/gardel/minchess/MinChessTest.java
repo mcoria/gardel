@@ -41,7 +41,7 @@ public class MinChessTest extends AbstractPerftTest{
     public void testKing_POS1_PERFT() {
         MinChess game = createGame("8/8/4k3/8/4K3/8/8/8 w KQkq - 0 1");
 
-        Perft perft = createPerft();
+        PerftBrute perft = new PerftBrute();
         PerftResult result = perft.start(game, 1);
 
         assertEquals(1, result.getChildNode(Square.e4, Square.d4));
@@ -50,8 +50,41 @@ public class MinChessTest extends AbstractPerftTest{
         assertEquals(1, result.getChildNode(Square.e4, Square.f3));
         assertEquals(1, result.getChildNode(Square.e4, Square.f4));
 
-
         assertEquals(5, result.getMovesCount());
         assertEquals(5, result.getTotalNodes());
     }
+
+
+    @Test
+    public void testKing_POS1_PERFT_L2() {
+        MinChess game = createGame("8/8/4k3/8/4K3/8/8/8 w KQkq - 0 1");
+
+        PerftBrute perft = new PerftBrute();
+        PerftResult result = perft.start(game, 2);
+
+        assertEquals(8, result.getChildNode(Square.e4, Square.d3));
+        assertEquals(8, result.getChildNode(Square.e4, Square.e3));
+        assertEquals(6, result.getChildNode(Square.e4, Square.d4));
+        assertEquals(6, result.getChildNode(Square.e4, Square.f4));
+        assertEquals(8, result.getChildNode(Square.e4, Square.f3));
+        assertEquals(5, result.getMovesCount());
+        assertEquals(36, result.getTotalNodes());
+    }
+
+    @Test
+    public void testKing_POS1_PERFT_L6() {
+        MinChess game = createGame("8/8/4k3/8/4K3/8/8/8 w KQkq - 0 1");
+
+        PerftBrute perft = new PerftBrute();
+        PerftResult result = perft.start(game, 6);
+
+        assertEquals(23876, result.getChildNode(Square.e4, Square.f3));
+        assertEquals(23000, result.getChildNode(Square.e4, Square.e3));
+        assertEquals(15566, result.getChildNode(Square.e4, Square.d4));
+        assertEquals(15566, result.getChildNode(Square.e4, Square.f4));
+        assertEquals(23876, result.getChildNode(Square.e4, Square.d3));
+        assertEquals(5, result.getMovesCount());
+        assertEquals(101884, result.getTotalNodes());
+    }
+
 }

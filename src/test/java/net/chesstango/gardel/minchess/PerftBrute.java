@@ -1,22 +1,16 @@
 package net.chesstango.gardel.minchess;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import static net.chesstango.gardel.minchess.MinChessConstants.MAX_MOVES;
 
 /**
  * @author Mauricio Coria
  */
-public class PerftBrute implements Perft {
+public class PerftBrute {
 
     private int maxLevel;
 
-
-    @Override
+    
     public PerftResult start(MinChess game, int maxLevel) {
         this.maxLevel = maxLevel;
         PerftResult perftResult = new PerftResult();
@@ -55,22 +49,5 @@ public class PerftBrute implements Perft {
         return totalNodes;
     }
 
-
-    public void printResult(PerftResult perftResult) {
-        System.out.println("Total Moves: " + perftResult.getMovesCount());
-        System.out.println("Total Nodes: " + perftResult.getTotalNodes());
-
-        Map<Short, Long> childs = perftResult.getChilds();
-
-        if (childs != null) {
-            List<Short> moves = new ArrayList<>(childs.keySet());
-            Collections.reverse(moves);
-
-            for (Short move : moves) {
-                System.out.println("Move = " + move.toString() +
-                        ", Total = " + childs.get(move));
-            }
-        }
-    }
 
 }

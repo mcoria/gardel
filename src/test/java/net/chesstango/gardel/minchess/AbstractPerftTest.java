@@ -16,10 +16,6 @@ public abstract class AbstractPerftTest {
         return builder.getPositionRepresentation();
     }
 
-    protected Perft createPerft() {
-        return new PerftBrute();
-    }
-
     /*
     protected boolean contieneMove(MoveContainerReader<? extends Move> movimientos, Square from, Square to) {
         for (Move move : movimientos) {

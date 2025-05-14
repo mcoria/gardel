@@ -76,7 +76,16 @@ public class MinChess implements Cloneable {
     }
 
     public void doMove(short move) {
+        int toFile = move & 0b00000000_00000111;
+        int toRank = (move & 0b00000000_00111000) >>> 3;
+        long toPosition = 1L << (toRank * 8 + toFile);
 
+
+        int fromFile = (move & 0b00000001_11000000) >>> 6;
+        int fromRank = (move & 0b00001110_00000000) >>>  9;
+        long fromPosition = 1L << (fromRank * 8 + fromFile);
+
+        doMoveImp(fromPosition, toPosition);
     }
 
     int generateKingMoves(short[] moves) {
