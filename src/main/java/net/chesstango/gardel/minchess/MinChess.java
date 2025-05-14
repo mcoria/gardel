@@ -3,7 +3,7 @@ package net.chesstango.gardel.minchess;
 /**
  * @author Mauricio Coria
  */
-public class MinChess {
+public class MinChess implements Cloneable {
     private boolean whiteTurn;
     private boolean castlingBlackKingAllowed;
     private boolean castlingBlackQueenAllowed;
@@ -61,6 +61,14 @@ public class MinChess {
         return size;
     }
 
+    public boolean isKingInCheck() {
+        return isKingInCheck(whiteTurn);
+    }
+
+    public void doMove(short move) {
+
+    }
+
     int generateKingMoves(short[] moves) {
         return 0; // TODO: Implement queen move generation
     }
@@ -91,22 +99,33 @@ public class MinChess {
 
     boolean isLegalMove(short move) {
         boolean isKingInCheck;
-        doMove(move);
-        isKingInCheck = isKingInCheck();
-        undoMove(move);
+        MinChess clon = this.clone();
+        clon.doMove(move);
+        isKingInCheck = clon.isKingInCheck(whiteTurn);
         return isKingInCheck;
     }
 
-    private boolean isKingInCheck() {
+
+    boolean isKingInCheck(boolean turn) {
         return false;
     }
 
-    void undoMove(short move) {
+
+    public MinChess clone() {
+        return new MinChess(whiteTurn,
+                castlingBlackKingAllowed,
+                castlingBlackQueenAllowed,
+                castlingWhiteKingAllowed,
+                castlingWhiteQueenAllowed,
+                enPassantSquare,
+                whitePositions,
+                blackPositions,
+                kingPositions,
+                queenPositions,
+                rookPositions,
+                bishopPositions,
+                knightPositions,
+                pawnPositions
+        );
     }
-
-    void doMove(short move) {
-
-    }
-
-
 }
