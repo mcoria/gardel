@@ -4,6 +4,7 @@ package net.chesstango.gardel.minchess;
  * @author Mauricio Coria
  */
 class MinChessConstants {
+    static final int MAX_MOVES = 64;
     static final long[] KING_JUMPS = {
             0x0000000000000302L,
             0x0000000000000705L,
@@ -72,6 +73,16 @@ class MinChessConstants {
 
 
     static short encodeMove(long fromPosition, long toPosition) {
-        return 0;
+        int fromIdx = Long.numberOfTrailingZeros(fromPosition);
+        int fromFile = fromIdx % 8;
+        int fromRank = fromIdx / 8;
+        int binaryEncodedFrom = ((fromFile << 6) | (fromRank << 9));
+
+        int toIdx = Long.numberOfTrailingZeros(toPosition);
+        int toFile = toIdx % 8;
+        int toRank = toIdx / 8;
+        int binaryEncodedTo = (toFile | (toRank << 3));
+
+        return (short) (binaryEncodedFrom | binaryEncodedTo);
     }
 }
