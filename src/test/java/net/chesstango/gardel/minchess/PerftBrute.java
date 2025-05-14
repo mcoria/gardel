@@ -10,7 +10,7 @@ public class PerftBrute {
 
     private int maxLevel;
 
-    
+
     public PerftResult start(MinChess game, int maxLevel) {
         this.maxLevel = maxLevel;
         PerftResult perftResult = new PerftResult();
@@ -41,7 +41,7 @@ public class PerftBrute {
             for (int i = 0; i < size; i++) {
                 MinChess gameClone = game.clone();
                 gameClone.doMove(moves[i]);
-                totalNodes += visitChild(game, level + 1);
+                totalNodes += visitChild(gameClone, level + 1);
             }
         } else {
             totalNodes = size;
