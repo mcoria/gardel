@@ -1,6 +1,7 @@
 package net.chesstango.gardel.minchess;
 
 import static net.chesstango.gardel.minchess.MinChessConstants.KING_JUMPS;
+import static net.chesstango.gardel.minchess.MinChessConstants.KNIGHT_JUMPS;
 
 /**
  * @author Mauricio Coria
@@ -62,8 +63,8 @@ public class MinChess implements Cloneable {
 
     public int generateMoves(short[] moves) {
         int size = 0;
-        size += generateKingMoves(moves);
-        size += generateKnightMoves(moves);
+        size += generateKingMoves(moves, size);
+        size += generateKnightMoves(moves, size);
         size += generateBishopMoves(moves);
         size += generateRookMoves(moves);
         size += generateQueenMoves(moves);
@@ -82,24 +83,24 @@ public class MinChess implements Cloneable {
 
 
         int fromFile = (move & 0b00000001_11000000) >>> 6;
-        int fromRank = (move & 0b00001110_00000000) >>>  9;
+        int fromRank = (move & 0b00001110_00000000) >>> 9;
         long fromPosition = 1L << (fromRank * 8 + fromFile);
 
         doMoveImp(fromPosition, toPosition);
     }
 
-    int generateKingMoves(short[] moves) {
+    int generateKingMoves(short[] moves, int startIdx) {
         int size = 0;
-        final long fromPosition = kingPositions & (whiteTurn ? whitePositions : blackPositions);
         final long emptyOrOpponentPositions = whiteTurn ? ~whitePositions : ~blackPositions;
-        final int kingIdx = Long.numberOfTrailingZeros(fromPosition);
-        final long kingJumps = KING_JUMPS[kingIdx];
-        long jumpPositions = kingJumps & emptyOrOpponentPositions;
+        final long fromPosition = kingPositions & (whiteTurn ? whitePositions : blackPositions);
+        final int fromIdx = Long.numberOfTrailingZeros(fromPosition);
+        final long jumps = KING_JUMPS[fromIdx];
+        long jumpPositions = jumps & emptyOrOpponentPositions;
         while (jumpPositions != 0) {
             final int jumpIdx = Long.numberOfTrailingZeros(jumpPositions);
             final long toPosition = 1L << jumpIdx;
             if (isLegalMove(fromPosition, toPosition)) {
-                moves[size] = MinChessConstants.encodeMove(fromPosition, toPosition);
+                moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                 size++;
             }
             jumpPositions &= ~toPosition;
@@ -107,8 +108,26 @@ public class MinChess implements Cloneable {
         return size;
     }
 
-    int generateKnightMoves(short[] moves) {
-        return 0; // TODO: Implement queen move generation
+    int generateKnightMoves(short[] moves, int startIdx) {
+        int size = 0;
+        final long emptyOrOpponentPositions = whiteTurn ? ~whitePositions : ~blackPositions;
+        long fromPosition = knightPositions & (whiteTurn ? whitePositions : blackPositions);
+        while (fromPosition != 0) {
+            final int fromIdx = Long.numberOfTrailingZeros(fromPosition);
+            final long jumps = KNIGHT_JUMPS[fromIdx];
+            long jumpPositions = jumps & emptyOrOpponentPositions;
+            while (jumpPositions != 0) {
+                final int jumpIdx = Long.numberOfTrailingZeros(jumpPositions);
+                final long toPosition = 1L << jumpIdx;
+                if (isLegalMove(fromPosition, toPosition)) {
+                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
+                    size++;
+                }
+                jumpPositions &= ~toPosition;
+            }
+            fromPosition &= ~(1L << fromIdx);
+        }
+        return size;
     }
 
     int generateRookMoves(short[] moves) {
@@ -220,18 +239,28 @@ public class MinChess implements Cloneable {
 
 
     boolean isKingInCheck(boolean turn) {
-        return isKingInCheckByOpponentKing(turn);
+        return isKingInCheckByOpponentKing(turn) || isKingInCheckByOpponentKnights(turn);
     }
 
     boolean isKingInCheckByOpponentKing(boolean kingColor) {
         final long kingPosition = kingPositions & (kingColor ? whitePositions : blackPositions);
         final int kingIdx = Long.numberOfTrailingZeros(kingPosition);
-        final long kingJumps = KING_JUMPS[kingIdx];
 
+        final long kingJumps = KING_JUMPS[kingIdx];
         final long kingPositionOpponent = kingPositions & (!kingColor ? whitePositions : blackPositions);
+
         return (kingJumps & kingPositionOpponent) != 0;
     }
 
+    private boolean isKingInCheckByOpponentKnights(boolean kingColor) {
+        final long kingPosition = kingPositions & (kingColor ? whitePositions : blackPositions);
+        final int kingIdx = Long.numberOfTrailingZeros(kingPosition);
+
+        final long kingJumps = KNIGHT_JUMPS[kingIdx];
+        final long knightPositionOpponent = knightPositions & (!kingColor ? whitePositions : blackPositions);
+
+        return (kingJumps & knightPositionOpponent) != 0;
+    }
 
     public MinChess clone() {
         return new MinChess(whiteTurn,

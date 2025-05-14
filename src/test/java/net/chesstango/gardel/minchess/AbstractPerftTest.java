@@ -1,6 +1,7 @@
 package net.chesstango.gardel.minchess;
 
 
+import net.chesstango.gardel.MirrorPositionBuilder;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.fen.FENExporter;
 
@@ -12,6 +13,14 @@ public abstract class AbstractPerftTest {
     protected MinChess createGame(String string) {
         MinChessBuilder builder = new MinChessBuilder();
         FENExporter exporter = new FENExporter(builder);
+        exporter.export(FEN.of(string));
+        return builder.getPositionRepresentation();
+    }
+
+    protected MinChess createMirrorGame(String string) {
+        MinChessBuilder builder = new MinChessBuilder();
+        MirrorPositionBuilder<MinChess> mirrorBuilder = new MirrorPositionBuilder<>(builder);
+        FENExporter exporter = new FENExporter(mirrorBuilder);
         exporter.export(FEN.of(string));
         return builder.getPositionRepresentation();
     }
