@@ -21,7 +21,7 @@ public class KvKTest extends AbstractPerftTest {
     }
 
     @Test
-    public void testKing_POS1() {
+    public void test_POS1() {
         FEN fen = FEN.of(POSITION);
         fen.export(minChessBuilder);
         MinChess minChess = minChessBuilder.getPositionRepresentation();
@@ -33,7 +33,7 @@ public class KvKTest extends AbstractPerftTest {
 
 
     @Test
-    public void testKing_POS1_PERFT_L1() {
+    public void test_POS1_PERFT_L1() {
         MinChess game = createGame(POSITION);
 
         PerftResult result = perft.start(game, 1);
@@ -49,7 +49,7 @@ public class KvKTest extends AbstractPerftTest {
 
 
     @Test
-    public void testKing_POS1_PERFT_L2() {
+    public void test_POS1_PERFT_L2() {
         MinChess game = createGame(POSITION);
 
         PerftResult result = perft.start(game, 2);
@@ -64,7 +64,7 @@ public class KvKTest extends AbstractPerftTest {
     }
 
     @Test
-    public void testKing_POS1_PERFT_L3() {
+    public void test_POS1_PERFT_L3() {
         MinChess game = createGame(POSITION);
 
         PerftResult result = perft.start(game, 3);
@@ -79,7 +79,7 @@ public class KvKTest extends AbstractPerftTest {
     }
 
     @Test
-    public void testKing_POS1_PERFT_L6() {
+    public void test_POS1_PERFT_L6() {
         MinChess game = createGame(POSITION);
 
         PerftResult result = perft.start(game, 6);
@@ -94,7 +94,7 @@ public class KvKTest extends AbstractPerftTest {
     }
 
     @Test
-    public void testKing_POS1_PERFT_L6_mirror() {
+    public void test_POS1_PERFT_L6_mirror() {
         MinChess game = createMirrorGame("8/8/4k3/8/4K3/8/8/8 w KQkq - 0 1");
 
         PerftResult result = perft.start(game, 6);
