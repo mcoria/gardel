@@ -64,7 +64,7 @@ public class MinChess implements Cloneable {
         int size = 0;
         size += generateKingMoves(moves, size);
         size += generateKnightMoves(moves, size);
-        //size += generateRookMoves(moves, size);
+        size += generateRookMoves(moves, size);
         //size += generateBishopMoves(moves);
         //size += generateQueenMoves(moves);
         //size += generatePawnMoves(moves);
@@ -131,11 +131,47 @@ public class MinChess implements Cloneable {
 
     int generateRookMoves(short[] moves, int startIdx) {
         int size = 0;
-        long fromPosition = knightPositions & (whiteTurn ? whitePositions : blackPositions);
+        long fromPosition = (rookPositions | queenPositions) & (whiteTurn ? whitePositions : blackPositions);
         while (fromPosition != 0) {
-            size += generateRookMovesNorth(moves, startIdx, fromPosition);
-            size += generateRookMovesSouth(moves, startIdx, fromPosition);
+            size += generateRookMovesNorth(moves, startIdx + size, fromPosition);
+            size += generateRookMovesSouth(moves, startIdx + size, fromPosition);
+            size += generateRookMovesEast(moves, startIdx + size, fromPosition);
+            size += generateRookMovesWest(moves, startIdx + size, fromPosition);
             fromPosition &= ~(1L << Long.numberOfTrailingZeros(fromPosition));
+        }
+        return size;
+    }
+
+    int generateRookMovesWest(short[] moves, int startIdx, long fromPosition) {
+        int size = 0;
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long ownPositions = whiteTurn ? whitePositions : blackPositions;
+        if ((fromPosition & LIMIT_WEST) == 0) {
+            long toPosition = fromPosition;
+            do {
+                toPosition = toPosition >>> 1;
+                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
+                    size++;
+                }
+            } while ((toPosition & LIMIT_WEST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return size;
+    }
+
+    int generateRookMovesEast(short[] moves, int startIdx, long fromPosition) {
+        int size = 0;
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long ownPositions = whiteTurn ? whitePositions : blackPositions;
+        if ((fromPosition & LIMIT_EAST) == 0) {
+            long toPosition = fromPosition;
+            do {
+                toPosition = toPosition << 1;
+                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
+                    size++;
+                }
+            } while ((toPosition & LIMIT_EAST) == 0 && (toPosition & emptyPositions) != 0);
         }
         return size;
     }
@@ -281,10 +317,76 @@ public class MinChess implements Cloneable {
     boolean isKingInCheck(boolean turn) {
         final long kingPosition = kingPositions & (turn ? whitePositions : blackPositions);
         final int kingIdx = Long.numberOfTrailingZeros(kingPosition);
-        return isKingInCheckByOpponentKing(kingPosition, kingIdx, !turn) || isKingInCheckByOpponentKnights(kingPosition, kingIdx, !turn) || isKingInCheckByOpponentRook(turn);
+        return isKingInCheckByOpponentKing(kingPosition, kingIdx, !turn) ||
+                isKingInCheckByOpponentKnights(kingPosition, kingIdx, !turn) ||
+                isKingInCheckByOpponentRook(kingPosition, kingIdx, !turn);
     }
 
-    boolean isKingInCheckByOpponentRook(boolean turn) {
+    boolean isKingInCheckByOpponentRook(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        return isKingInCheckByOpponentRookNorth(kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentRookSouth(kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentRookEast(kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentRookWest(kingPosition, kingIdx, opponentColor);
+
+    }
+
+    boolean isKingInCheckByOpponentRookWest(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long opponentRooks = (rookPositions | queenPositions) & (opponentColor ? whitePositions : blackPositions);
+        if ((kingPosition & LIMIT_WEST) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition >>> 1;
+                if ((toPosition & opponentRooks) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_WEST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
+    }
+
+    boolean isKingInCheckByOpponentRookEast(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long opponentRooks = (rookPositions | queenPositions) & (opponentColor ? whitePositions : blackPositions);
+        if ((kingPosition & LIMIT_EAST) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition << 1;
+                if ((toPosition & opponentRooks) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_EAST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
+    }
+
+    boolean isKingInCheckByOpponentRookNorth(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long opponentRooks = (rookPositions | queenPositions) & (opponentColor ? whitePositions : blackPositions);
+        if ((kingPosition & LIMIT_NORTH) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition << 8;
+                if ((toPosition & opponentRooks) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_NORTH) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
+    }
+
+    boolean isKingInCheckByOpponentRookSouth(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long opponentRooks = (rookPositions | queenPositions) & (opponentColor ? whitePositions : blackPositions);
+        if ((kingPosition & LIMIT_SOUTH) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition >> 8;
+                if ((toPosition & opponentRooks) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_SOUTH) == 0 && (toPosition & emptyPositions) != 0);
+        }
         return false;
     }
 
