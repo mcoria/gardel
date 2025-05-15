@@ -381,7 +381,7 @@ public class MinChess implements Cloneable {
         if ((kingPosition & LIMIT_SOUTH) == 0) {
             long toPosition = kingPosition;
             do {
-                toPosition = toPosition >> 8;
+                toPosition = toPosition >>> 8;
                 if ((toPosition & opponentRooks) != 0) {
                     return true;
                 }
