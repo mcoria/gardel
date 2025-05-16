@@ -65,7 +65,7 @@ public class MinChess implements Cloneable {
         size += generateKingMoves(moves, size);
         size += generateKnightMoves(moves, size);
         size += generateRookMoves(moves, size);
-        //size += generateBishopMoves(moves);
+        size += generateBishopMoves(moves, size);
         //size += generateQueenMoves(moves);
         //size += generatePawnMoves(moves);
         return size;
@@ -131,13 +131,14 @@ public class MinChess implements Cloneable {
 
     int generateRookMoves(short[] moves, int startIdx) {
         int size = 0;
-        long fromPosition = (rookPositions | queenPositions) & (whiteTurn ? whitePositions : blackPositions);
-        while (fromPosition != 0) {
-            size += generateRookMovesNorth(moves, startIdx + size, fromPosition);
-            size += generateRookMovesSouth(moves, startIdx + size, fromPosition);
-            size += generateRookMovesEast(moves, startIdx + size, fromPosition);
-            size += generateRookMovesWest(moves, startIdx + size, fromPosition);
-            fromPosition &= ~(1L << Long.numberOfTrailingZeros(fromPosition));
+        long fromRooks = (rookPositions | queenPositions) & (whiteTurn ? whitePositions : blackPositions);
+        while (fromRooks != 0) {
+            long from = 1L << Long.numberOfTrailingZeros(fromRooks);
+            size += generateRookMovesNorth(moves, startIdx + size, fromRooks);
+            size += generateRookMovesSouth(moves, startIdx + size, fromRooks);
+            size += generateRookMovesEast(moves, startIdx + size, fromRooks);
+            size += generateRookMovesWest(moves, startIdx + size, fromRooks);
+            fromRooks &= ~from;
         }
         return size;
     }
@@ -210,8 +211,86 @@ public class MinChess implements Cloneable {
         return size;
     }
 
-    int generateBishopMoves(short[] moves) {
-        return 0; // TODO: Implement queen move generation
+    int generateBishopMoves(short[] moves, int startIdx) {
+        int size = 0;
+        long fromBishops = (bishopPositions | queenPositions) & (whiteTurn ? whitePositions : blackPositions);
+        while (fromBishops != 0) {
+            long from = 1L << Long.numberOfTrailingZeros(fromBishops);
+            size += generateBishopMovesNorthWest(moves, startIdx + size, from);
+            size += generateBishopMovesNorthEast(moves, startIdx + size, from);
+            size += generateBishopMovesSouthWest(moves, startIdx + size, from);
+            size += generateBishopMovesSouthEast(moves, startIdx + size, from);
+            fromBishops &= ~from;
+        }
+        return size;
+    }
+
+    int generateBishopMovesNorthWest(short[] moves, int startIdx, long fromPosition) {
+        int size = 0;
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long ownPositions = whiteTurn ? whitePositions : blackPositions;
+        if ((fromPosition & LIMIT_NORTH_WEST) == 0) {
+            long toPosition = fromPosition;
+            do {
+                toPosition = toPosition << 7;
+                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
+                    size++;
+                }
+            } while ((toPosition & LIMIT_NORTH_WEST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return size;
+    }
+
+    int generateBishopMovesNorthEast(short[] moves, int startIdx, long fromPosition) {
+        int size = 0;
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long ownPositions = whiteTurn ? whitePositions : blackPositions;
+        if ((fromPosition & LIMIT_NORTH_EAST) == 0) {
+            long toPosition = fromPosition;
+            do {
+                toPosition = toPosition << 9;
+                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
+                    size++;
+                }
+            } while ((toPosition & LIMIT_NORTH_EAST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return size;
+    }
+
+    int generateBishopMovesSouthWest(short[] moves, int startIdx, long fromPosition) {
+        int size = 0;
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long ownPositions = whiteTurn ? whitePositions : blackPositions;
+        if ((fromPosition & LIMIT_SOUTH_WEST) == 0) {
+            long toPosition = fromPosition;
+            do {
+                toPosition = toPosition >>> 9;
+                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
+                    size++;
+                }
+            } while ((toPosition & LIMIT_SOUTH_WEST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return size;
+    }
+
+    int generateBishopMovesSouthEast(short[] moves, int startIdx, long fromPosition) {
+        int size = 0;
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long ownPositions = whiteTurn ? whitePositions : blackPositions;
+        if ((fromPosition & LIMIT_SOUTH_EAST) == 0) {
+            long toPosition = fromPosition;
+            do {
+                toPosition = toPosition >>> 7;
+                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
+                    size++;
+                }
+            } while ((toPosition & LIMIT_SOUTH_EAST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return size;
     }
 
     int generateQueenMoves(short[] moves) {
@@ -319,7 +398,73 @@ public class MinChess implements Cloneable {
         final int kingIdx = Long.numberOfTrailingZeros(kingPosition);
         return isKingInCheckByOpponentKing(kingPosition, kingIdx, !turn) ||
                 isKingInCheckByOpponentKnights(kingPosition, kingIdx, !turn) ||
-                isKingInCheckByOpponentRook(kingPosition, kingIdx, !turn);
+                isKingInCheckByOpponentRook(kingPosition, kingIdx, !turn) ||
+                isKingInCheckByOpponentBishop(kingPosition, kingIdx, !turn);
+    }
+
+    boolean isKingInCheckByOpponentBishop(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        return isKingInCheckByOpponentBishopNorthWest(kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentBishopNorthEast(kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentBishopSouthWest(kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentBishopSouthEast(kingPosition, kingIdx, opponentColor);
+
+    }
+
+    boolean isKingInCheckByOpponentBishopNorthWest(long kingPosition, int kingIdx, boolean opponentColor) {
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long opponentBishops = (bishopPositions | queenPositions) & (opponentColor ? whitePositions : blackPositions);
+        if ((kingPosition & LIMIT_NORTH_WEST) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition << 7;
+                if ((toPosition & opponentBishops) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_NORTH_WEST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
+    }
+    boolean isKingInCheckByOpponentBishopNorthEast(long kingPosition, int kingIdx, boolean opponentColor) {
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long opponentBishops = (bishopPositions | queenPositions) & (opponentColor ? whitePositions : blackPositions);
+        if ((kingPosition & LIMIT_NORTH_EAST) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition << 9;
+                if ((toPosition & opponentBishops) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_NORTH_EAST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
+    }
+    boolean isKingInCheckByOpponentBishopSouthWest(long kingPosition, int kingIdx, boolean opponentColor) {
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long opponentBishops = (bishopPositions | queenPositions) & (opponentColor ? whitePositions : blackPositions);
+        if ((kingPosition & LIMIT_SOUTH_WEST) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition >>> 9;
+                if ((toPosition & opponentBishops) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_SOUTH_WEST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
+    }
+    boolean isKingInCheckByOpponentBishopSouthEast(long kingPosition, int kingIdx, boolean opponentColor) {
+        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long opponentBishops = (bishopPositions | queenPositions) & (opponentColor ? whitePositions : blackPositions);
+        if ((kingPosition & LIMIT_SOUTH_EAST) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition >>> 7;
+                if ((toPosition & opponentBishops) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_SOUTH_EAST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
     }
 
     boolean isKingInCheckByOpponentRook(final long kingPosition, final int kingIdx, final boolean opponentColor) {
