@@ -66,7 +66,6 @@ public class MinChess implements Cloneable {
         size += generateKnightMoves(moves, size);
         size += generateRookMoves(moves, size);
         size += generateBishopMoves(moves, size);
-        //size += generateQueenMoves(moves);
         //size += generatePawnMoves(moves);
         return size;
     }
@@ -145,7 +144,7 @@ public class MinChess implements Cloneable {
 
     int generateRookMovesWest(short[] moves, int startIdx, long fromPosition) {
         int size = 0;
-        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long allPositions = whitePositions | blackPositions;
         final long ownPositions = whiteTurn ? whitePositions : blackPositions;
         if ((fromPosition & LIMIT_WEST) == 0) {
             long toPosition = fromPosition;
@@ -155,14 +154,14 @@ public class MinChess implements Cloneable {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
-            } while ((toPosition & LIMIT_WEST) == 0 && (toPosition & emptyPositions) != 0);
+            } while ((toPosition & LIMIT_WEST) == 0 && (toPosition & allPositions) == 0);
         }
         return size;
     }
 
     int generateRookMovesEast(short[] moves, int startIdx, long fromPosition) {
         int size = 0;
-        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long allPositions = whitePositions | blackPositions;
         final long ownPositions = whiteTurn ? whitePositions : blackPositions;
         if ((fromPosition & LIMIT_EAST) == 0) {
             long toPosition = fromPosition;
@@ -172,14 +171,14 @@ public class MinChess implements Cloneable {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
-            } while ((toPosition & LIMIT_EAST) == 0 && (toPosition & emptyPositions) != 0);
+            } while ((toPosition & LIMIT_EAST) == 0 && (toPosition & allPositions) == 0);
         }
         return size;
     }
 
     int generateRookMovesNorth(short[] moves, int startIdx, long fromPosition) {
         int size = 0;
-        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long allPositions = whitePositions | blackPositions;
         final long ownPositions = whiteTurn ? whitePositions : blackPositions;
         if ((fromPosition & LIMIT_NORTH) == 0) {
             long toPosition = fromPosition;
@@ -189,14 +188,14 @@ public class MinChess implements Cloneable {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
-            } while ((toPosition & LIMIT_NORTH) == 0 && (toPosition & emptyPositions) != 0);
+            } while ((toPosition & LIMIT_NORTH) == 0 && (toPosition & allPositions) == 0);
         }
         return size;
     }
 
     int generateRookMovesSouth(short[] moves, int startIdx, long fromPosition) {
         int size = 0;
-        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long allPositions = whitePositions | blackPositions;
         final long ownPositions = whiteTurn ? whitePositions : blackPositions;
         if ((fromPosition & LIMIT_SOUTH) == 0) {
             long toPosition = fromPosition;
@@ -206,7 +205,7 @@ public class MinChess implements Cloneable {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
-            } while ((toPosition & LIMIT_SOUTH) == 0 && (toPosition & emptyPositions) != 0);
+            } while ((toPosition & LIMIT_SOUTH) == 0 && (toPosition & allPositions) == 0);
         }
         return size;
     }
@@ -227,7 +226,7 @@ public class MinChess implements Cloneable {
 
     int generateBishopMovesNorthWest(short[] moves, int startIdx, long fromPosition) {
         int size = 0;
-        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long allPositions = whitePositions | blackPositions;
         final long ownPositions = whiteTurn ? whitePositions : blackPositions;
         if ((fromPosition & LIMIT_NORTH_WEST) == 0) {
             long toPosition = fromPosition;
@@ -237,14 +236,14 @@ public class MinChess implements Cloneable {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
-            } while ((toPosition & LIMIT_NORTH_WEST) == 0 && (toPosition & emptyPositions) != 0);
+            } while ((toPosition & LIMIT_NORTH_WEST) == 0 && (toPosition & allPositions) == 0);
         }
         return size;
     }
 
     int generateBishopMovesNorthEast(short[] moves, int startIdx, long fromPosition) {
         int size = 0;
-        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long allPositions = whitePositions | blackPositions;
         final long ownPositions = whiteTurn ? whitePositions : blackPositions;
         if ((fromPosition & LIMIT_NORTH_EAST) == 0) {
             long toPosition = fromPosition;
@@ -254,14 +253,14 @@ public class MinChess implements Cloneable {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
-            } while ((toPosition & LIMIT_NORTH_EAST) == 0 && (toPosition & emptyPositions) != 0);
+            } while ((toPosition & LIMIT_NORTH_EAST) == 0 && (toPosition & allPositions) == 0);
         }
         return size;
     }
 
     int generateBishopMovesSouthWest(short[] moves, int startIdx, long fromPosition) {
         int size = 0;
-        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long allPositions = whitePositions | blackPositions;
         final long ownPositions = whiteTurn ? whitePositions : blackPositions;
         if ((fromPosition & LIMIT_SOUTH_WEST) == 0) {
             long toPosition = fromPosition;
@@ -271,14 +270,14 @@ public class MinChess implements Cloneable {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
-            } while ((toPosition & LIMIT_SOUTH_WEST) == 0 && (toPosition & emptyPositions) != 0);
+            } while ((toPosition & LIMIT_SOUTH_WEST) == 0 && (toPosition & allPositions) == 0);
         }
         return size;
     }
 
     int generateBishopMovesSouthEast(short[] moves, int startIdx, long fromPosition) {
         int size = 0;
-        final long emptyPositions = ~(whitePositions | blackPositions);
+        final long allPositions = whitePositions | blackPositions;
         final long ownPositions = whiteTurn ? whitePositions : blackPositions;
         if ((fromPosition & LIMIT_SOUTH_EAST) == 0) {
             long toPosition = fromPosition;
@@ -288,7 +287,7 @@ public class MinChess implements Cloneable {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
-            } while ((toPosition & LIMIT_SOUTH_EAST) == 0 && (toPosition & emptyPositions) != 0);
+            } while ((toPosition & LIMIT_SOUTH_EAST) == 0 && (toPosition & allPositions) == 0);
         }
         return size;
     }
