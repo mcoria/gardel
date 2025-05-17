@@ -133,10 +133,10 @@ public class MinChess implements Cloneable {
         long fromRooks = (rookPositions | queenPositions) & (whiteTurn ? whitePositions : blackPositions);
         while (fromRooks != 0) {
             long from = 1L << Long.numberOfTrailingZeros(fromRooks);
-            size += generateRookMovesNorth(moves, startIdx + size, fromRooks);
-            size += generateRookMovesSouth(moves, startIdx + size, fromRooks);
-            size += generateRookMovesEast(moves, startIdx + size, fromRooks);
-            size += generateRookMovesWest(moves, startIdx + size, fromRooks);
+            size += generateRookMovesNorth(moves, startIdx + size, from);
+            size += generateRookMovesSouth(moves, startIdx + size, from);
+            size += generateRookMovesEast(moves, startIdx + size, from);
+            size += generateRookMovesWest(moves, startIdx + size, from);
             fromRooks &= ~from;
         }
         return size;
