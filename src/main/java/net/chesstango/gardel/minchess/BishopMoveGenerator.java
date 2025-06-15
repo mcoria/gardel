@@ -1,9 +1,6 @@
 package net.chesstango.gardel.minchess;
 
 import static net.chesstango.gardel.minchess.MinChessConstants.*;
-import static net.chesstango.gardel.minchess.MinChessConstants.LIMIT_NORTH_EAST;
-import static net.chesstango.gardel.minchess.MinChessConstants.LIMIT_SOUTH_EAST;
-import static net.chesstango.gardel.minchess.MinChessConstants.LIMIT_SOUTH_WEST;
 
 /**
  * @author Mauricio Coria

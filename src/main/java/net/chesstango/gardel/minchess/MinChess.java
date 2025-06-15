@@ -12,6 +12,7 @@ public class MinChess implements Cloneable {
     final KnightMoveGenerator knightMoveGenerator;
     final RookMoveGenerator rookMoveGenerator;
     final BishopMoveGenerator bishopMoveGenerator;
+    final PawnMoveGenerator pawnMoveGenerator;
 
     public MinChess(boolean whiteTurn,
                     boolean castlingBlackKingAllowed,
@@ -50,6 +51,7 @@ public class MinChess implements Cloneable {
         this.knightMoveGenerator = new KnightMoveGenerator(workspace, workspaceTmp);
         this.rookMoveGenerator = new RookMoveGenerator(workspace, workspaceTmp);
         this.bishopMoveGenerator = new BishopMoveGenerator(workspace, workspaceTmp);
+        this.pawnMoveGenerator = new PawnMoveGenerator(workspace, workspaceTmp);
     }
 
 
@@ -59,7 +61,7 @@ public class MinChess implements Cloneable {
         size += knightMoveGenerator.generateKnightMoves(moves, size);
         size += rookMoveGenerator.generateRookMoves(moves, size);
         size += bishopMoveGenerator.generateBishopMoves(moves, size);
-        //size += generatePawnMoves(moves);
+        size += pawnMoveGenerator.generatePawnMoves(moves, size);
         return size;
     }
 
@@ -80,21 +82,6 @@ public class MinChess implements Cloneable {
         workspace.doMoveImp(fromPosition, toPosition);
     }
 
-    int generateQueenMoves(short[] moves) {
-        return 0; // TODO: Implement queen move generation
-    }
-
-    int generatePawnMoves(short[] moves) {
-        return 0;
-    }
-
-    int generatePawnWhiteMoves(short[] moves) {
-        return 0; // TODO: Implement queen move generation
-    }
-
-    int generatePawnBlackMoves(short[] moves) {
-        return 0; // TODO: Implement queen move generation
-    }
 
 
     public MinChess clone() {
