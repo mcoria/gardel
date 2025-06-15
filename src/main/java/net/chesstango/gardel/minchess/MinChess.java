@@ -1,14 +1,17 @@
 package net.chesstango.gardel.minchess;
 
-import static net.chesstango.gardel.minchess.MinChessConstants.*;
-
 /**
  * @author Mauricio Coria
  */
 public class MinChess implements Cloneable {
 
-    private final MinChessWorkspace workspace;
-    private final MinChessWorkspace workspaceTmp;
+    final MinChessWorkspace workspace;
+    final MinChessWorkspace workspaceTmp;
+
+    final KingMoveGenerator kingMoveGenerator;
+    final KnightMoveGenerator knightMoveGenerator;
+    final RookMoveGenerator rookMoveGenerator;
+    final BishopMoveGenerator bishopMoveGenerator;
 
     public MinChess(boolean whiteTurn,
                     boolean castlingBlackKingAllowed,
@@ -42,15 +45,20 @@ public class MinChess implements Cloneable {
         );
 
         this.workspaceTmp = new MinChessWorkspace();
+
+        this.kingMoveGenerator = new KingMoveGenerator(workspace, workspaceTmp);
+        this.knightMoveGenerator = new KnightMoveGenerator(workspace, workspaceTmp);
+        this.rookMoveGenerator = new RookMoveGenerator(workspace, workspaceTmp);
+        this.bishopMoveGenerator = new BishopMoveGenerator(workspace, workspaceTmp);
     }
 
 
     public int generateMoves(short[] moves) {
         int size = 0;
-        size += generateKingMoves(moves, size);
-        size += generateKnightMoves(moves, size);
-        size += generateRookMoves(moves, size);
-        size += generateBishopMoves(moves, size);
+        size += kingMoveGenerator.generateKingMoves(moves, size);
+        size += knightMoveGenerator.generateKnightMoves(moves, size);
+        size += rookMoveGenerator.generateRookMoves(moves, size);
+        size += bishopMoveGenerator.generateBishopMoves(moves, size);
         //size += generatePawnMoves(moves);
         return size;
     }
@@ -72,211 +80,6 @@ public class MinChess implements Cloneable {
         workspace.doMoveImp(fromPosition, toPosition);
     }
 
-    int generateKingMoves(short[] moves, int startIdx) {
-        int size = 0;
-        final long emptyOrOpponentPositions = workspace.whiteTurn ? ~workspace.whitePositions : ~workspace.blackPositions;
-        final long fromPosition = workspace.kingPositions & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
-        final int fromIdx = Long.numberOfTrailingZeros(fromPosition);
-        final long jumps = KING_JUMPS[fromIdx];
-        long jumpPositions = jumps & emptyOrOpponentPositions;
-        while (jumpPositions != 0) {
-            final int jumpIdx = Long.numberOfTrailingZeros(jumpPositions);
-            final long toPosition = 1L << jumpIdx;
-            if (isLegalMove(fromPosition, toPosition)) {
-                moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                size++;
-            }
-            jumpPositions &= ~toPosition;
-        }
-        return size;
-    }
-
-    int generateKnightMoves(short[] moves, int startIdx) {
-        int size = 0;
-        final long emptyOrOpponentPositions = workspace.whiteTurn ? ~workspace.whitePositions : ~workspace.blackPositions;
-        long fromPosition = workspace.knightPositions & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
-        while (fromPosition != 0) {
-            final int fromIdx = Long.numberOfTrailingZeros(fromPosition);
-            final long jumps = KNIGHT_JUMPS[fromIdx];
-            long jumpPositions = jumps & emptyOrOpponentPositions;
-            while (jumpPositions != 0) {
-                final int jumpIdx = Long.numberOfTrailingZeros(jumpPositions);
-                final long toPosition = 1L << jumpIdx;
-                if (isLegalMove(fromPosition, toPosition)) {
-                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                    size++;
-                }
-                jumpPositions &= ~toPosition;
-            }
-            fromPosition &= ~(1L << fromIdx);
-        }
-        return size;
-    }
-
-    int generateRookMoves(short[] moves, int startIdx) {
-        int size = 0;
-        long fromRooks = (workspace.rookPositions | workspace.queenPositions) & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
-        while (fromRooks != 0) {
-            long from = 1L << Long.numberOfTrailingZeros(fromRooks);
-            size += generateRookMovesNorth(moves, startIdx + size, from);
-            size += generateRookMovesSouth(moves, startIdx + size, from);
-            size += generateRookMovesEast(moves, startIdx + size, from);
-            size += generateRookMovesWest(moves, startIdx + size, from);
-            fromRooks &= ~from;
-        }
-        return size;
-    }
-
-    int generateRookMovesWest(short[] moves, int startIdx, long fromPosition) {
-        int size = 0;
-        final long allPositions = workspace.whitePositions | workspace.blackPositions;
-        final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
-        if ((fromPosition & LIMIT_WEST) == 0) {
-            long toPosition = fromPosition;
-            do {
-                toPosition = toPosition >>> 1;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
-                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                    size++;
-                }
-            } while ((toPosition & LIMIT_WEST) == 0 && (toPosition & allPositions) == 0);
-        }
-        return size;
-    }
-
-    int generateRookMovesEast(short[] moves, int startIdx, long fromPosition) {
-        int size = 0;
-        final long allPositions = workspace.whitePositions | workspace.blackPositions;
-        final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
-        if ((fromPosition & LIMIT_EAST) == 0) {
-            long toPosition = fromPosition;
-            do {
-                toPosition = toPosition << 1;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
-                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                    size++;
-                }
-            } while ((toPosition & LIMIT_EAST) == 0 && (toPosition & allPositions) == 0);
-        }
-        return size;
-    }
-
-    int generateRookMovesNorth(short[] moves, int startIdx, long fromPosition) {
-        int size = 0;
-        final long allPositions = workspace.whitePositions | workspace.blackPositions;
-        final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
-        if ((fromPosition & LIMIT_NORTH) == 0) {
-            long toPosition = fromPosition;
-            do {
-                toPosition = toPosition << 8;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
-                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                    size++;
-                }
-            } while ((toPosition & LIMIT_NORTH) == 0 && (toPosition & allPositions) == 0);
-        }
-        return size;
-    }
-
-    int generateRookMovesSouth(short[] moves, int startIdx, long fromPosition) {
-        int size = 0;
-        final long allPositions = workspace.whitePositions | workspace.blackPositions;
-        final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
-        if ((fromPosition & LIMIT_SOUTH) == 0) {
-            long toPosition = fromPosition;
-            do {
-                toPosition = toPosition >>> 8;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
-                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                    size++;
-                }
-            } while ((toPosition & LIMIT_SOUTH) == 0 && (toPosition & allPositions) == 0);
-        }
-        return size;
-    }
-
-    int generateBishopMoves(short[] moves, int startIdx) {
-        int size = 0;
-        long fromBishops = (workspace.bishopPositions | workspace.queenPositions) & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
-        while (fromBishops != 0) {
-            long from = 1L << Long.numberOfTrailingZeros(fromBishops);
-            size += generateBishopMovesNorthWest(moves, startIdx + size, from);
-            size += generateBishopMovesNorthEast(moves, startIdx + size, from);
-            size += generateBishopMovesSouthWest(moves, startIdx + size, from);
-            size += generateBishopMovesSouthEast(moves, startIdx + size, from);
-            fromBishops &= ~from;
-        }
-        return size;
-    }
-
-    int generateBishopMovesNorthWest(short[] moves, int startIdx, long fromPosition) {
-        int size = 0;
-        final long allPositions = workspace.whitePositions | workspace.blackPositions;
-        final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
-        if ((fromPosition & LIMIT_NORTH_WEST) == 0) {
-            long toPosition = fromPosition;
-            do {
-                toPosition = toPosition << 7;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
-                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                    size++;
-                }
-            } while ((toPosition & LIMIT_NORTH_WEST) == 0 && (toPosition & allPositions) == 0);
-        }
-        return size;
-    }
-
-    int generateBishopMovesNorthEast(short[] moves, int startIdx, long fromPosition) {
-        int size = 0;
-        final long allPositions = workspace.whitePositions | workspace.blackPositions;
-        final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
-        if ((fromPosition & LIMIT_NORTH_EAST) == 0) {
-            long toPosition = fromPosition;
-            do {
-                toPosition = toPosition << 9;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
-                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                    size++;
-                }
-            } while ((toPosition & LIMIT_NORTH_EAST) == 0 && (toPosition & allPositions) == 0);
-        }
-        return size;
-    }
-
-    int generateBishopMovesSouthWest(short[] moves, int startIdx, long fromPosition) {
-        int size = 0;
-        final long allPositions = workspace.whitePositions | workspace.blackPositions;
-        final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
-        if ((fromPosition & LIMIT_SOUTH_WEST) == 0) {
-            long toPosition = fromPosition;
-            do {
-                toPosition = toPosition >>> 9;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
-                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                    size++;
-                }
-            } while ((toPosition & LIMIT_SOUTH_WEST) == 0 && (toPosition & allPositions) == 0);
-        }
-        return size;
-    }
-
-    int generateBishopMovesSouthEast(short[] moves, int startIdx, long fromPosition) {
-        int size = 0;
-        final long allPositions = workspace.whitePositions | workspace.blackPositions;
-        final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
-        if ((fromPosition & LIMIT_SOUTH_EAST) == 0) {
-            long toPosition = fromPosition;
-            do {
-                toPosition = toPosition >>> 7;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
-                    moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
-                    size++;
-                }
-            } while ((toPosition & LIMIT_SOUTH_EAST) == 0 && (toPosition & allPositions) == 0);
-        }
-        return size;
-    }
-
     int generateQueenMoves(short[] moves) {
         return 0; // TODO: Implement queen move generation
     }
@@ -291,12 +94,6 @@ public class MinChess implements Cloneable {
 
     int generatePawnBlackMoves(short[] moves) {
         return 0; // TODO: Implement queen move generation
-    }
-
-    boolean isLegalMove(long from, long to) {
-        workspaceTmp.copyFrom(workspace);
-        workspaceTmp.doMoveImp(from, to);
-        return !workspaceTmp.isKingInCheck(workspace.whiteTurn);
     }
 
 
