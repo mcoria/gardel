@@ -162,4 +162,9 @@ class MinChessConstants {
 
         return (short) (binaryEncodedFrom | binaryEncodedTo);
     }
+
+    static short encodeMove(long fromPosition, long toPosition, int promotionPiece) {
+        short fromToEncoded = encodeMove(fromPosition, toPosition);
+        return (short) (promotionPiece << 12 | fromToEncoded);
+    }
 }
