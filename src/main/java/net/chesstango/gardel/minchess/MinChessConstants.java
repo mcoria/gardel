@@ -4,6 +4,29 @@ package net.chesstango.gardel.minchess;
  * @author Mauricio Coria
  */
 class MinChessConstants {
+    enum PromotionPiece {
+        QUEEN(4),
+        ROOK(3),
+        BISHOP(2),
+        KNIGHT(1);
+
+        final int value;
+
+        PromotionPiece(int value) {
+            this.value = value;
+        }
+
+        static PromotionPiece from(int promotionPiece) {
+            return switch (promotionPiece) {
+                case 4 -> QUEEN;
+                case 3 -> ROOK;
+                case 2 -> BISHOP;
+                case 1 -> KNIGHT;
+                default -> throw new IllegalArgumentException("Invalid promotion piece: " + promotionPiece);
+            };
+        };
+    }
+
     static final long LIMIT_NORTH = 0xFF00000000000000L;
     static final long LIMIT_SOUTH = 0x00000000000000FFL;
     static final long LIMIT_EAST = 0x8080808080808080L;
@@ -163,8 +186,8 @@ class MinChessConstants {
         return (short) (binaryEncodedFrom | binaryEncodedTo);
     }
 
-    static short encodeMove(long fromPosition, long toPosition, int promotionPiece) {
+    static short encodeMove(long fromPosition, long toPosition, PromotionPiece promotionPiece) {
         short fromToEncoded = encodeMove(fromPosition, toPosition);
-        return (short) (promotionPiece << 12 | fromToEncoded);
+        return (short) (promotionPiece.value << 12 | fromToEncoded);
     }
 }

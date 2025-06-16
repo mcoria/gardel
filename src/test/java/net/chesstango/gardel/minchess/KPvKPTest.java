@@ -75,7 +75,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L2_a7_a8_KNIGHT_WHITE() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), 1));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.KNIGHT));
 
         PerftResult result = perft.start(game, 1);
 

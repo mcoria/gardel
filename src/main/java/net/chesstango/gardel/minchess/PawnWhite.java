@@ -73,10 +73,10 @@ class PawnWhite extends AbstractPiece {
     int createMove(short[] moves, int startIdx, long from, long to) {
         int size = 0;
         if ((to & LIMIT_NORTH) != 0) {
-            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 1); // Knight
-            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 2); // Bishop
-            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 3); // Rook
-            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 4); // Queen
+            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, PromotionPiece.KNIGHT); // Knight
+            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, PromotionPiece.BISHOP); // Bishop
+            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, PromotionPiece.ROOK); // Rook
+            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, PromotionPiece.QUEEN); // Queen
         } else {
             moves[startIdx + size++] = MinChessConstants.encodeMove(from, to);
         }

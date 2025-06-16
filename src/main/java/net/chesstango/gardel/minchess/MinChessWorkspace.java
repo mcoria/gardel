@@ -2,8 +2,6 @@ package net.chesstango.gardel.minchess;
 
 import lombok.Setter;
 
-import static net.chesstango.gardel.minchess.MinChessConstants.*;
-
 /**
  * @author Mauricio Coria
  */
@@ -92,6 +90,7 @@ class MinChessWorkspace {
     }
 
     void doMoveImp(long from, long to) {
+        // Capture, clean to square
         if ((to & whitePositions) != 0 || (to & blackPositions) != 0) {
             if ((to & queenPositions) != 0) {
                 queenPositions &= ~to;
@@ -149,6 +148,28 @@ class MinChessWorkspace {
         }
         whiteTurn = !whiteTurn;
     }
+
+    void doMovePromotionImp(long from, long to, MinChessConstants.PromotionPiece promotionPiece) {
+        pawnPositions &= ~from;
+        switch (promotionPiece) {
+            case KNIGHT:
+                knightPositions |= from;
+                break;
+            case BISHOP:
+                bishopPositions |= from;
+                break;
+            case ROOK:
+                rookPositions |= from;
+                break;
+            case QUEEN:
+                queenPositions |= from;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid promotion piece: " + promotionPiece);
+        }
+        doMoveImp(from, to);
+    }
+
 
     boolean isKingInCheck(boolean turn) {
         final long kingPosition = kingPositions & (turn ? whitePositions : blackPositions);
