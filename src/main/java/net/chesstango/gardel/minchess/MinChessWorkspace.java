@@ -139,10 +139,32 @@ class MinChessWorkspace {
         return isKingInCheckByOpponentKing(kingPosition, kingIdx, !turn) ||
                 isKingInCheckByOpponentKnights(kingPosition, kingIdx, !turn) ||
                 isKingInCheckByOpponentRook(kingPosition, kingIdx, !turn) ||
-                isKingInCheckByOpponentBishop(kingPosition, kingIdx, !turn);
+                isKingInCheckByOpponentBishop(kingPosition, kingIdx, !turn) ||
+                isKingInCheckByOpponentPawn(kingPosition, kingIdx, !turn);
     }
 
-    boolean isKingInCheckByOpponentBishop(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+    private boolean isKingInCheckByOpponentPawn(long kingPosition, int kingIdx, boolean opponentColor) {
+        return opponentColor ? isKingInCheckByWhitePawn(kingPosition, kingIdx) :  isKingInCheckByBlackPawn(kingPosition, kingIdx);
+    }
+
+    private boolean isKingInCheckByBlackPawn(long kingPosition, int kingIdx) {
+        final long blackPawns = blackPositions & pawnPositions;
+        if ((kingPosition & LIMIT_WEST) == 0) {
+            final long pawnPosition = kingPosition << 7;
+            return (blackPawns & pawnPosition) != 0;
+        }
+        if ((kingPosition & LIMIT_EAST) == 0) {
+            final long pawnPosition = kingPosition << 9;
+            return (blackPawns & pawnPosition) != 0;
+        }
+        return false;
+    }
+
+    private boolean isKingInCheckByWhitePawn(long kingPosition, int kingIdx) {
+        return false;
+    }
+
+    boolean isKingInCheckByOpponentBishop(final long kingPosition, final int kingIdx, boolean opponentColor) {
         return isKingInCheckByOpponentBishopNorthWest(kingPosition, kingIdx, opponentColor) ||
                 isKingInCheckByOpponentBishopNorthEast(kingPosition, kingIdx, opponentColor) ||
                 isKingInCheckByOpponentBishopSouthWest(kingPosition, kingIdx, opponentColor) ||

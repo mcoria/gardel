@@ -1,6 +1,7 @@
 package net.chesstango.gardel.minchess;
 
 import static net.chesstango.gardel.minchess.MinChessConstants.LIMIT_NORTH;
+import static net.chesstango.gardel.minchess.MinChessConstants.LIMIT_NORTH_WEST;
 
 /**
  * @author Mauricio Coria
@@ -21,12 +22,30 @@ class PawnWhiteMoveGenerator extends AbstractMoveGenerator {
             long from = 1L << Long.numberOfTrailingZeros(fromPawns);
             size += generateMoveForward(moves, startIdx + size, from, emptyPositions);
             size += generateDoubleMoveForward(moves, startIdx + size, from, emptyPositions);
+            size += generateCaptureMove(moves, startIdx + size, from, opponentPositions);
             fromPawns &= ~from;
         }
         return size;
     }
 
-    private int generateDoubleMoveForward(short[] moves, int startIdx, long from, long emptyPositions) {
+    int generateCaptureMove(short[] moves, int startIdx, long from, long opponentPositions) {
+        int size = 0;
+        size += generateCaptureNorthWest(moves, startIdx + size, from, opponentPositions);
+        return size;
+    }
+
+    int generateCaptureNorthWest(short[] moves, int startIdx, long from, long opponentPositions) {
+        int size = 0;
+        if ((from & LIMIT_NORTH_WEST) == 0) {
+            long toPosition = from << 7;
+            if ((toPosition & opponentPositions) != 0 && isLegalMove(from, toPosition)) {
+                size = createMove(moves, startIdx, from, toPosition);
+            }
+        }
+        return size;
+    }
+
+    int generateDoubleMoveForward(short[] moves, int startIdx, long from, long emptyPositions) {
         int size = 0;
         if ((from & START_POS) != 0) {
             final long intermediate = from << 8;
@@ -45,17 +64,21 @@ class PawnWhiteMoveGenerator extends AbstractMoveGenerator {
     int generateMoveForward(short[] moves, int startIdx, long from, long emptyPositions) {
         int size = 0;
         final long to = from << 8;
-        if ((to & emptyPositions) != 0) {
-            if (isLegalMove(from, to)) {
-                if ((to & LIMIT_NORTH) != 0) {
-                    moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 1); // Knight
-                    moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 2); // Bishop
-                    moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 3); // Rook
-                    moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 4); // Queen
-                } else {
-                    moves[startIdx + size++] = MinChessConstants.encodeMove(from, to);
-                }
-            }
+        if ((to & emptyPositions) != 0 && isLegalMove(from, to)) {
+            size = createMove(moves, startIdx, from, to);
+        }
+        return size;
+    }
+
+    int createMove(short[] moves, int startIdx, long from, long to) {
+        int size = 0;
+        if ((to & LIMIT_NORTH) != 0) {
+            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 1); // Knight
+            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 2); // Bishop
+            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 3); // Rook
+            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 4); // Queen
+        } else {
+            moves[startIdx + size++] = MinChessConstants.encodeMove(from, to);
         }
         return size;
     }
