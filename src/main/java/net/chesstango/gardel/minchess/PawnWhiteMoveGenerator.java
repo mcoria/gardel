@@ -6,6 +6,7 @@ import static net.chesstango.gardel.minchess.MinChessConstants.LIMIT_NORTH;
  * @author Mauricio Coria
  */
 class PawnWhiteMoveGenerator extends AbstractMoveGenerator {
+    static final long START_POS = 0x000000000000FF00L;
 
     PawnWhiteMoveGenerator(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
         super(workspace, workspaceTmp);
@@ -19,7 +20,24 @@ class PawnWhiteMoveGenerator extends AbstractMoveGenerator {
         while (fromPawns != 0) {
             long from = 1L << Long.numberOfTrailingZeros(fromPawns);
             size += generateMoveForward(moves, startIdx + size, from, emptyPositions);
+            size += generateDoubleMoveForward(moves, startIdx + size, from, emptyPositions);
             fromPawns &= ~from;
+        }
+        return size;
+    }
+
+    private int generateDoubleMoveForward(short[] moves, int startIdx, long from, long emptyPositions) {
+        int size = 0;
+        if ((from & START_POS) != 0) {
+            final long intermediate = from << 8;
+            if ((intermediate & emptyPositions) != 0) {
+                final long to = intermediate << 8;
+                if ((to & emptyPositions) != 0) {
+                    if (isLegalMove(from, to)) {
+                        moves[startIdx + size++] = MinChessConstants.encodeMove(from, to);
+                    }
+                }
+            }
         }
         return size;
     }
