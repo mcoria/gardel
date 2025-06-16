@@ -149,11 +149,11 @@ class MinChessWorkspace {
 
     private boolean isKingInCheckByBlackPawn(long kingPosition, int kingIdx) {
         final long blackPawns = blackPositions & pawnPositions;
-        if ((kingPosition & LIMIT_WEST) == 0) {
+        if ((kingPosition & LIMIT_NORTH_WEST) == 0) {
             final long pawnPosition = kingPosition << 7;
             return (blackPawns & pawnPosition) != 0;
         }
-        if ((kingPosition & LIMIT_EAST) == 0) {
+        if ((kingPosition & LIMIT_NORTH_EAST) == 0) {
             final long pawnPosition = kingPosition << 9;
             return (blackPawns & pawnPosition) != 0;
         }
@@ -161,6 +161,15 @@ class MinChessWorkspace {
     }
 
     private boolean isKingInCheckByWhitePawn(long kingPosition, int kingIdx) {
+        final long whitePawns = whitePositions & pawnPositions;
+        if ((kingPosition & LIMIT_SOUTH_WEST) == 0) {
+            final long pawnPosition = kingPosition >>> 7;
+            return (whitePawns & pawnPosition) != 0;
+        }
+        if ((kingPosition & LIMIT_SOUTH_EAST) == 0) {
+            final long pawnPosition = kingPosition >>> 9;
+            return (whitePawns & pawnPosition) != 0;
+        }
         return false;
     }
 

@@ -1,7 +1,6 @@
 package net.chesstango.gardel.minchess;
 
-import static net.chesstango.gardel.minchess.MinChessConstants.LIMIT_NORTH;
-import static net.chesstango.gardel.minchess.MinChessConstants.LIMIT_NORTH_WEST;
+import static net.chesstango.gardel.minchess.MinChessConstants.*;
 
 /**
  * @author Mauricio Coria
@@ -36,11 +35,20 @@ class PawnWhiteMoveGenerator extends AbstractMoveGenerator {
 
     int generateCaptureNorthWest(short[] moves, int startIdx, long from, long opponentPositions) {
         int size = 0;
-        if ((from & LIMIT_NORTH_WEST) == 0) {
+        if ((from & LIMIT_WEST) == 0) {
             long toPosition = from << 7;
             if ((toPosition & opponentPositions) != 0 && isLegalMove(from, toPosition)) {
                 size = createMove(moves, startIdx, from, toPosition);
             }
+        }
+        return size;
+    }
+
+    int generateMoveForward(short[] moves, int startIdx, long from, long emptyPositions) {
+        int size = 0;
+        final long to = from << 8;
+        if ((to & emptyPositions) != 0 && isLegalMove(from, to)) {
+            size = createMove(moves, startIdx, from, to);
         }
         return size;
     }
@@ -57,15 +65,6 @@ class PawnWhiteMoveGenerator extends AbstractMoveGenerator {
                     }
                 }
             }
-        }
-        return size;
-    }
-
-    int generateMoveForward(short[] moves, int startIdx, long from, long emptyPositions) {
-        int size = 0;
-        final long to = from << 8;
-        if ((to & emptyPositions) != 0 && isLegalMove(from, to)) {
-            size = createMove(moves, startIdx, from, to);
         }
         return size;
     }
