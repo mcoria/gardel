@@ -31,6 +31,7 @@ class PawnBlack extends AbstractPiece {
     int generateCaptureMove(short[] moves, int startIdx, long from, long opponentPositions) {
         int size = 0;
         size += generateCaptureSouthEast(moves, startIdx + size, from, opponentPositions);
+        size += generateCaptureSouthWest(moves, startIdx + size, from, opponentPositions);
         return size;
     }
 
@@ -38,6 +39,17 @@ class PawnBlack extends AbstractPiece {
         int size = 0;
         if ((from & LIMIT_EAST) == 0) {
             long toPosition = from >>> 7;
+            if ((toPosition & opponentPositions) != 0 && isLegalMove(from, toPosition)) {
+                size = createMove(moves, startIdx, from, toPosition);
+            }
+        }
+        return size;
+    }
+
+    private int generateCaptureSouthWest(short[] moves, int startIdx, long from, long opponentPositions) {
+        int size = 0;
+        if ((from & LIMIT_WEST) == 0) {
+            long toPosition = from >>> 9;
             if ((toPosition & opponentPositions) != 0 && isLegalMove(from, toPosition)) {
                 size = createMove(moves, startIdx, from, toPosition);
             }
@@ -69,7 +81,6 @@ class PawnBlack extends AbstractPiece {
         }
         return size;
     }
-
 
     int createMove(short[] moves, int startIdx, long from, long to) {
         int size = 0;

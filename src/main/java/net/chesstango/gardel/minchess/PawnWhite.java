@@ -30,7 +30,19 @@ class PawnWhite extends AbstractPiece {
 
     int generateCaptureMove(short[] moves, int startIdx, long from, long opponentPositions) {
         int size = 0;
+        size += generateCaptureNorthEast(moves, startIdx + size, from, opponentPositions);
         size += generateCaptureNorthWest(moves, startIdx + size, from, opponentPositions);
+        return size;
+    }
+
+    int generateCaptureNorthEast(short[] moves, int startIdx, long from, long opponentPositions) {
+        int size = 0;
+        if ((from & LIMIT_EAST) == 0) {
+            long toPosition = from << 9;
+            if ((toPosition & opponentPositions) != 0 && isLegalMove(from, toPosition)) {
+                size = createMove(moves, startIdx, from, toPosition);
+            }
+        }
         return size;
     }
 
