@@ -5,10 +5,10 @@ package net.chesstango.gardel.minchess;
  */
 class MinChessConstants {
     enum PromotionPiece {
-        QUEEN(4),
-        ROOK(3),
+        KNIGHT(1),
         BISHOP(2),
-        KNIGHT(1);
+        ROOK(3),
+        QUEEN(4);
 
         final int value;
 
@@ -18,10 +18,10 @@ class MinChessConstants {
 
         static PromotionPiece from(int promotionPiece) {
             return switch (promotionPiece) {
-                case 4 -> QUEEN;
-                case 3 -> ROOK;
-                case 2 -> BISHOP;
                 case 1 -> KNIGHT;
+                case 2 -> BISHOP;
+                case 3 -> ROOK;
+                case 4 -> QUEEN;
                 default -> throw new IllegalArgumentException("Invalid promotion piece: " + promotionPiece);
             };
         };

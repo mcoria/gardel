@@ -73,7 +73,7 @@ public class KPvKPTest extends AbstractPerftTest {
     }
 
     @Test
-    public void test_POS1_PERFT_L2_a7_a8_KNIGHT_WHITE() {
+    public void test_POS1_PERFT_L2_a7_a8_KNIGHT() {
         MinChess game = createGame(POSITION);
         game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.KNIGHT));
 
@@ -98,5 +98,30 @@ public class KPvKPTest extends AbstractPerftTest {
         assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.KNIGHT_BLACK));
         assertEquals(17, result.getMovesCount());
         assertEquals(17, result.getTotalNodes());
+    }
+
+    @Test
+    public void test_POS1_PERFT_L2_a7_a8_QUEEN() {
+        MinChess game = createGame(POSITION);
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.QUEEN));
+
+        PerftResult result = perft.start(game, 1);
+        assertEquals(1, result.getChildNode(Square.a4, Square.a3));
+        assertEquals(1, result.getChildNode(Square.c4, Square.c3));
+        assertEquals(1, result.getChildNode(Square.d5, Square.d4));
+        assertEquals(1, result.getChildNode(Square.d5, Square.e4));
+        assertEquals(1, result.getChildNode(Square.e7, Square.d6));
+        assertEquals(1, result.getChildNode(Square.e7, Square.d7));
+        assertEquals(1, result.getChildNode(Square.e7, Square.f6));
+        assertEquals(1, result.getChildNode(Square.e7, Square.f7));
+        assertEquals(1, result.getChildNode(Square.g7, Square.g5));
+        assertEquals(1, result.getChildNode(Square.g7, Square.g6));
+        assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.KNIGHT_BLACK));
+        assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.BISHOP_BLACK));
+        assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.ROOK_BLACK));
+        assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.QUEEN_BLACK));
+        assertEquals(14, result.getMovesCount());
+        assertEquals(14, result.getTotalNodes());
+
     }
 }
