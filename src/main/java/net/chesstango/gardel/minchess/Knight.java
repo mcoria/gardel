@@ -13,7 +13,8 @@ class Knight extends AbstractPiece {
         workspaceTmp.setKnight(this);
     }
 
-    int generateKnightMoves(short[] moves, int startIdx) {
+    @Override
+    int generateMoves(short[] moves, int startIdx) {
         int size = 0;
         final long emptyOrOpponentPositions = workspace.whiteTurn ? ~workspace.whitePositions : ~workspace.blackPositions;
         long fromPosition = workspace.knightPositions & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
@@ -33,5 +34,12 @@ class Knight extends AbstractPiece {
             fromPosition &= ~(1L << fromIdx);
         }
         return size;
+    }
+
+    @Override
+    boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long kingJumps = KNIGHT_JUMPS[kingIdx];
+        final long knightPositionOpponent = workspaceTmp.knightPositions & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+        return (kingJumps & knightPositionOpponent) != 0;
     }
 }

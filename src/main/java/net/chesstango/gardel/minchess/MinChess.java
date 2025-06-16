@@ -57,10 +57,10 @@ public class MinChess implements Cloneable {
 
     public int generateMoves(short[] moves) {
         int size = 0;
-        size += king.generateKingMoves(moves, size);
-        size += knight.generateKnightMoves(moves, size);
-        size += rook.generateRookMoves(moves, size);
-        size += bishop.generateBishopMoves(moves, size);
+        size += king.generateMoves(moves, size);
+        size += knight.generateMoves(moves, size);
+        size += rook.generateMoves(moves, size);
+        size += bishop.generateMoves(moves, size);
         size += pawn.generatePawnMoves(moves, size);
         return size;
     }

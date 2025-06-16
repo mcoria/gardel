@@ -3,7 +3,7 @@ package net.chesstango.gardel.minchess;
 /**
  * @author Mauricio Coria
  */
-class AbstractPiece {
+abstract class AbstractPiece {
     final MinChessWorkspace workspace;
     final MinChessWorkspace workspaceTmp;
 
@@ -17,4 +17,8 @@ class AbstractPiece {
         workspaceTmp.doMoveImp(from, to);
         return !workspaceTmp.isKingInCheck(workspace.whiteTurn);
     }
+
+    abstract int generateMoves(short[] moves, int startIdx);
+
+    abstract boolean isKingInCheckByOpponent(long kingPosition, int kingIdx, boolean opponentColor);
 }

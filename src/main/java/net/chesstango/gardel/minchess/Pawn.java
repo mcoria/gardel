@@ -20,6 +20,11 @@ class Pawn {
     }
 
     int generatePawnMoves(short[] moves, int startIdx) {
-        return workspace.whiteTurn ? pawnWhite.generatePawnMoves(moves, startIdx) : pawnBlack.generatePawnMoves(moves, startIdx);
+        return workspace.whiteTurn ? pawnWhite.generateMoves(moves, startIdx) : pawnBlack.generateMoves(moves, startIdx);
     }
+
+    boolean isKingInCheckByOpponentPawn(long kingPosition, int kingIdx, boolean opponentColor) {
+        return opponentColor ? pawnWhite.isKingInCheckByOpponent(kingPosition, kingIdx, opponentColor) : pawnBlack.isKingInCheckByOpponent(kingPosition, kingIdx, opponentColor);
+    }
+
 }

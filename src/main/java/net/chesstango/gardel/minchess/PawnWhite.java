@@ -12,7 +12,8 @@ class PawnWhite extends AbstractPiece {
         super(workspace, workspaceTmp);
     }
 
-    int generatePawnMoves(short[] moves, int startIdx) {
+    @Override
+    int generateMoves(short[] moves, int startIdx) {
         int size = 0;
         final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
         final long opponentPositions = workspace.blackPositions;
@@ -80,5 +81,19 @@ class PawnWhite extends AbstractPiece {
             moves[startIdx + size++] = MinChessConstants.encodeMove(from, to);
         }
         return size;
+    }
+
+    @Override
+    boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long whitePawns = workspaceTmp.whitePositions & workspaceTmp.pawnPositions;
+        if ((kingPosition & LIMIT_SOUTH_WEST) == 0) {
+            final long pawnPosition = kingPosition >>> 7;
+            return (whitePawns & pawnPosition) != 0;
+        }
+        if ((kingPosition & LIMIT_SOUTH_EAST) == 0) {
+            final long pawnPosition = kingPosition >>> 9;
+            return (whitePawns & pawnPosition) != 0;
+        }
+        return false;
     }
 }

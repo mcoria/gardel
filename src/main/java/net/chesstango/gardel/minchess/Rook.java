@@ -13,7 +13,8 @@ class Rook extends AbstractPiece {
         workspaceTmp.setRook(this);
     }
 
-    int generateRookMoves(short[] moves, int startIdx) {
+    @Override
+    int generateMoves(short[] moves, int startIdx) {
         int size = 0;
         long fromRooks = (workspace.rookPositions | workspace.queenPositions) & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
         while (fromRooks != 0) {
@@ -93,5 +94,76 @@ class Rook extends AbstractPiece {
             } while ((toPosition & LIMIT_SOUTH) == 0 && (toPosition & allPositions) == 0);
         }
         return size;
+    }
+
+
+
+    @Override
+    boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        return isKingInCheckByOpponentRookNorth(kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentRookSouth(kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentRookEast(kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentRookWest(kingPosition, kingIdx, opponentColor);
+
+    }
+
+    boolean isKingInCheckByOpponentRookWest(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
+        final long opponentRooks = (workspaceTmp.rookPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+        if ((kingPosition & LIMIT_WEST) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition >>> 1;
+                if ((toPosition & opponentRooks) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_WEST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
+    }
+
+    boolean isKingInCheckByOpponentRookEast(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
+        final long opponentRooks = (workspaceTmp.rookPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+        if ((kingPosition & LIMIT_EAST) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition << 1;
+                if ((toPosition & opponentRooks) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_EAST) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
+    }
+
+    boolean isKingInCheckByOpponentRookNorth(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
+        final long opponentRooks = (workspaceTmp.rookPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+        if ((kingPosition & LIMIT_NORTH) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition << 8;
+                if ((toPosition & opponentRooks) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_NORTH) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
+    }
+
+    boolean isKingInCheckByOpponentRookSouth(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
+        final long opponentRooks = (workspaceTmp.rookPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+        if ((kingPosition & LIMIT_SOUTH) == 0) {
+            long toPosition = kingPosition;
+            do {
+                toPosition = toPosition >>> 8;
+                if ((toPosition & opponentRooks) != 0) {
+                    return true;
+                }
+            } while ((toPosition & LIMIT_SOUTH) == 0 && (toPosition & emptyPositions) != 0);
+        }
+        return false;
     }
 }
