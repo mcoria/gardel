@@ -5,10 +5,12 @@ import static net.chesstango.gardel.minchess.MinChessConstants.KING_JUMPS;
 /**
  * @author Mauricio Coria
  */
-class KingMoveGenerator extends AbstractMoveGenerator {
+class King extends AbstractPiece {
 
-    KingMoveGenerator(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
+    King(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
         super(workspace, workspaceTmp);
+        workspace.setKing(this);
+        workspaceTmp.setKing(this);
     }
 
     int generateKingMoves(short[] moves, int startIdx) {

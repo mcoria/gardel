@@ -5,10 +5,12 @@ import static net.chesstango.gardel.minchess.MinChessConstants.*;
 /**
  * @author Mauricio Coria
  */
-class RookMoveGenerator extends AbstractMoveGenerator {
+class Rook extends AbstractPiece {
 
-    RookMoveGenerator(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
+    Rook(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
         super(workspace, workspaceTmp);
+        workspace.setRook(this);
+        workspaceTmp.setRook(this);
     }
 
     int generateRookMoves(short[] moves, int startIdx) {

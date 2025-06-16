@@ -8,11 +8,11 @@ public class MinChess implements Cloneable {
     final MinChessWorkspace workspace;
     final MinChessWorkspace workspaceTmp;
 
-    final KingMoveGenerator kingMoveGenerator;
-    final KnightMoveGenerator knightMoveGenerator;
-    final RookMoveGenerator rookMoveGenerator;
-    final BishopMoveGenerator bishopMoveGenerator;
-    final PawnMoveGenerator pawnMoveGenerator;
+    final King king;
+    final Knight knight;
+    final Rook rook;
+    final Bishop bishop;
+    final Pawn pawn;
 
     public MinChess(boolean whiteTurn,
                     boolean castlingBlackKingAllowed,
@@ -47,21 +47,21 @@ public class MinChess implements Cloneable {
 
         this.workspaceTmp = new MinChessWorkspace();
 
-        this.kingMoveGenerator = new KingMoveGenerator(workspace, workspaceTmp);
-        this.knightMoveGenerator = new KnightMoveGenerator(workspace, workspaceTmp);
-        this.rookMoveGenerator = new RookMoveGenerator(workspace, workspaceTmp);
-        this.bishopMoveGenerator = new BishopMoveGenerator(workspace, workspaceTmp);
-        this.pawnMoveGenerator = new PawnMoveGenerator(workspace, workspaceTmp);
+        this.king = new King(workspace, workspaceTmp);
+        this.knight = new Knight(workspace, workspaceTmp);
+        this.rook = new Rook(workspace, workspaceTmp);
+        this.bishop = new Bishop(workspace, workspaceTmp);
+        this.pawn = new Pawn(workspace, workspaceTmp);
     }
 
 
     public int generateMoves(short[] moves) {
         int size = 0;
-        size += kingMoveGenerator.generateKingMoves(moves, size);
-        size += knightMoveGenerator.generateKnightMoves(moves, size);
-        size += rookMoveGenerator.generateRookMoves(moves, size);
-        size += bishopMoveGenerator.generateBishopMoves(moves, size);
-        size += pawnMoveGenerator.generatePawnMoves(moves, size);
+        size += king.generateKingMoves(moves, size);
+        size += knight.generateKnightMoves(moves, size);
+        size += rook.generateRookMoves(moves, size);
+        size += bishop.generateBishopMoves(moves, size);
+        size += pawn.generatePawnMoves(moves, size);
         return size;
     }
 

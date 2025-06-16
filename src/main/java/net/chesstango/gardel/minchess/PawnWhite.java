@@ -5,18 +5,18 @@ import static net.chesstango.gardel.minchess.MinChessConstants.*;
 /**
  * @author Mauricio Coria
  */
-class PawnBlackMoveGenerator extends AbstractMoveGenerator {
-    static final long START_POS = 0x00FF000000000000L;
+class PawnWhite extends AbstractPiece {
+    static final long START_POS = 0x000000000000FF00L;
 
-    PawnBlackMoveGenerator(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
+    PawnWhite(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
         super(workspace, workspaceTmp);
     }
 
     int generatePawnMoves(short[] moves, int startIdx) {
         int size = 0;
         final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
-        final long opponentPositions = workspace.whitePositions;
-        long fromPawns = workspace.pawnPositions & workspace.blackPositions;
+        final long opponentPositions = workspace.blackPositions;
+        long fromPawns = workspace.pawnPositions & workspace.whitePositions;
         while (fromPawns != 0) {
             long from = 1L << Long.numberOfTrailingZeros(fromPawns);
             size += generateMoveForward(moves, startIdx + size, from, emptyPositions);
@@ -29,14 +29,14 @@ class PawnBlackMoveGenerator extends AbstractMoveGenerator {
 
     int generateCaptureMove(short[] moves, int startIdx, long from, long opponentPositions) {
         int size = 0;
-        size += generateCaptureSouthEast(moves, startIdx + size, from, opponentPositions);
+        size += generateCaptureNorthWest(moves, startIdx + size, from, opponentPositions);
         return size;
     }
 
-    int generateCaptureSouthEast(short[] moves, int startIdx, long from, long opponentPositions) {
+    int generateCaptureNorthWest(short[] moves, int startIdx, long from, long opponentPositions) {
         int size = 0;
-        if ((from & LIMIT_EAST) == 0) {
-            long toPosition = from >>> 7;
+        if ((from & LIMIT_WEST) == 0) {
+            long toPosition = from << 7;
             if ((toPosition & opponentPositions) != 0 && isLegalMove(from, toPosition)) {
                 size = createMove(moves, startIdx, from, toPosition);
             }
@@ -46,7 +46,7 @@ class PawnBlackMoveGenerator extends AbstractMoveGenerator {
 
     int generateMoveForward(short[] moves, int startIdx, long from, long emptyPositions) {
         int size = 0;
-        final long to = from >>> 8;
+        final long to = from << 8;
         if ((to & emptyPositions) != 0 && isLegalMove(from, to)) {
             size = createMove(moves, startIdx, from, to);
         }
@@ -56,9 +56,9 @@ class PawnBlackMoveGenerator extends AbstractMoveGenerator {
     int generateDoubleMoveForward(short[] moves, int startIdx, long from, long emptyPositions) {
         int size = 0;
         if ((from & START_POS) != 0) {
-            final long intermediate = from >>> 8;
+            final long intermediate = from << 8;
             if ((intermediate & emptyPositions) != 0) {
-                final long to = intermediate >>> 8;
+                final long to = intermediate << 8;
                 if ((to & emptyPositions) != 0) {
                     if (isLegalMove(from, to)) {
                         moves[startIdx + size++] = MinChessConstants.encodeMove(from, to);
@@ -69,10 +69,9 @@ class PawnBlackMoveGenerator extends AbstractMoveGenerator {
         return size;
     }
 
-
     int createMove(short[] moves, int startIdx, long from, long to) {
         int size = 0;
-        if ((to & LIMIT_SOUTH) != 0) {
+        if ((to & LIMIT_NORTH) != 0) {
             moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 1); // Knight
             moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 2); // Bishop
             moves[startIdx + size++] = MinChessConstants.encodeMove(from, to, 3); // Rook

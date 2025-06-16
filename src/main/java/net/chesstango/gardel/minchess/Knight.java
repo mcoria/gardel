@@ -5,10 +5,12 @@ import static net.chesstango.gardel.minchess.MinChessConstants.KNIGHT_JUMPS;
 /**
  * @author Mauricio Coria
  */
-class KnightMoveGenerator extends AbstractMoveGenerator {
+class Knight extends AbstractPiece {
 
-    KnightMoveGenerator(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
+    Knight(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
         super(workspace, workspaceTmp);
+        workspace.setKnight(this);
+        workspaceTmp.setKnight(this);
     }
 
     int generateKnightMoves(short[] moves, int startIdx) {

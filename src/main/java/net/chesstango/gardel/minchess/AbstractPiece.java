@@ -3,11 +3,11 @@ package net.chesstango.gardel.minchess;
 /**
  * @author Mauricio Coria
  */
-class AbstractMoveGenerator {
+class AbstractPiece {
     final MinChessWorkspace workspace;
     final MinChessWorkspace workspaceTmp;
 
-    AbstractMoveGenerator(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
+    AbstractPiece(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
         this.workspace = workspace;
         this.workspaceTmp = workspaceTmp;
     }

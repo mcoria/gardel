@@ -5,10 +5,12 @@ import static net.chesstango.gardel.minchess.MinChessConstants.*;
 /**
  * @author Mauricio Coria
  */
-class BishopMoveGenerator extends AbstractMoveGenerator {
+class Bishop extends AbstractPiece {
 
-    BishopMoveGenerator(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
+    Bishop(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
         super(workspace, workspaceTmp);
+        workspace.setBishop( this);
+        workspaceTmp.setBishop( this);
     }
 
     int generateBishopMoves(short[] moves, int startIdx) {

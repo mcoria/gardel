@@ -1,5 +1,7 @@
 package net.chesstango.gardel.minchess;
 
+import lombok.Setter;
+
 import static net.chesstango.gardel.minchess.MinChessConstants.*;
 
 /**
@@ -21,6 +23,21 @@ class MinChessWorkspace {
     long bishopPositions = 0;
     long knightPositions = 0;
     long pawnPositions = 0;
+
+    @Setter
+    King king;
+
+    @Setter
+    Knight knight;
+
+    @Setter
+    Rook rook;
+
+    @Setter
+    Bishop bishop;
+
+    @Setter
+    Pawn pawn;
 
     MinChessWorkspace(boolean whiteTurn,
                       boolean castlingBlackKingAllowed,
