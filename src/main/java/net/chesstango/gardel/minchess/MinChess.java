@@ -74,21 +74,24 @@ public class MinChess implements Cloneable {
         int toRank = (move & 0b00000000_00111000) >>> 3;
         long toPosition = 1L << (toRank * 8 + toFile);
 
-
         int fromFile = (move & 0b00000001_11000000) >>> 6;
         int fromRank = (move & 0b00001110_00000000) >>> 9;
         long fromPosition = 1L << (fromRank * 8 + fromFile);
 
-        int promotionPiece = (move & 0b01110000_00000000) >>> 12;
-
-        if (promotionPiece == 0) {
-            workspace.doMoveImp(fromPosition, toPosition);
+        if ((fromPosition & workspace.pawnPositions) != 0) {
+            int promotionPiece = (move & 0b01110000_00000000) >>> 12;
+            if (promotionPiece != 0) {
+                MinChessConstants.PromotionPiece promotionPieceValue = MinChessConstants.PromotionPiece.from(promotionPiece);
+                workspace.doMovePromotionImp(fromPosition, toPosition, promotionPieceValue);
+            } else if (Math.abs(fromRank - toRank) == 2) {
+                throw new IllegalArgumentException("Invalid move: " + move);
+            } else {
+                workspace.doMoveImp(fromPosition, toPosition);
+            }
         } else {
-            MinChessConstants.PromotionPiece promotionPieceValue = MinChessConstants.PromotionPiece.from(promotionPiece);
-            workspace.doMovePromotionImp(fromPosition, toPosition, promotionPieceValue);
+            workspace.doMoveImp(fromPosition, toPosition);
         }
     }
-
 
 
     public MinChess clone() {

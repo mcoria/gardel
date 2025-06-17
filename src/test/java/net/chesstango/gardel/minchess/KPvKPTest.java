@@ -124,4 +124,34 @@ public class KPvKPTest extends AbstractPerftTest {
         assertEquals(14, result.getTotalNodes());
 
     }
+
+    @Test
+    public void test_POS1_PERFT_L2_b2_b4() {
+        MinChess game = createGame(POSITION);
+        game.doMove(encodeMove(Square.b2.bitPosition(), Square.b4.bitPosition()));
+
+        PerftResult result = perft.start(game, 1);
+
+        assertEquals(1, result.getChildNode(Square.a4, Square.a3));
+        assertEquals(1, result.getChildNode(Square.a4, Square.b3));
+        assertEquals(1, result.getChildNode(Square.c4, Square.b3));
+        assertEquals(1, result.getChildNode(Square.c4, Square.c3));
+        assertEquals(1, result.getChildNode(Square.d5, Square.d4));
+        assertEquals(1, result.getChildNode(Square.d5, Square.e4));
+        assertEquals(1, result.getChildNode(Square.e7, Square.d6));
+        assertEquals(1, result.getChildNode(Square.e7, Square.d7));
+        assertEquals(1, result.getChildNode(Square.e7, Square.d8));
+        assertEquals(1, result.getChildNode(Square.e7, Square.e8));
+        assertEquals(1, result.getChildNode(Square.e7, Square.f6));
+        assertEquals(1, result.getChildNode(Square.e7, Square.f7));
+        assertEquals(1, result.getChildNode(Square.e7, Square.f8));
+        assertEquals(1, result.getChildNode(Square.g7, Square.g5));
+        assertEquals(1, result.getChildNode(Square.g7, Square.g6));
+        assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.BISHOP_BLACK));
+        assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.ROOK_BLACK));
+        assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.KNIGHT_BLACK));
+        assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.QUEEN_BLACK));
+        assertEquals(19, result.getMovesCount());
+        assertEquals(19, result.getTotalNodes());
+    }
 }
