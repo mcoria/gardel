@@ -121,7 +121,6 @@ class PawnBlack extends AbstractPiece {
         return size;
     }
 
-
     @Override
     boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
         final long blackPawns = workspaceTmp.blackPositions & workspaceTmp.pawnPositions;

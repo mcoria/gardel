@@ -89,6 +89,8 @@ public class MinChess implements Cloneable {
                 workspace.enPassantSquare = 1L << (enPassantRank * 8 + fromFile);
             } else if ((toPosition & workspace.enPassantSquare) != 0) {
                 workspace.doEnPassantMoveImp(fromPosition, toPosition);
+            } else {
+                workspace.doMoveImp(fromPosition, toPosition);
             }
         } else {
             workspace.doMoveImp(fromPosition, toPosition);
