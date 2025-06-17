@@ -100,11 +100,15 @@ class PawnWhite extends AbstractPiece {
         final long whitePawns = workspaceTmp.whitePositions & workspaceTmp.pawnPositions;
         if ((kingPosition & LIMIT_SOUTH_WEST) == 0) {
             final long pawnPosition = kingPosition >>> 7;
-            return (whitePawns & pawnPosition) != 0;
+            if((whitePawns & pawnPosition) != 0){
+                return true;
+            }
         }
         if ((kingPosition & LIMIT_SOUTH_EAST) == 0) {
             final long pawnPosition = kingPosition >>> 9;
-            return (whitePawns & pawnPosition) != 0;
+            if((whitePawns & pawnPosition) != 0){
+                return true;
+            }
         }
         return false;
     }

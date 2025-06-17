@@ -126,11 +126,15 @@ class PawnBlack extends AbstractPiece {
         final long blackPawns = workspaceTmp.blackPositions & workspaceTmp.pawnPositions;
         if ((kingPosition & LIMIT_NORTH_WEST) == 0) {
             final long pawnPosition = kingPosition << 7;
-            return (blackPawns & pawnPosition) != 0;
+            if((blackPawns & pawnPosition) != 0){
+                return true;
+            }
         }
         if ((kingPosition & LIMIT_NORTH_EAST) == 0) {
             final long pawnPosition = kingPosition << 9;
-            return (blackPawns & pawnPosition) != 0;
+            if((blackPawns & pawnPosition) != 0){
+                return true;
+            }
         }
         return false;
     }
