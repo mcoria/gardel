@@ -139,6 +139,8 @@ class MinChessWorkspace {
             pawnPositions |= to;
         }
 
+        enPassantSquare = 0;
+
         if (whiteTurn) {
             whitePositions &= ~from;
             whitePositions |= to;
@@ -168,6 +170,19 @@ class MinChessWorkspace {
                 throw new IllegalArgumentException("Invalid promotion piece: " + promotionPiece);
         }
         doMoveImp(from, to);
+    }
+
+    void doEnPassantMoveImp(long from, long enPassantSquare) {
+        if(whiteTurn){
+            long enPassantPawn = enPassantSquare << 8;
+            blackPositions &= ~enPassantPawn;
+            pawnPositions &= ~enPassantPawn;
+        } else {
+            long enPassantPawn = enPassantSquare >>> 8;
+            whitePositions &= ~enPassantPawn;
+            pawnPositions &= ~enPassantPawn;
+        }
+        doMoveImp(from, enPassantSquare);
     }
 
 

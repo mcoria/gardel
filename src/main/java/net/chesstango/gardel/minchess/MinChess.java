@@ -84,9 +84,11 @@ public class MinChess implements Cloneable {
                 MinChessConstants.PromotionPiece promotionPieceValue = MinChessConstants.PromotionPiece.from(promotionPiece);
                 workspace.doMovePromotionImp(fromPosition, toPosition, promotionPieceValue);
             } else if (Math.abs(fromRank - toRank) == 2) {
-                throw new IllegalArgumentException("Invalid move: " + move);
-            } else {
+                int enPassantRank = (fromRank + toRank) / 2;
                 workspace.doMoveImp(fromPosition, toPosition);
+                workspace.enPassantSquare = 1L << (enPassantRank * 8 + fromFile);
+            } else if ((toPosition & workspace.enPassantSquare) != 0) {
+                workspace.doEnPassantMoveImp(fromPosition, toPosition);
             }
         } else {
             workspace.doMoveImp(fromPosition, toPosition);
