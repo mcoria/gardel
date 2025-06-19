@@ -40,7 +40,7 @@ class PawnWhite extends AbstractPiece {
             }
             if ((from & LIMIT_WEST) == 0) {
                 final long toPosition = from << 7;
-                if ((toPosition & workspace.enPassantSquare) != 0 && isLegalMove(from, workspace.enPassantSquare)) {
+                if ((toPosition & workspace.enPassantSquare) != 0 && isLegalEnPassantMove(from, workspace.enPassantSquare)) {
                     size = createMove(moves, startIdx, from, toPosition);
                 }
             }
