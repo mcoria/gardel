@@ -125,13 +125,13 @@ class PawnWhite extends AbstractPiece {
     boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
         final long whitePawns = workspaceTmp.whitePositions & workspaceTmp.pawnPositions;
         if ((kingPosition & LIMIT_SOUTH_WEST) == 0) {
-            final long pawnPosition = kingPosition >>> 7;
+            final long pawnPosition = kingPosition >>> 9;
             if((whitePawns & pawnPosition) != 0){
                 return true;
             }
         }
         if ((kingPosition & LIMIT_SOUTH_EAST) == 0) {
-            final long pawnPosition = kingPosition >>> 9;
+            final long pawnPosition = kingPosition >>> 7;
             if((whitePawns & pawnPosition) != 0){
                 return true;
             }
