@@ -174,11 +174,11 @@ class MinChessWorkspace {
 
     void doEnPassantMoveImp(long from, long enPassantSquare) {
         if(whiteTurn){
-            long enPassantPawn = enPassantSquare << 8;
+            long enPassantPawn = enPassantSquare >>> 8;
             blackPositions &= ~enPassantPawn;
             pawnPositions &= ~enPassantPawn;
         } else {
-            long enPassantPawn = enPassantSquare >>> 8;
+            long enPassantPawn = enPassantSquare << 8;
             whitePositions &= ~enPassantPawn;
             pawnPositions &= ~enPassantPawn;
         }
