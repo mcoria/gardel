@@ -27,6 +27,24 @@ class MinChessConstants {
         };
     }
 
+    static final long A1 = 0x01L;
+    static final long C1 = 0x04L;
+    static final long D1 = 0x08L;
+    static final long E1 = 0x10L;
+    static final long F1 = 0x20L;
+    static final long G1 = 0x40L;
+    static final long H1 = 0x80L;
+
+    static final long A8 = 0x0800000000000000L;
+    static final long C8 = 0x0400000000000000L;
+    static final long D8 = 0x0800000000000000L;
+    static final long E8 = 0x1000000000000000L;
+    static final long F8 = 0x2000000000000000L;
+    static final long G8 = 0x4000000000000000L;
+    static final long H8 = 0x8000000000000000L;
+
+
+
     static final long LIMIT_NORTH = 0xFF00000000000000L;
     static final long LIMIT_SOUTH = 0x00000000000000FFL;
     static final long LIMIT_EAST = 0x8080808080808080L;

@@ -2,6 +2,8 @@ package net.chesstango.gardel.minchess;
 
 import lombok.Setter;
 
+import static net.chesstango.gardel.minchess.MinChessConstants.*;
+
 /**
  * @author Mauricio Coria
  */
@@ -97,6 +99,15 @@ class MinChessWorkspace {
             }
             if ((to & rookPositions) != 0) {
                 rookPositions &= ~to;
+                if (to == A1) {
+                    castlingWhiteQueenAllowed = false;
+                } else if (to == H1) {
+                    castlingWhiteKingAllowed = false;
+                } else if (to == A8) {
+                    castlingBlackQueenAllowed = false;
+                } else if (to == H8) {
+                    castlingBlackKingAllowed = false;
+                }
             }
             if ((to & bishopPositions) != 0) {
                 bishopPositions &= ~to;
@@ -173,7 +184,7 @@ class MinChessWorkspace {
     }
 
     void doEnPassantMoveImp(long from, long enPassantSquare) {
-        if(whiteTurn){
+        if (whiteTurn) {
             long enPassantPawn = enPassantSquare >>> 8;
             blackPositions &= ~enPassantPawn;
             pawnPositions &= ~enPassantPawn;
