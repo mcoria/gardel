@@ -1,6 +1,7 @@
 package net.chesstango.gardel.minchess;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static net.chesstango.gardel.minchess.MinChessConstants.encodeMove;
@@ -677,5 +678,58 @@ public class KPvKPTest extends AbstractPerftTest {
         assertEquals(1, result.getChildNode(Square.h2, Square.h1, Piece.QUEEN_BLACK));
         assertEquals(14, result.getMovesCount());
         assertEquals(14, result.getTotalNodes());
+    }
+
+    @Test
+    public void test_POS1_PERFT_L7() {
+        MinChess game = createGame(POSITION);
+
+        PerftResult result = perft.start(game, 7);
+        assertEquals(26067994, result.getChildNode(Square.a7, Square.a8, Piece.ROOK_WHITE));
+        assertEquals(13851764, result.getChildNode(Square.a7, Square.a8, Piece.BISHOP_WHITE));
+        assertEquals(31259020, result.getChildNode(Square.a7, Square.a8, Piece.QUEEN_WHITE));
+        assertEquals(11147427, result.getChildNode(Square.a7, Square.a8, Piece.KNIGHT_WHITE));
+        assertEquals(20922344, result.getChildNode(Square.b2, Square.b3));
+        assertEquals(14055990, result.getChildNode(Square.b2, Square.b4));
+        assertEquals(10796909, result.getChildNode(Square.e2, Square.d1));
+        assertEquals(15468361, result.getChildNode(Square.e2, Square.d2));
+        assertEquals(11075704, result.getChildNode(Square.e2, Square.e1));
+        assertEquals(15833641, result.getChildNode(Square.e2, Square.e3));
+        assertEquals(9864824, result.getChildNode(Square.e2, Square.f1));
+        assertEquals(16445096, result.getChildNode(Square.e2, Square.f2));
+        assertEquals(15356122, result.getChildNode(Square.e2, Square.f3));
+        assertEquals(10462493, result.getChildNode(Square.e4, Square.d5));
+        assertEquals(9505517, result.getChildNode(Square.e4, Square.e5));
+        assertEquals(8957888, result.getChildNode(Square.f5, Square.f6));
+        assertEquals(20915923, result.getChildNode(Square.h5, Square.h6));
+        assertEquals(17, result.getMovesCount());
+        assertEquals(261987017, result.getTotalNodes());
+    }
+
+    @Test
+    @Disabled
+    public void test_POS1_PERFT_L8() {
+        MinChess game = createGame(POSITION);
+
+        PerftResult result = perft.start(game, 8);
+        assertEquals(180835438, result.getChildNode(Square.a7, Square.a8, Piece.KNIGHT_WHITE));
+        assertEquals(223920815, result.getChildNode(Square.a7, Square.a8, Piece.BISHOP_WHITE));
+        assertEquals(401057318, result.getChildNode(Square.a7, Square.a8, Piece.QUEEN_WHITE));
+        assertEquals(397791194, result.getChildNode(Square.a7, Square.a8, Piece.ROOK_WHITE));
+        assertEquals(329056510, result.getChildNode(Square.b2, Square.b3));
+        assertEquals(210324242, result.getChildNode(Square.b2, Square.b4));
+        assertEquals(155566967, result.getChildNode(Square.e2, Square.d1));
+        assertEquals(243062794, result.getChildNode(Square.e2, Square.d2));
+        assertEquals(161051941, result.getChildNode(Square.e2, Square.e1));
+        assertEquals(256602070, result.getChildNode(Square.e2, Square.e3));
+        assertEquals(141710258, result.getChildNode(Square.e2, Square.f1));
+        assertEquals(261623014, result.getChildNode(Square.e2, Square.f2));
+        assertEquals(243019740, result.getChildNode(Square.e2, Square.f3));
+        assertEquals(154953476, result.getChildNode(Square.e4, Square.d5));
+        assertEquals(138675715, result.getChildNode(Square.e4, Square.e5));
+        assertEquals(133296005, result.getChildNode(Square.f5, Square.f6));
+        assertEquals(330821471, result.getChildNode(Square.h5, Square.h6));
+        assertEquals(17, result.getMovesCount());
+        assertEquals(3963368968L, result.getTotalNodes());
     }
 }
