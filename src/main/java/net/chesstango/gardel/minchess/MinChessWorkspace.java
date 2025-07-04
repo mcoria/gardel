@@ -196,6 +196,25 @@ class MinChessWorkspace {
         doMoveImp(from, enPassantSquare);
     }
 
+    void doCastlingMoveImp(long from, long to) {
+        if (whiteTurn) {
+            if (from == E1 && to == G1) {
+                castlingWhiteKingAllowed = false;
+                castlingWhiteQueenAllowed = false;
+
+                rookPositions &= ~H1;
+                rookPositions |= F1;
+
+                whitePositions &= ~H1;
+                whitePositions |= F1;
+            }
+        } else {
+            throw new RuntimeException("Error");
+        }
+
+        doMoveImp(from, to);
+    }
+
 
     boolean isKingInCheck(boolean turn) {
         final long kingPosition = kingPositions & (turn ? whitePositions : blackPositions);

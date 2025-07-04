@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Mauricio Coria
  */
 public class KvKTest extends AbstractPerftTest {
-    public static final String POSITION = "8/8/4k3/8/4K3/8/8/8 w KQkq - 0 1";
+    public static final String POSITION = "8/8/4k3/8/4K3/8/8/8 w - - 0 1";
     private MinChessBuilder minChessBuilder;
     private PerftBrute perft;
 
@@ -95,7 +95,7 @@ public class KvKTest extends AbstractPerftTest {
 
     @Test
     public void test_POS1_PERFT_L6_mirror() {
-        MinChess game = createMirrorGame("8/8/4k3/8/4K3/8/8/8 w KQkq - 0 1");
+        MinChess game = createMirrorGame(POSITION);
 
         PerftResult result = perft.start(game, 6);
 

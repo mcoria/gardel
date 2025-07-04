@@ -92,6 +92,12 @@ public class MinChess implements Cloneable {
             } else {
                 workspace.doMoveImp(fromPosition, toPosition);
             }
+        } else if ((fromPosition & workspace.kingPositions) != 0) {
+            if (Math.abs(fromFile - toFile) == 2) {
+                workspace.doCastlingMoveImp(fromPosition, toPosition);
+            } else {
+                workspace.doMoveImp(fromPosition, toPosition);
+            }
         } else {
             workspace.doMoveImp(fromPosition, toPosition);
         }
