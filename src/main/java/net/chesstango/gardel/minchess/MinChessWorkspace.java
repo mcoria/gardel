@@ -230,14 +230,14 @@ class MinChessWorkspace {
                 rookPositions &= ~H8;
                 rookPositions |= F8;
 
-                whitePositions &= ~H8;
-                whitePositions |= F8;
+                blackPositions &= ~H8;
+                blackPositions |= F8;
             } else if (from == E8 && to == C8) {
                 rookPositions &= ~A8;
                 rookPositions |= D8;
 
-                whitePositions &= ~A8;
-                whitePositions |= D8;
+                blackPositions &= ~A8;
+                blackPositions |= D8;
             } else {
                 throw new RuntimeException("Error");
             }
