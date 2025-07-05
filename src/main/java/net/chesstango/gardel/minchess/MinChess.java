@@ -65,10 +65,6 @@ public class MinChess implements Cloneable {
         return size;
     }
 
-    public boolean isKingInCheck() {
-        return workspace.isKingInCheck(workspace.whiteTurn);
-    }
-
     public void doMove(short move) {
         int toFile = move & 0b00000000_00000111;
         int toRank = (move & 0b00000000_00111000) >>> 3;

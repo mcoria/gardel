@@ -30,6 +30,7 @@ class King extends AbstractPiece {
     final long CASTLING_BLACK_QUEEN = 0x0E00000000000000L;
     int generateBlackCastlingMoves(short[] moves, int startIdx) {
         int size = 0;
+        workspaceTmp.copyFrom(workspace);
         if(!workspace.isKingInCheck(false)) {
             final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
             final long fromPosition = workspace.blackPositions & workspace.kingPositions;
@@ -52,6 +53,7 @@ class King extends AbstractPiece {
     final long CASTLING_WHITE_QUEEN = 0x000000000000000EL;
     int generateWhiteCastlingMoves(short[] moves, int startIdx) {
         int size = 0;
+        workspaceTmp.copyFrom(workspace);
         if(!workspace.isKingInCheck(true)) {
             final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
             final long fromPosition = workspace.whitePositions & workspace.kingPositions;

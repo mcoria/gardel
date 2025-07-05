@@ -35,7 +35,7 @@ class MinChessConstants {
     static final long G1 = 0x40L;
     static final long H1 = 0x80L;
 
-    static final long A8 = 0x0800000000000000L;
+    static final long A8 = 0x0100000000000000L;
     static final long C8 = 0x0400000000000000L;
     static final long D8 = 0x0800000000000000L;
     static final long E8 = 0x1000000000000000L;
