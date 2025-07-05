@@ -136,6 +136,16 @@ class MinChessWorkspace {
         if ((from & rookPositions) != 0) {
             rookPositions &= ~from;
             rookPositions |= to;
+
+            if(from == A1) {
+                castlingWhiteQueenAllowed = false;
+            } else if(from == H1) {
+                castlingWhiteKingAllowed = false;
+            } else if(from == A8) {
+                castlingBlackQueenAllowed = false;
+            } else if(from == H8) {
+                castlingBlackKingAllowed = false;
+            }
         }
         if ((from & bishopPositions) != 0) {
             bishopPositions &= ~from;
