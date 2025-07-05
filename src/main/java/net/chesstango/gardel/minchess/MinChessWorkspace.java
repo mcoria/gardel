@@ -199,17 +199,40 @@ class MinChessWorkspace {
     void doCastlingMoveImp(long from, long to) {
         if (whiteTurn) {
             if (from == E1 && to == G1) {
-                castlingWhiteKingAllowed = false;
-                castlingWhiteQueenAllowed = false;
-
                 rookPositions &= ~H1;
                 rookPositions |= F1;
 
                 whitePositions &= ~H1;
                 whitePositions |= F1;
+            } else if (from == E1 && to == C1) {
+                rookPositions &= ~A1;
+                rookPositions |= D1;
+
+                whitePositions &= ~A1;
+                whitePositions |= D1;
+            } else {
+                throw new RuntimeException("Error");
             }
+            castlingWhiteKingAllowed = false;
+            castlingWhiteQueenAllowed = false;
         } else {
-            throw new RuntimeException("Error");
+            if (from == E8 && to == G8) {
+                rookPositions &= ~H8;
+                rookPositions |= F8;
+
+                whitePositions &= ~H8;
+                whitePositions |= F8;
+            } else if (from == E8 && to == C8) {
+                rookPositions &= ~A8;
+                rookPositions |= D8;
+
+                whitePositions &= ~A8;
+                whitePositions |= D8;
+            } else {
+                throw new RuntimeException("Error");
+            }
+            castlingBlackKingAllowed = false;
+            castlingBlackQueenAllowed = false;
         }
 
         doMoveImp(from, to);

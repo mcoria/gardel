@@ -188,4 +188,47 @@ public class CastlingTest extends AbstractPerftTest {
         assertEquals(31, result.getTotalNodes());
     }
 
+    @Test
+    public void test_POS1_PERFT_L3() {
+        MinChess game = createGame(POSITION);
+
+        PerftResult result = perft.start(game, 3);
+        assertEquals(1057, result.getChildNode(Square.a1, Square.a2));
+        assertEquals(1030, result.getChildNode(Square.a1, Square.a3));
+        assertEquals(860, result.getChildNode(Square.a1, Square.a4));
+        assertEquals(901, result.getChildNode(Square.a1, Square.a5));
+        assertEquals(920, result.getChildNode(Square.a1, Square.a6));
+        assertEquals(773, result.getChildNode(Square.a1, Square.a7));
+        assertEquals(111, result.getChildNode(Square.a1, Square.a8));
+        assertEquals(992, result.getChildNode(Square.a1, Square.b1));
+        assertEquals(953, result.getChildNode(Square.a1, Square.c1));
+        assertEquals(810, result.getChildNode(Square.a1, Square.d1));
+        assertEquals(882, result.getChildNode(Square.d4, Square.b3));
+        assertEquals(910, result.getChildNode(Square.d4, Square.b5));
+        assertEquals(855, result.getChildNode(Square.d4, Square.c2));
+        assertEquals(864, result.getChildNode(Square.d4, Square.c6));
+        assertEquals(882, result.getChildNode(Square.d4, Square.e2));
+        assertEquals(840, result.getChildNode(Square.d4, Square.e6));
+        assertEquals(947, result.getChildNode(Square.d4, Square.f3));
+        assertEquals(942, result.getChildNode(Square.d4, Square.f5));
+        assertEquals(806, result.getChildNode(Square.e1, Square.c1));
+        assertEquals(959, result.getChildNode(Square.e1, Square.d1));
+        assertEquals(1179, result.getChildNode(Square.e1, Square.d2));
+        assertEquals(1201, result.getChildNode(Square.e1, Square.e2));
+        assertEquals(923, result.getChildNode(Square.e1, Square.f1));
+        assertEquals(1128, result.getChildNode(Square.e1, Square.f2));
+        assertEquals(863, result.getChildNode(Square.e1, Square.g1));
+        assertEquals(868, result.getChildNode(Square.h1, Square.f1));
+        assertEquals(957, result.getChildNode(Square.h1, Square.g1));
+        assertEquals(1089, result.getChildNode(Square.h1, Square.h2));
+        assertEquals(1061, result.getChildNode(Square.h1, Square.h3));
+        assertEquals(915, result.getChildNode(Square.h1, Square.h4));
+        assertEquals(910, result.getChildNode(Square.h1, Square.h5));
+        assertEquals(946, result.getChildNode(Square.h1, Square.h6));
+        assertEquals(795, result.getChildNode(Square.h1, Square.h7));
+        assertEquals(114, result.getChildNode(Square.h1, Square.h8));
+        assertEquals(34, result.getMovesCount());
+        assertEquals(30243, result.getTotalNodes());
+    }
+
 }
