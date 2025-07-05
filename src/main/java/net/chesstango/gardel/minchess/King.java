@@ -28,20 +28,20 @@ class King extends AbstractPiece {
 
     final long CASTLING_BLACK_KING = 0x6000000000000000L;
     final long CASTLING_BLACK_QUEEN = 0x0E00000000000000L;
-
-
     int generateBlackCastlingMoves(short[] moves, int startIdx) {
         int size = 0;
-        final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
-        final long fromPosition = workspace.blackPositions & workspace.kingPositions;
-        if (workspace.castlingBlackKingAllowed && (CASTLING_BLACK_KING & emptyPositions) == CASTLING_BLACK_KING) {
-            if (isLegalMove(fromPosition, F8) && isLegalMove(fromPosition, G8)) {
-                moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, G8);
+        if(!workspace.isKingInCheck(false)) {
+            final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
+            final long fromPosition = workspace.blackPositions & workspace.kingPositions;
+            if (workspace.castlingBlackKingAllowed && (CASTLING_BLACK_KING & emptyPositions) == CASTLING_BLACK_KING) {
+                if (isLegalMove(fromPosition, F8) && isLegalMove(fromPosition, G8)) {
+                    moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, G8);
+                }
             }
-        }
-        if (workspace.castlingBlackQueenAllowed && (CASTLING_BLACK_QUEEN & emptyPositions) == CASTLING_BLACK_QUEEN) {
-            if (isLegalMove(fromPosition, C8) && isLegalMove(fromPosition, D8)) {
-                moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, C8);
+            if (workspace.castlingBlackQueenAllowed && (CASTLING_BLACK_QUEEN & emptyPositions) == CASTLING_BLACK_QUEEN) {
+                if (isLegalMove(fromPosition, C8) && isLegalMove(fromPosition, D8)) {
+                    moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, C8);
+                }
             }
         }
         return size;
@@ -50,20 +50,20 @@ class King extends AbstractPiece {
 
     final long CASTLING_WHITE_KING = 0x0000000000000060L;
     final long CASTLING_WHITE_QUEEN = 0x000000000000000EL;
-
-
     int generateWhiteCastlingMoves(short[] moves, int startIdx) {
         int size = 0;
-        final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
-        final long fromPosition = workspace.whitePositions & workspace.kingPositions;
-        if (workspace.castlingWhiteKingAllowed && (CASTLING_WHITE_KING & emptyPositions) == CASTLING_WHITE_KING) {
-            if (isLegalMove(fromPosition, F1) && isLegalMove(fromPosition, G1)) {
-                moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, G1);
+        if(!workspace.isKingInCheck(true)) {
+            final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
+            final long fromPosition = workspace.whitePositions & workspace.kingPositions;
+            if (workspace.castlingWhiteKingAllowed && (CASTLING_WHITE_KING & emptyPositions) == CASTLING_WHITE_KING) {
+                if (isLegalMove(fromPosition, F1) && isLegalMove(fromPosition, G1)) {
+                    moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, G1);
+                }
             }
-        }
-        if (workspace.castlingWhiteQueenAllowed && (CASTLING_WHITE_QUEEN & emptyPositions) == CASTLING_WHITE_QUEEN) {
-            if (isLegalMove(fromPosition, C1) && isLegalMove(fromPosition, D1)) {
-                moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, C1);
+            if (workspace.castlingWhiteQueenAllowed && (CASTLING_WHITE_QUEEN & emptyPositions) == CASTLING_WHITE_QUEEN) {
+                if (isLegalMove(fromPosition, C1) && isLegalMove(fromPosition, D1)) {
+                    moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, C1);
+                }
             }
         }
         return size;

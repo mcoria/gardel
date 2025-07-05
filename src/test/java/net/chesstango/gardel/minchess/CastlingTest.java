@@ -304,4 +304,19 @@ public class CastlingTest extends AbstractPerftTest {
         assertEquals(20, result.getMovesCount());
         assertEquals(20, result.getTotalNodes());
     }
+
+    @Test
+    public void test_POS1_PERFT_L3_a1a2_e5d3() {
+        MinChess game = createGame(POSITION);
+        game.doMove(encodeMove(Square.a1.bitPosition(), Square.a2.bitPosition()));
+        game.doMove(encodeMove(Square.e5.bitPosition(), Square.d3.bitPosition()));
+
+        PerftResult result = perft.start(game, 1);
+        assertEquals(1, result.getChildNode(Square.e1, Square.d1));
+        assertEquals(1, result.getChildNode(Square.e1, Square.d2));
+        assertEquals(1, result.getChildNode(Square.e1, Square.e2));
+        assertEquals(1, result.getChildNode(Square.e1, Square.f1));
+        assertEquals(4, result.getMovesCount());
+        assertEquals(4, result.getTotalNodes());
+    }
 }
