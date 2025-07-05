@@ -128,6 +128,13 @@ class MinChessWorkspace {
         if ((from & kingPositions) != 0) {
             kingPositions &= ~from;
             kingPositions |= to;
+            if (from == E1) {
+                castlingWhiteKingAllowed = false;
+                castlingWhiteQueenAllowed = false;
+            } else if (from == E8) {
+                castlingBlackKingAllowed = false;
+                castlingBlackQueenAllowed = false;
+            }
         }
         if ((from & queenPositions) != 0) {
             queenPositions &= ~from;
@@ -136,14 +143,13 @@ class MinChessWorkspace {
         if ((from & rookPositions) != 0) {
             rookPositions &= ~from;
             rookPositions |= to;
-
-            if(from == A1) {
+            if (from == A1) {
                 castlingWhiteQueenAllowed = false;
-            } else if(from == H1) {
+            } else if (from == H1) {
                 castlingWhiteKingAllowed = false;
-            } else if(from == A8) {
+            } else if (from == A8) {
                 castlingBlackQueenAllowed = false;
-            } else if(from == H8) {
+            } else if (from == H8) {
                 castlingBlackKingAllowed = false;
             }
         }
