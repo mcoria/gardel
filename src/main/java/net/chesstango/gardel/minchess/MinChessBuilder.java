@@ -1,11 +1,11 @@
 package net.chesstango.gardel.minchess;
 
-import net.chesstango.gardel.fen.AbstractFENBuilder;
+import net.chesstango.gardel.AbstractPositionBuilder;
 
 /**
  * @author Mauricio Coria
  */
-public class MinChessBuilder extends AbstractFENBuilder<MinChess> {
+public class MinChessBuilder extends AbstractPositionBuilder<MinChess> {
 
 
     @Override

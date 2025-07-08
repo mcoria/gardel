@@ -17,9 +17,10 @@ class Knight extends AbstractPiece {
     int generateMoves(short[] moves, int startIdx) {
         int size = 0;
         final long emptyOrOpponentPositions = workspace.whiteTurn ? ~workspace.whitePositions : ~workspace.blackPositions;
-        long fromPosition = workspace.knightPositions & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
-        while (fromPosition != 0) {
-            final int fromIdx = Long.numberOfTrailingZeros(fromPosition);
+        long knights = workspace.knightPositions & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
+        while (knights != 0) {
+            final int fromIdx = Long.numberOfTrailingZeros(knights);
+            final long fromPosition = 1L << fromIdx;
             final long jumps = KNIGHT_JUMPS[fromIdx];
             long jumpPositions = jumps & emptyOrOpponentPositions;
             while (jumpPositions != 0) {
@@ -31,7 +32,7 @@ class Knight extends AbstractPiece {
                 }
                 jumpPositions &= ~toPosition;
             }
-            fromPosition &= ~(1L << fromIdx);
+            knights &= ~fromPosition;
         }
         return size;
     }

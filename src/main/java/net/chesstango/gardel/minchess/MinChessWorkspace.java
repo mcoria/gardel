@@ -264,4 +264,38 @@ class MinChessWorkspace {
                 bishop.isKingInCheckByOpponent(kingPosition, kingIdx, !turn) ||
                 pawn.isKingInCheckByOpponentPawn(kingPosition, kingIdx, !turn);
     }
+
+    void validate() {
+        if ((whitePositions & blackPositions) != 0) {
+            throw new RuntimeException("White and Black positions collide");
+        }
+        long allPositions = whitePositions | blackPositions;
+        if ((allPositions & kingPositions) != kingPositions) {
+            throw new RuntimeException("King positions don't match");
+        }
+        allPositions &= ~kingPositions;
+        if ((allPositions & queenPositions) != queenPositions) {
+            throw new RuntimeException("Queen positions don't match");
+        }
+        allPositions &= ~queenPositions;
+        if ((allPositions & rookPositions) != rookPositions) {
+            throw new RuntimeException("Rook positions don't match");
+        }
+        allPositions &= ~rookPositions;
+        if ((allPositions & bishopPositions) != bishopPositions) {
+            throw new RuntimeException("Bishop positions don't match");
+        }
+        allPositions &= ~bishopPositions;
+        if ((allPositions & knightPositions) != knightPositions) {
+            throw new RuntimeException("Knight positions don't match");
+        }
+        allPositions &= ~knightPositions;
+        if ((allPositions & pawnPositions) != pawnPositions) {
+            throw new RuntimeException("Pawn positions don't match");
+        }
+        allPositions &= ~pawnPositions;
+        if (allPositions != 0) {
+            throw new RuntimeException("All positions don't match");
+        }
+    }
 }

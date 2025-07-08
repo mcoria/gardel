@@ -153,7 +153,7 @@ class Rook extends AbstractPiece {
     }
 
     boolean isKingInCheckByOpponentRookSouth(final long kingPosition, final int kingIdx, final boolean opponentColor) {
-        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
+        final long allPositions = workspaceTmp.whitePositions | workspaceTmp.blackPositions;
         final long opponentRooks = (workspaceTmp.rookPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
         if ((kingPosition & LIMIT_SOUTH) == 0) {
             long toPosition = kingPosition;
@@ -162,7 +162,7 @@ class Rook extends AbstractPiece {
                 if ((toPosition & opponentRooks) != 0) {
                     return true;
                 }
-            } while ((toPosition & LIMIT_SOUTH) == 0 && (toPosition & emptyPositions) != 0);
+            } while ((toPosition & LIMIT_SOUTH) == 0 && (toPosition & allPositions) == 0);
         }
         return false;
     }

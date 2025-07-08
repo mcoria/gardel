@@ -2,6 +2,7 @@ package net.chesstango.gardel.minchess;
 
 
 import net.chesstango.gardel.MirrorPositionBuilder;
+import net.chesstango.gardel.ascii.ASCIIBuilder;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.fen.FENExporter;
 
@@ -50,6 +51,13 @@ public abstract class AbstractPerftTest {
         } else {
             System.out.printf("%s%s\n", from, to);
         }
+    }
+
+    void printAscii(MinChess minChess){
+        ASCIIBuilder asciiBuilder = new ASCIIBuilder();
+        MinChessExporter builder = new MinChessExporter(asciiBuilder);
+        builder.export(minChess);
+        System.out.println(asciiBuilder.getPositionRepresentation());
     }
 
     /*

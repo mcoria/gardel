@@ -13,6 +13,9 @@ abstract class AbstractPiece {
     }
 
     boolean isLegalMove(long from, long to) {
+        if(Long.bitCount(from) > 1 || Long.bitCount(to) > 1) {
+            throw new RuntimeException("Invalid move: " + Long.toBinaryString(from) + " -> " + Long.toBinaryString(to));
+        }
         workspaceTmp.copyFrom(workspace);
         workspaceTmp.doMoveImp(from, to);
         return !workspaceTmp.isKingInCheck(workspace.whiteTurn);

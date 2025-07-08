@@ -4,7 +4,6 @@ package net.chesstango.gardel.minchess;
  * @author Mauricio Coria
  */
 public class MinChess implements Cloneable {
-
     final MinChessWorkspace workspace;
     final MinChessWorkspace workspaceTmp;
 
@@ -13,6 +12,8 @@ public class MinChess implements Cloneable {
     final Rook rook;
     final Bishop bishop;
     final Pawn pawn;
+
+    boolean validate = false;
 
     public MinChess(boolean whiteTurn,
                     boolean castlingBlackKingAllowed,
@@ -96,6 +97,10 @@ public class MinChess implements Cloneable {
             }
         } else {
             workspace.doMoveImp(fromPosition, toPosition);
+        }
+
+        if (validate) {
+            workspace.validate();
         }
     }
 
