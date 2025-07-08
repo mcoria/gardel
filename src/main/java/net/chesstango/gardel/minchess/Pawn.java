@@ -1,30 +1,27 @@
 package net.chesstango.gardel.minchess;
 
+import java.util.function.BiPredicate;
+
 /**
  * @author Mauricio Coria
  */
 class Pawn {
 
-    final MinChessWorkspace workspace;
     final PawnWhite pawnWhite;
     final PawnBlack pawnBlack;
 
 
-    Pawn(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
-        this.workspace = workspace;
-        this.pawnWhite = new PawnWhite(workspace, workspaceTmp);
-        this.pawnBlack = new PawnBlack(workspace, workspaceTmp);
-
-        workspace.setPawn(this);
-        workspaceTmp.setPawn(this);
+    Pawn(BiPredicate<Long, Long> isLegalMoveFn, BiPredicate<Long, Long> isLegalEnPassantMoveFn) {
+        this.pawnWhite = new PawnWhite(isLegalMoveFn, isLegalEnPassantMoveFn);
+        this.pawnBlack = new PawnBlack(isLegalMoveFn, isLegalEnPassantMoveFn);
     }
 
-    int generatePawnMoves(short[] moves, int startIdx) {
-        return workspace.whiteTurn ? pawnWhite.generateMoves(moves, startIdx) : pawnBlack.generateMoves(moves, startIdx);
+    int generatePawnMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
+        return workspace.whiteTurn ? pawnWhite.generateMoves(workspace, moves, startIdx) : pawnBlack.generateMoves(workspace, moves, startIdx);
     }
 
-    boolean isKingInCheckByOpponentPawn(long kingPosition, int kingIdx, boolean opponentColor) {
-        return opponentColor ? pawnWhite.isKingInCheckByOpponent(kingPosition, kingIdx, opponentColor) : pawnBlack.isKingInCheckByOpponent(kingPosition, kingIdx, opponentColor);
+    boolean isKingInCheckByOpponentPawn(final MinChessWorkspace workspace, long kingPosition, int kingIdx, boolean opponentColor) {
+        return opponentColor ? pawnWhite.isKingInCheckByOpponent(workspace, kingPosition, kingIdx, opponentColor) : pawnBlack.isKingInCheckByOpponent(workspace, kingPosition, kingIdx, opponentColor);
     }
 
 }

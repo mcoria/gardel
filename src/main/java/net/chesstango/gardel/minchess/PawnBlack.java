@@ -1,5 +1,7 @@
 package net.chesstango.gardel.minchess;
 
+import java.util.function.BiPredicate;
+
 import static net.chesstango.gardel.minchess.MinChessConstants.*;
 
 /**
@@ -8,12 +10,15 @@ import static net.chesstango.gardel.minchess.MinChessConstants.*;
 class PawnBlack extends AbstractPiece {
     static final long START_POS = 0x00FF000000000000L;
 
-    PawnBlack(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
-        super(workspace, workspaceTmp);
+    final BiPredicate<Long, Long> isLegalEnPassantMoveFn;
+
+    PawnBlack(BiPredicate<Long, Long> isLegalMoveFn, BiPredicate<Long, Long> isLegalEnPassantMoveFn) {
+        super(isLegalMoveFn);
+        this.isLegalEnPassantMoveFn = isLegalEnPassantMoveFn;
     }
 
     @Override
-    int generateMoves(short[] moves, int startIdx) {
+    int generateMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
         final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
         final long opponentPositions = workspace.whitePositions;
@@ -23,35 +28,29 @@ class PawnBlack extends AbstractPiece {
             size += generateMoveForward(moves, startIdx + size, from, emptyPositions);
             size += generateDoubleMoveForward(moves, startIdx + size, from, emptyPositions);
             size += generateCaptureMove(moves, startIdx + size, from, opponentPositions);
-            size += generateCaptureEnPassantMove(moves, startIdx + size, from);
+            size += generateCaptureEnPassantMove(workspace.enPassantSquare, moves, startIdx + size, from);
             fromPawns &= ~from;
         }
         return size;
     }
 
-    int generateCaptureEnPassantMove(short[] moves, int startIdx, long from) {
+    int generateCaptureEnPassantMove(long enPassantSquare, short[] moves, int startIdx, long from) {
         int size = 0;
-        if (workspace.enPassantSquare != 0) {
+        if (enPassantSquare != 0) {
             if ((from & LIMIT_EAST) == 0) {
                 final long toPosition = from >>> 7;
-                if ((toPosition & workspace.enPassantSquare) != 0 && isLegalEnPassantMove(from, workspace.enPassantSquare)) {
+                if ((toPosition & enPassantSquare) != 0 && isLegalEnPassantMoveFn.test(from, enPassantSquare)) {
                     moves[startIdx + size++] = MinChessConstants.encodeMove(from, toPosition);
                 }
             }
             if ((from & LIMIT_WEST) == 0) {
                 final long toPosition = from >>> 9;
-                if ((toPosition & workspace.enPassantSquare) != 0 && isLegalEnPassantMove(from, workspace.enPassantSquare)) {
+                if ((toPosition & enPassantSquare) != 0 && isLegalEnPassantMoveFn.test(from, enPassantSquare)) {
                     size = createMove(moves, startIdx, from, toPosition);
                 }
             }
         }
         return size;
-    }
-
-    boolean isLegalEnPassantMove(long from, long enPassantSquare) {
-        workspaceTmp.copyFrom(workspace);
-        workspaceTmp.doEnPassantMoveImp(from, enPassantSquare);
-        return !workspaceTmp.isKingInCheck(workspace.whiteTurn);
     }
 
     int generateCaptureMove(short[] moves, int startIdx, long from, long opponentPositions) {
@@ -65,7 +64,7 @@ class PawnBlack extends AbstractPiece {
         int size = 0;
         if ((from & LIMIT_EAST) == 0) {
             final long toPosition = from >>> 7;
-            if ((toPosition & opponentPositions) != 0 && isLegalMove(from, toPosition)) {
+            if ((toPosition & opponentPositions) != 0 && isLegalMoveFn.test(from, toPosition)) {
                 size = createMove(moves, startIdx, from, toPosition);
             }
         }
@@ -76,7 +75,7 @@ class PawnBlack extends AbstractPiece {
         int size = 0;
         if ((from & LIMIT_WEST) == 0) {
             final long toPosition = from >>> 9;
-            if ((toPosition & opponentPositions) != 0 && isLegalMove(from, toPosition)) {
+            if ((toPosition & opponentPositions) != 0 && isLegalMoveFn.test(from, toPosition)) {
                 size = createMove(moves, startIdx, from, toPosition);
             }
         }
@@ -86,7 +85,7 @@ class PawnBlack extends AbstractPiece {
     int generateMoveForward(short[] moves, int startIdx, long from, long emptyPositions) {
         int size = 0;
         final long to = from >>> 8;
-        if ((to & emptyPositions) != 0 && isLegalMove(from, to)) {
+        if ((to & emptyPositions) != 0 && isLegalMoveFn.test(from, to)) {
             size = createMove(moves, startIdx, from, to);
         }
         return size;
@@ -99,7 +98,7 @@ class PawnBlack extends AbstractPiece {
             if ((intermediate & emptyPositions) != 0) {
                 final long to = intermediate >>> 8;
                 if ((to & emptyPositions) != 0) {
-                    if (isLegalMove(from, to)) {
+                    if (isLegalMoveFn.test(from, to)) {
                         moves[startIdx + size++] = MinChessConstants.encodeMove(from, to);
                     }
                 }
@@ -122,17 +121,17 @@ class PawnBlack extends AbstractPiece {
     }
 
     @Override
-    boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
-        final long blackPawns = workspaceTmp.blackPositions & workspaceTmp.pawnPositions;
+    boolean isKingInCheckByOpponent(final MinChessWorkspace workspace, final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long blackPawns = workspace.blackPositions & workspace.pawnPositions;
         if ((kingPosition & LIMIT_NORTH_WEST) == 0) {
             final long pawnPosition = kingPosition << 7;
-            if((blackPawns & pawnPosition) != 0){
+            if ((blackPawns & pawnPosition) != 0) {
                 return true;
             }
         }
         if ((kingPosition & LIMIT_NORTH_EAST) == 0) {
             final long pawnPosition = kingPosition << 9;
-            if((blackPawns & pawnPosition) != 0){
+            if ((blackPawns & pawnPosition) != 0) {
                 return true;
             }
         }

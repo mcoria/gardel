@@ -1,5 +1,7 @@
 package net.chesstango.gardel.minchess;
 
+import java.util.function.BiPredicate;
+
 import static net.chesstango.gardel.minchess.MinChessConstants.*;
 
 /**
@@ -7,28 +9,26 @@ import static net.chesstango.gardel.minchess.MinChessConstants.*;
  */
 class Rook extends AbstractPiece {
 
-    Rook(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
-        super(workspace, workspaceTmp);
-        workspace.setRook(this);
-        workspaceTmp.setRook(this);
+    Rook(BiPredicate<Long, Long> isLegalMoveFn) {
+        super(isLegalMoveFn);
     }
 
     @Override
-    int generateMoves(short[] moves, int startIdx) {
+    int generateMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
         long fromRooks = (workspace.rookPositions | workspace.queenPositions) & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
         while (fromRooks != 0) {
             long from = 1L << Long.numberOfTrailingZeros(fromRooks);
-            size += generateRookMovesNorth(moves, startIdx + size, from);
-            size += generateRookMovesSouth(moves, startIdx + size, from);
-            size += generateRookMovesEast(moves, startIdx + size, from);
-            size += generateRookMovesWest(moves, startIdx + size, from);
+            size += generateRookMovesNorth(workspace, moves, startIdx + size, from);
+            size += generateRookMovesSouth(workspace, moves, startIdx + size, from);
+            size += generateRookMovesEast(workspace, moves, startIdx + size, from);
+            size += generateRookMovesWest(workspace, moves, startIdx + size, from);
             fromRooks &= ~from;
         }
         return size;
     }
 
-    int generateRookMovesWest(short[] moves, int startIdx, long fromPosition) {
+    int generateRookMovesWest(final MinChessWorkspace workspace, short[] moves, int startIdx, long fromPosition) {
         int size = 0;
         final long allPositions = workspace.whitePositions | workspace.blackPositions;
         final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
@@ -36,7 +36,7 @@ class Rook extends AbstractPiece {
             long toPosition = fromPosition;
             do {
                 toPosition = toPosition >>> 1;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                if ((toPosition & ownPositions) == 0 && isLegalMoveFn.test(fromPosition, toPosition)) {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
@@ -45,7 +45,7 @@ class Rook extends AbstractPiece {
         return size;
     }
 
-    int generateRookMovesEast(short[] moves, int startIdx, long fromPosition) {
+    int generateRookMovesEast(final MinChessWorkspace workspace, short[] moves, int startIdx, long fromPosition) {
         int size = 0;
         final long allPositions = workspace.whitePositions | workspace.blackPositions;
         final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
@@ -53,7 +53,7 @@ class Rook extends AbstractPiece {
             long toPosition = fromPosition;
             do {
                 toPosition = toPosition << 1;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                if ((toPosition & ownPositions) == 0 && isLegalMoveFn.test(fromPosition, toPosition)) {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
@@ -62,7 +62,7 @@ class Rook extends AbstractPiece {
         return size;
     }
 
-    int generateRookMovesNorth(short[] moves, int startIdx, long fromPosition) {
+    int generateRookMovesNorth(final MinChessWorkspace workspace, short[] moves, int startIdx, long fromPosition) {
         int size = 0;
         final long allPositions = workspace.whitePositions | workspace.blackPositions;
         final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
@@ -70,7 +70,7 @@ class Rook extends AbstractPiece {
             long toPosition = fromPosition;
             do {
                 toPosition = toPosition << 8;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                if ((toPosition & ownPositions) == 0 && isLegalMoveFn.test(fromPosition, toPosition)) {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
@@ -79,7 +79,7 @@ class Rook extends AbstractPiece {
         return size;
     }
 
-    int generateRookMovesSouth(short[] moves, int startIdx, long fromPosition) {
+    int generateRookMovesSouth(final MinChessWorkspace workspace, short[] moves, int startIdx, long fromPosition) {
         int size = 0;
         final long allPositions = workspace.whitePositions | workspace.blackPositions;
         final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
@@ -87,7 +87,7 @@ class Rook extends AbstractPiece {
             long toPosition = fromPosition;
             do {
                 toPosition = toPosition >>> 8;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                if ((toPosition & ownPositions) == 0 && isLegalMoveFn.test(fromPosition, toPosition)) {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
@@ -99,17 +99,17 @@ class Rook extends AbstractPiece {
 
 
     @Override
-    boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
-        return isKingInCheckByOpponentRookNorth(kingPosition, kingIdx, opponentColor) ||
-                isKingInCheckByOpponentRookSouth(kingPosition, kingIdx, opponentColor) ||
-                isKingInCheckByOpponentRookEast(kingPosition, kingIdx, opponentColor) ||
-                isKingInCheckByOpponentRookWest(kingPosition, kingIdx, opponentColor);
+    boolean isKingInCheckByOpponent(final MinChessWorkspace workspace, final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        return isKingInCheckByOpponentRookNorth(workspace, kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentRookSouth(workspace, kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentRookEast(workspace, kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentRookWest(workspace, kingPosition, kingIdx, opponentColor);
 
     }
 
-    boolean isKingInCheckByOpponentRookWest(final long kingPosition, final int kingIdx, final boolean opponentColor) {
-        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
-        final long opponentRooks = (workspaceTmp.rookPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+    boolean isKingInCheckByOpponentRookWest(final MinChessWorkspace workspace, final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
+        final long opponentRooks = (workspace.rookPositions | workspace.queenPositions) & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         if ((kingPosition & LIMIT_WEST) == 0) {
             long toPosition = kingPosition;
             do {
@@ -122,9 +122,9 @@ class Rook extends AbstractPiece {
         return false;
     }
 
-    boolean isKingInCheckByOpponentRookEast(final long kingPosition, final int kingIdx, final boolean opponentColor) {
-        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
-        final long opponentRooks = (workspaceTmp.rookPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+    boolean isKingInCheckByOpponentRookEast(final MinChessWorkspace workspace, final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
+        final long opponentRooks = (workspace.rookPositions | workspace.queenPositions) & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         if ((kingPosition & LIMIT_EAST) == 0) {
             long toPosition = kingPosition;
             do {
@@ -137,9 +137,9 @@ class Rook extends AbstractPiece {
         return false;
     }
 
-    boolean isKingInCheckByOpponentRookNorth(final long kingPosition, final int kingIdx, final boolean opponentColor) {
-        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
-        final long opponentRooks = (workspaceTmp.rookPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+    boolean isKingInCheckByOpponentRookNorth(final MinChessWorkspace workspace, final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
+        final long opponentRooks = (workspace.rookPositions | workspace.queenPositions) & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         if ((kingPosition & LIMIT_NORTH) == 0) {
             long toPosition = kingPosition;
             do {
@@ -152,9 +152,9 @@ class Rook extends AbstractPiece {
         return false;
     }
 
-    boolean isKingInCheckByOpponentRookSouth(final long kingPosition, final int kingIdx, final boolean opponentColor) {
-        final long allPositions = workspaceTmp.whitePositions | workspaceTmp.blackPositions;
-        final long opponentRooks = (workspaceTmp.rookPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+    boolean isKingInCheckByOpponentRookSouth(final MinChessWorkspace workspace, final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        final long allPositions = workspace.whitePositions | workspace.blackPositions;
+        final long opponentRooks = (workspace.rookPositions | workspace.queenPositions) & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         if ((kingPosition & LIMIT_SOUTH) == 0) {
             long toPosition = kingPosition;
             do {

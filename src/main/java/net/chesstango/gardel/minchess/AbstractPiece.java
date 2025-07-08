@@ -1,27 +1,18 @@
 package net.chesstango.gardel.minchess;
 
+import java.util.function.BiPredicate;
+
 /**
  * @author Mauricio Coria
  */
 abstract class AbstractPiece {
-    final MinChessWorkspace workspace;
-    final MinChessWorkspace workspaceTmp;
+    final BiPredicate<Long, Long> isLegalMoveFn;
 
-    AbstractPiece(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
-        this.workspace = workspace;
-        this.workspaceTmp = workspaceTmp;
+    AbstractPiece(BiPredicate<Long, Long> isLegalMoveFn) {
+        this.isLegalMoveFn = isLegalMoveFn;
     }
 
-    boolean isLegalMove(long from, long to) {
-        if(Long.bitCount(from) > 1 || Long.bitCount(to) > 1) {
-            throw new RuntimeException("Invalid move: " + Long.toBinaryString(from) + " -> " + Long.toBinaryString(to));
-        }
-        workspaceTmp.copyFrom(workspace);
-        workspaceTmp.doMoveImp(from, to);
-        return !workspaceTmp.isKingInCheck(workspace.whiteTurn);
-    }
+    abstract int generateMoves(final MinChessWorkspace workspace, short[] moves, int startIdx);
 
-    abstract int generateMoves(short[] moves, int startIdx);
-
-    abstract boolean isKingInCheckByOpponent(long kingPosition, int kingIdx, boolean opponentColor);
+    abstract boolean isKingInCheckByOpponent(final MinChessWorkspace workspace, long kingPosition, int kingIdx, boolean opponentColor);
 }

@@ -48,21 +48,21 @@ public class MinChess implements Cloneable {
 
         this.workspaceTmp = new MinChessWorkspace();
 
-        this.king = new King(workspace, workspaceTmp);
-        this.knight = new Knight(workspace, workspaceTmp);
-        this.rook = new Rook(workspace, workspaceTmp);
-        this.bishop = new Bishop(workspace, workspaceTmp);
-        this.pawn = new Pawn(workspace, workspaceTmp);
+        this.king = new King(this::isLegalMove, turn -> this.isKingInCheck(workspace, turn));
+        this.knight = new Knight(this::isLegalMove);
+        this.rook = new Rook(this::isLegalMove);
+        this.bishop = new Bishop(this::isLegalMove);
+        this.pawn = new Pawn(this::isLegalMove, this::isLegalEnPassantMove);
     }
 
 
     public int generateMoves(short[] moves) {
         int size = 0;
-        size += king.generateMoves(moves, size);
-        size += knight.generateMoves(moves, size);
-        size += rook.generateMoves(moves, size);
-        size += bishop.generateMoves(moves, size);
-        size += pawn.generatePawnMoves(moves, size);
+        size += king.generateMoves(workspace, moves, size);
+        size += knight.generateMoves(workspace, moves, size);
+        size += rook.generateMoves(workspace, moves, size);
+        size += bishop.generateMoves(workspace, moves, size);
+        size += pawn.generatePawnMoves(workspace, moves, size);
         return size;
     }
 
@@ -121,5 +121,34 @@ public class MinChess implements Cloneable {
                 workspace.knightPositions,
                 workspace.pawnPositions
         );
+    }
+
+    boolean isLegalMove(long from, long to) {
+        if (Long.bitCount(from) > 1 || Long.bitCount(to) > 1) {
+            throw new RuntimeException("Invalid move: " + Long.toBinaryString(from) + " -> " + Long.toBinaryString(to));
+        }
+        workspaceTmp.copyFrom(workspace);
+        workspaceTmp.doMoveImp(from, to);
+        return !isKingInCheck(workspaceTmp, workspace.whiteTurn);
+    }
+
+    boolean isLegalEnPassantMove(long from, long enPassantSquare) {
+        workspaceTmp.copyFrom(workspace);
+        workspaceTmp.doEnPassantMoveImp(from, enPassantSquare);
+        return !isKingInCheck(workspaceTmp, workspace.whiteTurn);
+    }
+
+    boolean isKingInCheck(boolean turn) {
+        return isKingInCheck(workspace, turn);
+    }
+
+    boolean isKingInCheck(MinChessWorkspace workspace, boolean turn) {
+        final long kingPosition = workspace.kingPositions & (turn ? workspace.whitePositions : workspace.blackPositions);
+        final int kingIdx = Long.numberOfTrailingZeros(kingPosition);
+        return king.isKingInCheckByOpponent(workspace, kingPosition, kingIdx, !turn) ||
+                knight.isKingInCheckByOpponent(workspace, kingPosition, kingIdx, !turn) ||
+                rook.isKingInCheckByOpponent(workspace, kingPosition, kingIdx, !turn) ||
+                bishop.isKingInCheckByOpponent(workspace, kingPosition, kingIdx, !turn) ||
+                pawn.isKingInCheckByOpponentPawn(workspace, kingPosition, kingIdx, !turn);
     }
 }

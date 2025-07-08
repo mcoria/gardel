@@ -24,21 +24,6 @@ class MinChessWorkspace {
     long knightPositions = 0;
     long pawnPositions = 0;
 
-    @Setter
-    King king;
-
-    @Setter
-    Knight knight;
-
-    @Setter
-    Rook rook;
-
-    @Setter
-    Bishop bishop;
-
-    @Setter
-    Pawn pawn;
-
     MinChessWorkspace(boolean whiteTurn,
                       boolean castlingBlackKingAllowed,
                       boolean castlingBlackQueenAllowed,
@@ -252,17 +237,6 @@ class MinChessWorkspace {
         }
 
         doMoveImp(from, to);
-    }
-
-
-    boolean isKingInCheck(boolean turn) {
-        final long kingPosition = kingPositions & (turn ? whitePositions : blackPositions);
-        final int kingIdx = Long.numberOfTrailingZeros(kingPosition);
-        return king.isKingInCheckByOpponent(kingPosition, kingIdx, !turn) ||
-                knight.isKingInCheckByOpponent(kingPosition, kingIdx, !turn) ||
-                rook.isKingInCheckByOpponent(kingPosition, kingIdx, !turn) ||
-                bishop.isKingInCheckByOpponent(kingPosition, kingIdx, !turn) ||
-                pawn.isKingInCheckByOpponentPawn(kingPosition, kingIdx, !turn);
     }
 
     void validate() {

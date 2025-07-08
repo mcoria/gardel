@@ -1,46 +1,49 @@
 package net.chesstango.gardel.minchess;
 
 
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+
 import static net.chesstango.gardel.minchess.MinChessConstants.*;
 
 /**
  * @author Mauricio Coria
  */
 class King extends AbstractPiece {
+    final Predicate<Boolean> isKingInCheckFn;
 
-    King(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
-        super(workspace, workspaceTmp);
-        workspace.setKing(this);
-        workspaceTmp.setKing(this);
+    King(BiPredicate<Long, Long> isLegalMoveFn, Predicate<Boolean> isKingInCheckFn) {
+        super(isLegalMoveFn);
+        this.isKingInCheckFn = isKingInCheckFn;
     }
 
     @Override
-    int generateMoves(short[] moves, int startIdx) {
+    int generateMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
-        size += generateJumpMoves(moves, size);
-        size += generateCastlingMoves(moves, size);
+        size += generateJumpMoves(workspace, moves, size);
+        size += generateCastlingMoves(workspace, moves, size);
         return size;
     }
 
-    int generateCastlingMoves(short[] moves, int startIdx) {
-        return workspace.whiteTurn ? generateWhiteCastlingMoves(moves, startIdx) : generateBlackCastlingMoves(moves, startIdx);
+    int generateCastlingMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
+        return workspace.whiteTurn ? generateWhiteCastlingMoves(workspace, moves, startIdx) : generateBlackCastlingMoves(workspace, moves, startIdx);
     }
 
     final long CASTLING_BLACK_KING = 0x6000000000000000L;
     final long CASTLING_BLACK_QUEEN = 0x0E00000000000000L;
-    int generateBlackCastlingMoves(short[] moves, int startIdx) {
+
+    int generateBlackCastlingMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
-        workspaceTmp.copyFrom(workspace);
-        if(!workspace.isKingInCheck(false)) {
+        if (!isKingInCheckFn.test(false)) {
             final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
             final long fromPosition = workspace.blackPositions & workspace.kingPositions;
             if (workspace.castlingBlackKingAllowed && (CASTLING_BLACK_KING & emptyPositions) == CASTLING_BLACK_KING) {
-                if (isLegalMove(fromPosition, F8) && isLegalMove(fromPosition, G8)) {
+                if (isLegalMoveFn.test(fromPosition, F8) && isLegalMoveFn.test(fromPosition, G8)) {
                     moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, G8);
                 }
             }
             if (workspace.castlingBlackQueenAllowed && (CASTLING_BLACK_QUEEN & emptyPositions) == CASTLING_BLACK_QUEEN) {
-                if (isLegalMove(fromPosition, C8) && isLegalMove(fromPosition, D8)) {
+                if (isLegalMoveFn.test(fromPosition, C8) && isLegalMoveFn.test(fromPosition, D8)) {
                     moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, C8);
                 }
             }
@@ -51,19 +54,19 @@ class King extends AbstractPiece {
 
     final long CASTLING_WHITE_KING = 0x0000000000000060L;
     final long CASTLING_WHITE_QUEEN = 0x000000000000000EL;
-    int generateWhiteCastlingMoves(short[] moves, int startIdx) {
+
+    int generateWhiteCastlingMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
-        workspaceTmp.copyFrom(workspace);
-        if(!workspace.isKingInCheck(true)) {
+        if (!isKingInCheckFn.test(true)) {
             final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
             final long fromPosition = workspace.whitePositions & workspace.kingPositions;
             if (workspace.castlingWhiteKingAllowed && (CASTLING_WHITE_KING & emptyPositions) == CASTLING_WHITE_KING) {
-                if (isLegalMove(fromPosition, F1) && isLegalMove(fromPosition, G1)) {
+                if (isLegalMoveFn.test(fromPosition, F1) && isLegalMoveFn.test(fromPosition, G1)) {
                     moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, G1);
                 }
             }
             if (workspace.castlingWhiteQueenAllowed && (CASTLING_WHITE_QUEEN & emptyPositions) == CASTLING_WHITE_QUEEN) {
-                if (isLegalMove(fromPosition, C1) && isLegalMove(fromPosition, D1)) {
+                if (isLegalMoveFn.test(fromPosition, C1) && isLegalMoveFn.test(fromPosition, D1)) {
                     moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, C1);
                 }
             }
@@ -72,7 +75,7 @@ class King extends AbstractPiece {
     }
 
 
-    int generateJumpMoves(short[] moves, int startIdx) {
+    int generateJumpMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
         final long emptyOrOpponentPositions = workspace.whiteTurn ? ~workspace.whitePositions : ~workspace.blackPositions;
         final long fromPosition = workspace.kingPositions & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
@@ -82,7 +85,7 @@ class King extends AbstractPiece {
         while (jumpPositions != 0) {
             final int jumpIdx = Long.numberOfTrailingZeros(jumpPositions);
             final long toPosition = 1L << jumpIdx;
-            if (isLegalMove(fromPosition, toPosition)) {
+            if (isLegalMoveFn.test(fromPosition, toPosition)) {
                 moves[startIdx + size++] = MinChessConstants.encodeMove(fromPosition, toPosition);
             }
             jumpPositions &= ~toPosition;
@@ -91,9 +94,9 @@ class King extends AbstractPiece {
     }
 
     @Override
-    boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+    boolean isKingInCheckByOpponent(final MinChessWorkspace workspace, final long kingPosition, final int kingIdx, final boolean opponentColor) {
         final long kingJumps = KING_JUMPS[kingIdx];
-        final long kingPositionOpponent = workspaceTmp.kingPositions & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+        final long kingPositionOpponent = workspace.kingPositions & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         return (kingJumps & kingPositionOpponent) != 0;
     }
 }

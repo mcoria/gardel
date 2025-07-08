@@ -1,5 +1,7 @@
 package net.chesstango.gardel.minchess;
 
+import java.util.function.BiPredicate;
+
 import static net.chesstango.gardel.minchess.MinChessConstants.*;
 
 /**
@@ -7,28 +9,26 @@ import static net.chesstango.gardel.minchess.MinChessConstants.*;
  */
 class Bishop extends AbstractPiece {
 
-    Bishop(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
-        super(workspace, workspaceTmp);
-        workspace.setBishop(this);
-        workspaceTmp.setBishop(this);
+    Bishop(BiPredicate<Long, Long> isLegalMoveFn) {
+        super(isLegalMoveFn);
     }
 
     @Override
-    int generateMoves(short[] moves, int startIdx) {
+    int generateMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
         long fromBishops = (workspace.bishopPositions | workspace.queenPositions) & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
         while (fromBishops != 0) {
             long from = 1L << Long.numberOfTrailingZeros(fromBishops);
-            size += generateBishopMovesNorthWest(moves, startIdx + size, from);
-            size += generateBishopMovesNorthEast(moves, startIdx + size, from);
-            size += generateBishopMovesSouthWest(moves, startIdx + size, from);
-            size += generateBishopMovesSouthEast(moves, startIdx + size, from);
+            size += generateBishopMovesNorthWest(workspace, moves, startIdx + size, from);
+            size += generateBishopMovesNorthEast(workspace, moves, startIdx + size, from);
+            size += generateBishopMovesSouthWest(workspace, moves, startIdx + size, from);
+            size += generateBishopMovesSouthEast(workspace, moves, startIdx + size, from);
             fromBishops &= ~from;
         }
         return size;
     }
 
-    int generateBishopMovesNorthWest(short[] moves, int startIdx, long fromPosition) {
+    int generateBishopMovesNorthWest(final MinChessWorkspace workspace, short[] moves, int startIdx, long fromPosition) {
         int size = 0;
         final long allPositions = workspace.whitePositions | workspace.blackPositions;
         final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
@@ -36,7 +36,7 @@ class Bishop extends AbstractPiece {
             long toPosition = fromPosition;
             do {
                 toPosition = toPosition << 7;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                if ((toPosition & ownPositions) == 0 && isLegalMoveFn.test(fromPosition, toPosition)) {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
@@ -45,7 +45,7 @@ class Bishop extends AbstractPiece {
         return size;
     }
 
-    int generateBishopMovesNorthEast(short[] moves, int startIdx, long fromPosition) {
+    int generateBishopMovesNorthEast(final MinChessWorkspace workspace, short[] moves, int startIdx, long fromPosition) {
         int size = 0;
         final long allPositions = workspace.whitePositions | workspace.blackPositions;
         final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
@@ -53,7 +53,7 @@ class Bishop extends AbstractPiece {
             long toPosition = fromPosition;
             do {
                 toPosition = toPosition << 9;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                if ((toPosition & ownPositions) == 0 && isLegalMoveFn.test(fromPosition, toPosition)) {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
@@ -62,7 +62,7 @@ class Bishop extends AbstractPiece {
         return size;
     }
 
-    int generateBishopMovesSouthWest(short[] moves, int startIdx, long fromPosition) {
+    int generateBishopMovesSouthWest(final MinChessWorkspace workspace, short[] moves, int startIdx, long fromPosition) {
         int size = 0;
         final long allPositions = workspace.whitePositions | workspace.blackPositions;
         final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
@@ -70,7 +70,7 @@ class Bishop extends AbstractPiece {
             long toPosition = fromPosition;
             do {
                 toPosition = toPosition >>> 9;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                if ((toPosition & ownPositions) == 0 && isLegalMoveFn.test(fromPosition, toPosition)) {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
@@ -79,7 +79,7 @@ class Bishop extends AbstractPiece {
         return size;
     }
 
-    int generateBishopMovesSouthEast(short[] moves, int startIdx, long fromPosition) {
+    int generateBishopMovesSouthEast(final MinChessWorkspace workspace, short[] moves, int startIdx, long fromPosition) {
         int size = 0;
         final long allPositions = workspace.whitePositions | workspace.blackPositions;
         final long ownPositions = workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions;
@@ -87,7 +87,7 @@ class Bishop extends AbstractPiece {
             long toPosition = fromPosition;
             do {
                 toPosition = toPosition >>> 7;
-                if ((toPosition & ownPositions) == 0 && isLegalMove(fromPosition, toPosition)) {
+                if ((toPosition & ownPositions) == 0 && isLegalMoveFn.test(fromPosition, toPosition)) {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
@@ -97,17 +97,17 @@ class Bishop extends AbstractPiece {
     }
 
     @Override
-    boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
-        return isKingInCheckByOpponentBishopNorthWest(kingPosition, kingIdx, opponentColor) ||
-                isKingInCheckByOpponentBishopNorthEast(kingPosition, kingIdx, opponentColor) ||
-                isKingInCheckByOpponentBishopSouthWest(kingPosition, kingIdx, opponentColor) ||
-                isKingInCheckByOpponentBishopSouthEast(kingPosition, kingIdx, opponentColor);
+    boolean isKingInCheckByOpponent(final MinChessWorkspace workspace, final long kingPosition, final int kingIdx, final boolean opponentColor) {
+        return isKingInCheckByOpponentBishopNorthWest(workspace, kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentBishopNorthEast(workspace, kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentBishopSouthWest(workspace, kingPosition, kingIdx, opponentColor) ||
+                isKingInCheckByOpponentBishopSouthEast(workspace, kingPosition, kingIdx, opponentColor);
 
     }
 
-    boolean isKingInCheckByOpponentBishopNorthWest(long kingPosition, int kingIdx, boolean opponentColor) {
-        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
-        final long opponentBishops = (workspaceTmp.bishopPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+    boolean isKingInCheckByOpponentBishopNorthWest(final MinChessWorkspace workspace, long kingPosition, int kingIdx, boolean opponentColor) {
+        final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
+        final long opponentBishops = (workspace.bishopPositions | workspace.queenPositions) & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         if ((kingPosition & LIMIT_NORTH_WEST) == 0) {
             long toPosition = kingPosition;
             do {
@@ -120,9 +120,9 @@ class Bishop extends AbstractPiece {
         return false;
     }
 
-    boolean isKingInCheckByOpponentBishopNorthEast(long kingPosition, int kingIdx, boolean opponentColor) {
-        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
-        final long opponentBishops = (workspaceTmp.bishopPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+    boolean isKingInCheckByOpponentBishopNorthEast(final MinChessWorkspace workspace, long kingPosition, int kingIdx, boolean opponentColor) {
+        final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
+        final long opponentBishops = (workspace.bishopPositions | workspace.queenPositions) & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         if ((kingPosition & LIMIT_NORTH_EAST) == 0) {
             long toPosition = kingPosition;
             do {
@@ -135,9 +135,9 @@ class Bishop extends AbstractPiece {
         return false;
     }
 
-    boolean isKingInCheckByOpponentBishopSouthWest(long kingPosition, int kingIdx, boolean opponentColor) {
-        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
-        final long opponentBishops = (workspaceTmp.bishopPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+    boolean isKingInCheckByOpponentBishopSouthWest(final MinChessWorkspace workspace, long kingPosition, int kingIdx, boolean opponentColor) {
+        final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
+        final long opponentBishops = (workspace.bishopPositions | workspace.queenPositions) & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         if ((kingPosition & LIMIT_SOUTH_WEST) == 0) {
             long toPosition = kingPosition;
             do {
@@ -150,9 +150,9 @@ class Bishop extends AbstractPiece {
         return false;
     }
 
-    boolean isKingInCheckByOpponentBishopSouthEast(long kingPosition, int kingIdx, boolean opponentColor) {
-        final long emptyPositions = ~(workspaceTmp.whitePositions | workspaceTmp.blackPositions);
-        final long opponentBishops = (workspaceTmp.bishopPositions | workspaceTmp.queenPositions) & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+    boolean isKingInCheckByOpponentBishopSouthEast(final MinChessWorkspace workspace, long kingPosition, int kingIdx, boolean opponentColor) {
+        final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
+        final long opponentBishops = (workspace.bishopPositions | workspace.queenPositions) & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         if ((kingPosition & LIMIT_SOUTH_EAST) == 0) {
             long toPosition = kingPosition;
             do {

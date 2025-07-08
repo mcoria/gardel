@@ -1,5 +1,7 @@
 package net.chesstango.gardel.minchess;
 
+import java.util.function.BiPredicate;
+
 import static net.chesstango.gardel.minchess.MinChessConstants.KNIGHT_JUMPS;
 
 /**
@@ -7,14 +9,12 @@ import static net.chesstango.gardel.minchess.MinChessConstants.KNIGHT_JUMPS;
  */
 class Knight extends AbstractPiece {
 
-    Knight(MinChessWorkspace workspace, MinChessWorkspace workspaceTmp) {
-        super(workspace, workspaceTmp);
-        workspace.setKnight(this);
-        workspaceTmp.setKnight(this);
+    Knight(BiPredicate<Long, Long> isLegalMoveFn) {
+        super(isLegalMoveFn);
     }
 
     @Override
-    int generateMoves(short[] moves, int startIdx) {
+    int generateMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
         final long emptyOrOpponentPositions = workspace.whiteTurn ? ~workspace.whitePositions : ~workspace.blackPositions;
         long knights = workspace.knightPositions & (workspace.whiteTurn ? workspace.whitePositions : workspace.blackPositions);
@@ -26,7 +26,7 @@ class Knight extends AbstractPiece {
             while (jumpPositions != 0) {
                 final int jumpIdx = Long.numberOfTrailingZeros(jumpPositions);
                 final long toPosition = 1L << jumpIdx;
-                if (isLegalMove(fromPosition, toPosition)) {
+                if (isLegalMoveFn.test(fromPosition, toPosition)) {
                     moves[startIdx + size] = MinChessConstants.encodeMove(fromPosition, toPosition);
                     size++;
                 }
@@ -38,9 +38,9 @@ class Knight extends AbstractPiece {
     }
 
     @Override
-    boolean isKingInCheckByOpponent(final long kingPosition, final int kingIdx, final boolean opponentColor) {
+    boolean isKingInCheckByOpponent(final MinChessWorkspace workspace, final long kingPosition, final int kingIdx, final boolean opponentColor) {
         final long kingJumps = KNIGHT_JUMPS[kingIdx];
-        final long knightPositionOpponent = workspaceTmp.knightPositions & (opponentColor ? workspaceTmp.whitePositions : workspaceTmp.blackPositions);
+        final long knightPositionOpponent = workspace.knightPositions & (opponentColor ? workspace.whitePositions : workspace.blackPositions);
         return (kingJumps & knightPositionOpponent) != 0;
     }
 }
