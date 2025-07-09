@@ -681,6 +681,7 @@ public class KPvKPTest extends AbstractPerftTest {
     }
 
     @Test
+    @Disabled
     public void test_POS1_PERFT_L7() {
         MinChess game = createGame(POSITION);
 

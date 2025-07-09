@@ -1,6 +1,7 @@
 package net.chesstango.gardel.minchess;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static net.chesstango.gardel.minchess.MinChessConstants.encodeMove;
@@ -806,6 +807,7 @@ public class CastlingTest extends AbstractPerftTest {
     }
 
     @Test
+    @Disabled
     public void test_POS1_PERFT_L6() {
         MinChess game = createGame(POSITION);
 

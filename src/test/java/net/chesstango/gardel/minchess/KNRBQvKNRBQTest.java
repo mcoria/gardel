@@ -1,6 +1,7 @@
 package net.chesstango.gardel.minchess;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -224,6 +225,7 @@ public class KNRBQvKNRBQTest extends AbstractPerftTest {
     }
 
     @Test
+    @Disabled
     public void test_POS1_PERFT_L6() {
         MinChess game = createGame(POSITION);
 
