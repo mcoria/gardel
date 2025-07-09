@@ -56,7 +56,6 @@ class MinChessConstants {
     static final long LIMIT_SOUTH_EAST = 0x00000000000000FFL | 0x8080808080808080L;
     static final long LIMIT_SOUTH_WEST = 0x00000000000000FFL | 0x101010101010101L;
 
-    static final int MAX_MOVES = 128;
     static final long[] KING_JUMPS = {
             0x0000000000000302L,
             0x0000000000000705L,

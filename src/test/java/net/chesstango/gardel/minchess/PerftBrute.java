@@ -1,7 +1,7 @@
 package net.chesstango.gardel.minchess;
 
 
-import static net.chesstango.gardel.minchess.MinChessConstants.MAX_MOVES;
+import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
 
 /**
  * @author Mauricio Coria

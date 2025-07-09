@@ -1,9 +1,13 @@
 package net.chesstango.gardel.minchess;
 
+import net.chesstango.gardel.fen.FEN;
+import net.chesstango.gardel.fen.FENExporter;
+
 /**
  * @author Mauricio Coria
  */
 public class MinChess implements Cloneable {
+    public static final int MAX_MOVES = 128;
     final MinChessWorkspace workspace;
     final MinChessWorkspace workspaceTmp;
 
@@ -14,6 +18,13 @@ public class MinChess implements Cloneable {
     final Pawn pawn;
 
     boolean validate = false;
+
+    public static MinChess from(FEN fen) {
+        MinChessBuilder builder = new MinChessBuilder();
+        FENExporter exporter = new FENExporter(builder);
+        exporter.export(fen);
+        return builder.getPositionRepresentation();
+    }
 
     public MinChess(boolean whiteTurn,
                     boolean castlingBlackKingAllowed,
