@@ -43,12 +43,13 @@ public class MinChess implements Cloneable {
                 rookPositions,
                 bishopPositions,
                 knightPositions,
-                pawnPositions
+                pawnPositions,
+                this
         );
 
-        this.workspaceTmp = new MinChessWorkspace();
+        this.workspaceTmp = new MinChessWorkspace(this);
 
-        this.king = new King(this::isLegalMove, turn -> this.isKingInCheck(workspace, turn));
+        this.king = new King(this::isLegalMove);
         this.knight = new Knight(this::isLegalMove);
         this.rook = new Rook(this::isLegalMove);
         this.bishop = new Bishop(this::isLegalMove);
@@ -136,10 +137,6 @@ public class MinChess implements Cloneable {
         workspaceTmp.copyFrom(workspace);
         workspaceTmp.doEnPassantMoveImp(from, enPassantSquare);
         return !isKingInCheck(workspaceTmp, workspace.whiteTurn);
-    }
-
-    boolean isKingInCheck(boolean turn) {
-        return isKingInCheck(workspace, turn);
     }
 
     boolean isKingInCheck(MinChessWorkspace workspace, boolean turn) {

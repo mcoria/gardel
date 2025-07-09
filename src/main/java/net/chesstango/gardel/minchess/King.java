@@ -2,7 +2,6 @@ package net.chesstango.gardel.minchess;
 
 
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 import static net.chesstango.gardel.minchess.MinChessConstants.*;
 
@@ -10,11 +9,8 @@ import static net.chesstango.gardel.minchess.MinChessConstants.*;
  * @author Mauricio Coria
  */
 class King extends AbstractPiece {
-    final Predicate<Boolean> isKingInCheckFn;
-
-    King(BiPredicate<Long, Long> isLegalMoveFn, Predicate<Boolean> isKingInCheckFn) {
+    King(BiPredicate<Long, Long> isLegalMoveFn) {
         super(isLegalMoveFn);
-        this.isKingInCheckFn = isKingInCheckFn;
     }
 
     @Override
@@ -34,7 +30,7 @@ class King extends AbstractPiece {
 
     int generateBlackCastlingMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
-        if (!isKingInCheckFn.test(false)) {
+        if (!workspace.isKingInCheck(false)) {
             final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
             final long fromPosition = workspace.blackPositions & workspace.kingPositions;
             if (workspace.castlingBlackKingAllowed && (CASTLING_BLACK_KING & emptyPositions) == CASTLING_BLACK_KING) {
@@ -57,7 +53,7 @@ class King extends AbstractPiece {
 
     int generateWhiteCastlingMoves(final MinChessWorkspace workspace, short[] moves, int startIdx) {
         int size = 0;
-        if (!isKingInCheckFn.test(true)) {
+        if (!workspace.isKingInCheck(true)) {
             final long emptyPositions = ~(workspace.whitePositions | workspace.blackPositions);
             final long fromPosition = workspace.whitePositions & workspace.kingPositions;
             if (workspace.castlingWhiteKingAllowed && (CASTLING_WHITE_KING & emptyPositions) == CASTLING_WHITE_KING) {

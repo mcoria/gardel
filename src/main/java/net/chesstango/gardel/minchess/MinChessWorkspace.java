@@ -1,6 +1,7 @@
 package net.chesstango.gardel.minchess;
 
-import lombok.Setter;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import static net.chesstango.gardel.minchess.MinChessConstants.*;
 
@@ -23,6 +24,7 @@ class MinChessWorkspace {
     long bishopPositions = 0;
     long knightPositions = 0;
     long pawnPositions = 0;
+    final MinChess minChess;
 
     MinChessWorkspace(boolean whiteTurn,
                       boolean castlingBlackKingAllowed,
@@ -37,7 +39,8 @@ class MinChessWorkspace {
                       long rookPositions,
                       long bishopPositions,
                       long knightPositions,
-                      long pawnPositions) {
+                      long pawnPositions,
+                      MinChess minChess) {
         this.whiteTurn = whiteTurn;
         this.castlingBlackKingAllowed = castlingBlackKingAllowed;
         this.castlingBlackQueenAllowed = castlingBlackQueenAllowed;
@@ -53,9 +56,11 @@ class MinChessWorkspace {
         this.bishopPositions = bishopPositions;
         this.knightPositions = knightPositions;
         this.pawnPositions = pawnPositions;
+        this.minChess = minChess;
     }
 
-    MinChessWorkspace() {
+    MinChessWorkspace(MinChess minChess) {
+        this.minChess = minChess;
     }
 
     void copyFrom(MinChessWorkspace other) {
@@ -237,6 +242,10 @@ class MinChessWorkspace {
         }
 
         doMoveImp(from, to);
+    }
+
+    boolean isKingInCheck(boolean turn) {
+        return minChess.isKingInCheck(this, turn);
     }
 
     void validate() {
