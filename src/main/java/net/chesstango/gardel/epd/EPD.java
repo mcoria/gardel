@@ -63,8 +63,12 @@ public class EPD {
                 enPassantSquare;
     }
 
+    public boolean isMoveSuccess(short move) {
+        throw new RuntimeException("Not implemented yet");
+    }
+
     /*
-    public boolean isMoveSuccess(Move move) {
+    public boolean isMoveSuccess(short move) {
         if (bestMovesStr != null && !bestMovesStr.isEmpty()) {
             return isMoveSuccess(move, bestMovesStr);
         } else if (avoidMovesStr != null && !avoidMovesStr.isEmpty()) {
@@ -76,7 +80,8 @@ public class EPD {
         }
     }
 
-    private boolean isMoveSuccess(Move move, String movesStr) {
+
+    boolean isMoveSuccess(short move, String movesStr) {
         List<Move> movesFromString = movesStringToMoves(movesStr);
         for (Move moveFromString : movesFromString) {
             if (move.equals(moveFromString)) {
@@ -102,4 +107,5 @@ public class EPD {
         return moveList;
     }
      */
+
 }

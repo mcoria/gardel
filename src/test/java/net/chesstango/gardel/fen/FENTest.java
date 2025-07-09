@@ -22,7 +22,7 @@ public class FENTest {
         // Get the ASCII representation of the position
         String position = asciiBuilder.getPositionRepresentation();
 
-        System.out.println(position);
+        //System.out.println(position);
     }
 
 
@@ -41,6 +41,6 @@ public class FENTest {
         // Get the ASCII representation of the position, but mirrored.
         String position = asciiBuilder.getPositionRepresentation();
 
-        System.out.println(position);
+        //System.out.println(position);
     }
 }

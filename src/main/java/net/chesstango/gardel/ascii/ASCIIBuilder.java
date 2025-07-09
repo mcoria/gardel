@@ -13,7 +13,6 @@ public class ASCIIBuilder extends AbstractPositionBuilder<String> {
 
     private FENBuilder fenBuilder = new FENBuilder();
 
-
     @Override
     public String getPositionRepresentation() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
