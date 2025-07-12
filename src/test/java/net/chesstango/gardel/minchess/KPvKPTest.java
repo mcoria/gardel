@@ -76,7 +76,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L2_a7a8KNIGHT() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.KNIGHT));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.KNIGHT));
 
         PerftResult result = perft.start(game, 1);
 
@@ -104,7 +104,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L2_a7a8_QUEEN() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.QUEEN));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.QUEEN));
 
         PerftResult result = perft.start(game, 1);
         assertEquals(1, result.getChildNode(Square.a4, Square.a3));
@@ -239,7 +239,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L3_a7a8BISHOP() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.BISHOP));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.BISHOP));
 
         PerftResult result = perft.start(game, 2);
         assertEquals(17, result.getChildNode(Square.a4, Square.a3));
@@ -266,7 +266,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L3_a7a8BISHOP_g7g5() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.BISHOP));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.BISHOP));
         game.doMove(encodeMove(Square.g7.bitPosition(), Square.g5.bitPosition()));
 
         PerftResult result = perft.start(game, 1);
@@ -531,7 +531,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L6_a7a8ROOK() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.ROOK));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.ROOK));
 
         PerftResult result = perft.start(game, 5);
         assertEquals(120628, result.getChildNode(Square.a4, Square.a3));
@@ -555,7 +555,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L6_a7a8ROOK_e7f6() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.ROOK));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.ROOK));
         game.doMove(encodeMove(Square.e7.bitPosition(), Square.f6.bitPosition()));
 
         PerftResult result = perft.start(game, 4);
@@ -589,7 +589,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L6_a7a8ROOK_e7f6_b2b3() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.ROOK));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.ROOK));
         game.doMove(encodeMove(Square.e7.bitPosition(), Square.f6.bitPosition()));
         game.doMove(encodeMove(Square.b2.bitPosition(), Square.b3.bitPosition()));
 
@@ -617,7 +617,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L6_a7a8ROOK_e7f6_b2b3_f6g5() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.ROOK));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.ROOK));
         game.doMove(encodeMove(Square.e7.bitPosition(), Square.f6.bitPosition()));
         game.doMove(encodeMove(Square.b2.bitPosition(), Square.b3.bitPosition()));
         game.doMove(encodeMove(Square.f6.bitPosition(), Square.g5.bitPosition()));
@@ -655,7 +655,7 @@ public class KPvKPTest extends AbstractPerftTest {
     @Test
     public void test_POS1_PERFT_L6_a7a8ROOK_e7f6_b2b3_f6g5_b3a4() {
         MinChess game = createGame(POSITION);
-        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.PromotionPiece.ROOK));
+        game.doMove(encodeMove(Square.a7.bitPosition(), Square.a8.bitPosition(), MinChessConstants.ROOK));
         game.doMove(encodeMove(Square.e7.bitPosition(), Square.f6.bitPosition()));
         game.doMove(encodeMove(Square.b2.bitPosition(), Square.b3.bitPosition()));
         game.doMove(encodeMove(Square.f6.bitPosition(), Square.g5.bitPosition()));

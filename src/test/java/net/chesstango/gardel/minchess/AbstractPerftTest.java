@@ -47,7 +47,7 @@ public abstract class AbstractPerftTest {
         int promotion = (move & 0b11110000_00000000) >>> 12;
 
         if (promotion != 0) {
-            System.out.printf("%s%s - %s\n", from, to, MinChessConstants.PromotionPiece.from(promotion).name());
+            System.out.printf("%s%s - %s\n", from, to, promotion);
         } else {
             System.out.printf("%s%s\n", from, to);
         }

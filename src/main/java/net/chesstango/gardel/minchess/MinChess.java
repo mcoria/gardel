@@ -88,10 +88,9 @@ public class MinChess implements Cloneable {
         long fromPosition = 1L << (fromRank * 8 + fromFile);
 
         if ((fromPosition & workspace.pawnPositions) != 0) {
-            int promotionPiece = (move & 0b01110000_00000000) >>> 12;
+            final int promotionPiece = (move & 0b01110000_00000000) >>> 12;
             if (promotionPiece != 0) {
-                MinChessConstants.PromotionPiece promotionPieceValue = MinChessConstants.PromotionPiece.from(promotionPiece);
-                workspace.doMovePromotionImp(fromPosition, toPosition, promotionPieceValue);
+                workspace.doMovePromotionImp(fromPosition, toPosition, promotionPiece);
             } else if (Math.abs(fromRank - toRank) == 2) {
                 int enPassantRank = (fromRank + toRank) / 2;
                 workspace.doMoveImp(fromPosition, toPosition);
@@ -114,6 +113,30 @@ public class MinChess implements Cloneable {
         if (validate) {
             workspace.validate();
         }
+    }
+
+    int getFromPiece(short move) {
+        int fromFile = (move & 0b00000001_11000000) >>> 6;
+        int fromRank = (move & 0b00001110_00000000) >>> 9;
+        long fromPosition = 1L << (fromRank * 8 + fromFile);
+
+        int piece = 0;
+
+        if ((fromPosition & workspace.pawnPositions) != 0) {
+            piece = 1;
+        } else if ((fromPosition & workspace.kingPositions) != 0) {
+            piece = 2;
+        } else if ((fromPosition & workspace.queenPositions) != 0) {
+            piece = 3;
+        } else if ((fromPosition & workspace.rookPositions) != 0) {
+            piece = 4;
+        } else if ((fromPosition & workspace.bishopPositions) != 0) {
+            piece = 5;
+        } else if ((fromPosition & workspace.knightPositions) != 0) {
+            piece = 6;
+        }
+
+        return piece;
     }
 
 

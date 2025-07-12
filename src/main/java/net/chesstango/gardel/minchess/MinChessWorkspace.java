@@ -168,19 +168,19 @@ class MinChessWorkspace {
         whiteTurn = !whiteTurn;
     }
 
-    void doMovePromotionImp(long from, long to, MinChessConstants.PromotionPiece promotionPiece) {
+    void doMovePromotionImp(long from, long to, int promotionPiece) {
         pawnPositions &= ~from;
         switch (promotionPiece) {
-            case KNIGHT:
+            case 1:
                 knightPositions |= from;
                 break;
-            case BISHOP:
+            case 2:
                 bishopPositions |= from;
                 break;
-            case ROOK:
+            case 3:
                 rookPositions |= from;
                 break;
-            case QUEEN:
+            case 4:
                 queenPositions |= from;
                 break;
             default:
