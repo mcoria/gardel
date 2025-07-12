@@ -4,10 +4,6 @@ package net.chesstango.gardel.minchess;
  * @author Mauricio Coria
  */
 class MinChessConstants {
-    static final int KNIGHT = 1;
-    static final int BISHOP = 2;
-    static final int ROOK = 3;
-    static final int QUEEN = 4;
 
     static final long A1 = 0x01L;
     static final long C1 = 0x04L;

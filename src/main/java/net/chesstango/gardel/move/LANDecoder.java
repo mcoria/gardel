@@ -22,7 +22,7 @@ public class LANDecoder {
             "(?<pawnmove>(?<pawnfrom>[a-h][1-8])[-x](?<pawnto>[a-h][1-8])(?<promotionpiece>[RNBQK]))" +
             ")[+#]?");
 
-    public MoveCoordinates decode(String moveLongAlgNotation, FEN fen) {
+    public Move decode(String moveLongAlgNotation, FEN fen) {
         final Matcher matcher = edpMovePattern.matcher(moveLongAlgNotation);
         if (matcher.matches()) {
             MinChess minchess = MinChess.from(fen);
@@ -37,7 +37,7 @@ public class LANDecoder {
         return null;
     }
 
-    private MoveCoordinates decodePieceMove(Matcher matcher, short[] moves) {
+    private Move decodePieceMove(Matcher matcher, short[] moves) {
         String pieceStr = matcher.group("piece");
         String fromStr = matcher.group("from");
         String fromFileStr = matcher.group("fromfile");
@@ -48,15 +48,17 @@ public class LANDecoder {
         return null;
     }
 
-    private MoveCoordinates decodePawnMove(Matcher matcher, short[] moves) {
+    private Move decodePawnMove(Matcher matcher, short[] moves) {
         String promotionPieceStr = matcher.group("promotionpiece");
         String fromStr = matcher.group("pawnfrom");
         String toStr = matcher.group("pawnto");
 
 
-        return MoveCoordinates.from(MoveCoordinates.Square.valueOf(fromStr),
-                MoveCoordinates.Square.valueOf(toStr),
-                promotionPieceStr != null ? MoveCoordinates.PromotionPiece.from(promotionPieceStr.toLowerCase()) : null
+        return Move.of(Move.Square.valueOf(fromStr),
+                Move.Square.valueOf(toStr),
+                null,
+                null,
+                promotionPieceStr != null ? Move.PromotionPiece.from(promotionPieceStr.toLowerCase()) : null
         );
     }
 

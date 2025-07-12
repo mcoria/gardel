@@ -14,7 +14,7 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
  */
 public class SANEncoder {
 
-    public String encodeAlgebraicNotation(MoveCoordinates moveCoordinates, FEN fen) {
+    public String encodeAlgebraicNotation(Move move, FEN fen) {
         MinChess minchess = MinChess.from(fen);
         short[] moves = new short[MAX_MOVES];
         minchess.generateMoves(moves);
@@ -25,27 +25,27 @@ public class SANEncoder {
             return encodePawnMove(move, moves);
         }
          */
-        return encodePieceMove(moveCoordinates, moves);
+        return encodePieceMove(move, moves);
     }
 
-    public String encodePieceMove(MoveCoordinates moveCoordinates, short[] moves) {
+    public String encodePieceMove(Move move, short[] moves) {
 
 
         return null;
     }
 
-    private String encodePawnMove(MoveCoordinates moveCoordinates, short[] moves) {
+    private String encodePawnMove(Move move, short[] moves) {
 
         return null;
     }
 
-    private String encodeMoveCastling(MoveCoordinates moveCoordinatesCastling) {
+    private String encodeMoveCastling(Move moveCastling) {
 
         return null;
     }
 
 
-    private String solvePieceAmbiguityFrom(MoveCoordinates moveCoordinates, short[] moves) {
+    private String solvePieceAmbiguityFrom(Move move, short[] moves) {
 
         return null;
     }

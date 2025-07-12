@@ -18,13 +18,13 @@ public class SANDecoderTest {
     public void test_bishop() {
         FEN fen = FEN.of("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
-        MoveCoordinates expected = MoveCoordinates.from(MoveCoordinates.Square.c1, MoveCoordinates.Square.d2);
-        MoveCoordinates actual = decoder.decode("Bd2", fen);
+        Move expected = Move.of(Move.Square.c1, Move.Square.d2, Move.Piece.BISHOP_WHITE);
+        Move actual = decoder.decode("Bd2", fen);
 
         assertEquals(expected, actual);
     }
 
-        /*
+    /*
     @Test
     public void test_pawn_push01() {
         Game game = Game.fromFEN("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
