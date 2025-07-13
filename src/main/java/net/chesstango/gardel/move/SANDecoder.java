@@ -45,12 +45,26 @@ public class SANDecoder {
     }
 
     private Move searchKingCastling(List<Move> moves) {
-
+        for (Move move : moves) {
+            Move.Piece fromPiece = move.fromPiece();
+            if (Move.Piece.KING_WHITE.equals(fromPiece) || Move.Piece.KING_BLACK.equals(fromPiece)) {
+                if (move.to().getFile() - move.from().getFile() == 2) {
+                    return move;
+                }
+            }
+        }
         return null;
     }
 
     private Move searchQueenCastling(List<Move> moves) {
-
+        for (Move move : moves) {
+            Move.Piece fromPiece = move.fromPiece();
+            if (Move.Piece.KING_WHITE.equals(fromPiece) || Move.Piece.KING_BLACK.equals(fromPiece)) {
+                if (move.from().getFile() - move.to().getFile() == 2) {
+                    return move;
+                }
+            }
+        }
         return null;
     }
 

@@ -49,8 +49,7 @@ public class SANDecoderTest {
 
 
     @Test
-    public void
-    test_pawnMove_capture() {
+    public void test_pawnMove_capture() {
         FEN fen = FEN.of("rnbqkbnr/ppp1p1pp/8/3p1p2/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq f6 0 3");
 
         Move expected = null;
@@ -69,23 +68,24 @@ public class SANDecoderTest {
         assertEquals(expected, actual);
     }
 
-    /*
+
     @Test
     public void test_castling() {
-        Game game = Game.fromFEN("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1 ");
+        FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1 ");
 
-        Move expectedMove = null;
-        Move decodedMove = null;
+        Move expected = null;
+        Move actual = null;
 
-        expectedMove = game.getMove(Square.e1, Square.c1);
-        decodedMove = decoder.decode("O-O-O", game.getPossibleMoves());
-        assertEquals(expectedMove, decodedMove);
+        expected = Move.of(Move.Square.e1, Move.Square.c1, Move.Piece.KING_WHITE);
+        actual = decoder.decode("O-O-O", fen);
+        assertEquals(expected, actual);
 
-        expectedMove = game.getMove(Square.e1, Square.g1);
-        decodedMove = decoder.decode("O-O", game.getPossibleMoves());
-        assertEquals(expectedMove, decodedMove);
+        expected = Move.of(Move.Square.e1, Move.Square.g1, Move.Piece.KING_WHITE);
+        actual = decoder.decode("O-O", fen);
+        assertEquals(expected, actual);
     }
 
+        /*
     @Test
     public void test_knight_move01() {
         Game game = Game.fromFEN("r1k4r/ppp4p/2nb1pq1/3p1np1/4p1Q1/4P3/PPPPNPPP/RNB1K2R w KQ - 0 1");
