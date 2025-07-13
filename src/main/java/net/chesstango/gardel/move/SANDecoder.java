@@ -59,17 +59,18 @@ public class SANDecoder {
     }
 
     private Move decodePawnPush(Matcher matcher, List<Move> moves) {
-        String pawnto = matcher.group("pawnto");
-        String pawnpushpromotion = matcher.group("pawnpushpromotion");
+        String pawnTo = matcher.group("pawnto");
+        String pawnPushPromotion = matcher.group("pawnpushpromotion");
 
-        if (pawnpushpromotion.equals("")) {
-            pawnpushpromotion = switch (pawnto) {
-                case "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1", "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8" ->
-                        "Q";
-                default -> pawnpushpromotion;
-            };
+        Move.Square toSquare = Move.Square.valueOf(pawnTo);
+        for (Move move : moves) {
+            Move.Piece fromPiece = move.fromPiece();
+            if (Move.Piece.PAWN_WHITE.equals(fromPiece) || Move.Piece.PAWN_BLACK.equals(fromPiece)) {
+                if (move.to() == toSquare) {
+                    return move;
+                }
+            }
         }
-
 
         return null;
     }

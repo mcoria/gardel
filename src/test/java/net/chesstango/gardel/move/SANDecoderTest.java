@@ -24,17 +24,18 @@ public class SANDecoderTest {
         assertEquals(expected, actual);
     }
 
-    /*
+
     @Test
     public void test_pawn_push01() {
-        Game game = Game.fromFEN("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
+        FEN fen = FEN.of("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
-        Move expectedMove = game.getMove(Square.a2, Square.a3);
-        Move decodedMove = decoder.decode("a3", game.getPossibleMoves());
+        Move expected = Move.of(Move.Square.a2, Move.Square.a3, Move.Piece.PAWN_WHITE);
+        Move actual = decoder.decode("a3", fen);
 
-        assertEquals(expectedMove, decodedMove);
+        assertEquals(expected, actual);
     }
 
+       /*
     @Test
     public void test_pawnMove1() {
         Game game = Game.fromFEN(FENParser.INITIAL_FEN);
