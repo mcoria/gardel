@@ -47,28 +47,29 @@ public class SANDecoderTest {
         assertEquals(expected, actual);
     }
 
-    /*
+
     @Test
     public void
     test_pawnMove_capture() {
-        Game game = Game.fromFEN("rnbqkbnr/ppp1p1pp/8/3p1p2/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq f6 0 3");
+        FEN fen = FEN.of("rnbqkbnr/ppp1p1pp/8/3p1p2/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq f6 0 3");
 
-        Move expectedMove = null;
-        Move decodedMove = null;
+        Move expected = null;
+        Move actual = null;
 
-        expectedMove = game.getMove(Square.e4, Square.f5);
-        decodedMove = decoder.decode("exf5", game.getPossibleMoves());
-        assertEquals(expectedMove, decodedMove);
+        expected = Move.of(Move.Square.e4, Move.Square.f5, Move.Piece.PAWN_WHITE, Move.Piece.PAWN_BLACK);
+        actual = decoder.decode("exf5", fen);
+        assertEquals(expected, actual);
 
-        expectedMove = game.getMove(Square.c4, Square.d5);
-        decodedMove = decoder.decode("cxd5", game.getPossibleMoves());
-        assertEquals(expectedMove, decodedMove);
+        expected = Move.of(Move.Square.c4, Move.Square.d5, Move.Piece.PAWN_WHITE, Move.Piece.PAWN_BLACK);
+        actual = decoder.decode("cxd5", fen);
+        assertEquals(expected, actual);
 
-        expectedMove = game.getMove(Square.e4, Square.d5);
-        decodedMove = decoder.decode("exd5", game.getPossibleMoves());
-        assertEquals(expectedMove, decodedMove);
+        expected = Move.of(Move.Square.e4, Move.Square.d5, Move.Piece.PAWN_WHITE, Move.Piece.PAWN_BLACK);
+        actual = decoder.decode("exd5", fen);
+        assertEquals(expected, actual);
     }
 
+    /*
     @Test
     public void test_castling() {
         Game game = Game.fromFEN("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1 ");
