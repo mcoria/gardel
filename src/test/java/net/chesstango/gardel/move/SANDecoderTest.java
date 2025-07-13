@@ -2,6 +2,7 @@ package net.chesstango.gardel.move;
 
 
 import net.chesstango.gardel.fen.FEN;
+import net.chesstango.gardel.fen.FENParser;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,17 +36,18 @@ public class SANDecoderTest {
         assertEquals(expected, actual);
     }
 
-       /*
+
     @Test
     public void test_pawnMove1() {
-        Game game = Game.fromFEN(FENParser.INITIAL_FEN);
+        FEN fen = FEN.of(FENParser.INITIAL_FEN);
 
-        Move expectedMove = game.getMove(Square.e2, Square.e3);
-        Move decodedMove = decoder.decode("e3", game.getPossibleMoves());
+        Move expected = Move.of(Move.Square.e2, Move.Square.e3, Move.Piece.PAWN_WHITE);
+        Move actual = decoder.decode("e3", fen);
 
-        assertEquals(expectedMove, decodedMove);
+        assertEquals(expected, actual);
     }
 
+    /*
     @Test
     public void
     test_pawnMove_capture() {
