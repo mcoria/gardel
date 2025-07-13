@@ -2,14 +2,10 @@ package net.chesstango.gardel.move;
 
 
 import net.chesstango.gardel.fen.FEN;
-import net.chesstango.gardel.minchess.MinChess;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
 
 /**
  * @author Mauricio Coria
@@ -80,11 +76,23 @@ public class SANDecoder {
         String pawnCaptureTo = matcher.group("pawncaptureto");
         String pawnCapturePromotion = matcher.group("pawncapturepromotion");
 
+        int pawnCaptureFileInt = switch (pawnCaptureFile) {
+            case "a" -> 0;
+            case "b" -> 1;
+            case "c" -> 2;
+            case "d" -> 3;
+            case "e" -> 4;
+            case "f" -> 5;
+            case "g" -> 6;
+            case "h" -> 7;
+            default -> throw new IllegalStateException("Unexpected value: " + pawnCaptureFile);
+        };
+
         Move.Square toSquare = Move.Square.valueOf(pawnCaptureTo);
         for (Move move : moves) {
             Move.Piece fromPiece = move.fromPiece();
             if (Move.Piece.PAWN_WHITE.equals(fromPiece) || Move.Piece.PAWN_BLACK.equals(fromPiece)) {
-                if (move.to() == toSquare) {
+                if (move.from().getFile() == pawnCaptureFileInt && move.to() == toSquare) {
                     return move;
                 }
             }
