@@ -54,10 +54,10 @@ public record Move(Square from,
 
         static PromotionPiece from(String charRepresentation) {
             return switch (charRepresentation) {
-                case "n" -> KNIGHT;
-                case "b" -> BISHOP;
-                case "r" -> ROOK;
-                case "q" -> QUEEN;
+                case "N" -> KNIGHT;
+                case "B" -> BISHOP;
+                case "R" -> ROOK;
+                case "Q" -> QUEEN;
                 default -> null;
             };
         }
