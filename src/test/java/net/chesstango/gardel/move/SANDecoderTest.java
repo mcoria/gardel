@@ -203,7 +203,7 @@ public class SANDecoderTest {
     public void testCheck01() {
         FEN fen = FEN.of("6k1/5p2/p6p/1pQ3P1/2n1B3/2P1PpP1/q4r2/4R1K1 b - - 0 37");
 
-        Move expected = Move.of(Move.Square.f2, Move.Square.f1, null);
+        Move expected = Move.of(Move.Square.f2, Move.Square.f1, Move.Piece.ROOK_BLACK, Move.Piece.EMPTY);
         assertNotNull(expected);
 
         Move actual = decoder.decode("Rf1+", fen);
@@ -216,7 +216,7 @@ public class SANDecoderTest {
     public void testCheck02() {
         FEN fen = FEN.of("r1bq1rk1/ppp2ppp/3p1n2/3Np3/1bPnP3/5NP1/PP1P1PBP/R1BQ1RK1 b - - 3 8");
 
-        Move expected = Move.of(Move.Square.d4, Move.Square.f3, null);
+        Move expected = Move.of(Move.Square.d4, Move.Square.f3, Move.Piece.KNIGHT_BLACK, Move.Piece.KNIGHT_WHITE);
         assertNotNull(expected);
 
         Move actual = decoder.decode("Nxf3+", fen);
