@@ -58,7 +58,7 @@ public record Move(Square from,
                 case "B" -> BISHOP;
                 case "R" -> ROOK;
                 case "Q" -> QUEEN;
-                default -> null;
+                case null, default -> null;
             };
         }
     }

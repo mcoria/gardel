@@ -177,7 +177,7 @@ public class SANDecoderTest {
     public void testPawnMovePromotion02() {
         FEN fen = FEN.of("8/PR1nk2p/4p1p1/8/3p3P/5K2/8/8 w - - 9 54");
 
-        Move expected = Move.of(Move.Square.a7, Move.Square.a8, Move.Piece.QUEEN_WHITE);
+        Move expected = Move.of(Move.Square.a7, Move.Square.a8, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY, Move.PromotionPiece.QUEEN);
         assertNotNull(expected);
 
         Move actual = decoder.decode("a8Q", fen);

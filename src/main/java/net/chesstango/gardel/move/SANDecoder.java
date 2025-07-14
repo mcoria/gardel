@@ -4,6 +4,7 @@ package net.chesstango.gardel.move;
 import net.chesstango.gardel.fen.FEN;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,7 +78,9 @@ public class SANDecoder {
             Move.Piece fromPiece = move.fromPiece();
             if (Move.Piece.PAWN_WHITE.equals(fromPiece) || Move.Piece.PAWN_BLACK.equals(fromPiece)) {
                 if (move.to() == toSquare) {
-                    return move;
+                    if(Objects.equals(move.promotionPiece(), Move.PromotionPiece.from(pawnPushPromotion))) {
+                        return move;
+                    }
                 }
             }
         }
@@ -90,24 +93,18 @@ public class SANDecoder {
         String pawnCaptureTo = matcher.group("pawncaptureto");
         String pawnCapturePromotion = matcher.group("pawncapturepromotion");
 
-        int pawnCaptureFileInt = switch (pawnCaptureFile) {
-            case "a" -> 0;
-            case "b" -> 1;
-            case "c" -> 2;
-            case "d" -> 3;
-            case "e" -> 4;
-            case "f" -> 5;
-            case "g" -> 6;
-            case "h" -> 7;
-            default -> -1;
-        };
+        int pawnCaptureFileInt = getFileInt(pawnCaptureFile);
 
         Move.Square toSquare = Move.Square.valueOf(pawnCaptureTo);
         for (Move move : moves) {
             Move.Piece fromPiece = move.fromPiece();
             if (Move.Piece.PAWN_WHITE.equals(fromPiece) || Move.Piece.PAWN_BLACK.equals(fromPiece)) {
-                if (move.from().getFile() == pawnCaptureFileInt && move.to() == toSquare) {
-                    return move;
+                if (move.to() == toSquare) {
+                    if(move.from().getFile() == pawnCaptureFileInt) {
+                        if(Objects.equals(move.promotionPiece(), Move.PromotionPiece.from(pawnCapturePromotion))) {
+                            return move;
+                        }
+                    }
                 }
             }
         }
@@ -124,17 +121,7 @@ public class SANDecoder {
 
         Move.Square pieceToSquare = Move.Square.valueOf(pieceTo);
 
-        int pieceFromFileInt = switch (pieceFromFile) {
-            case "a" -> 0;
-            case "b" -> 1;
-            case "c" -> 2;
-            case "d" -> 3;
-            case "e" -> 4;
-            case "f" -> 5;
-            case "g" -> 6;
-            case "h" -> 7;
-            case null, default -> -1;
-        };
+        int pieceFromFileInt = getFileInt(pieceFromFile);
 
         int pieceFromRankInt = switch (pieceFromRank) {
             case "1" -> 0;
@@ -160,7 +147,7 @@ public class SANDecoder {
         return null;
     }
 
-    private boolean isPiece(Move move, String pieceStr) {
+    private static boolean isPiece(Move move, String pieceStr) {
         Move.Piece fromPiece = move.fromPiece();
         return "B".equalsIgnoreCase(pieceStr) && (Move.Piece.BISHOP_WHITE.equals(fromPiece) || Move.Piece.BISHOP_BLACK.equals(fromPiece)) ||
                 "N".equalsIgnoreCase(pieceStr) && (Move.Piece.KNIGHT_WHITE.equals(fromPiece) || Move.Piece.KNIGHT_BLACK.equals(fromPiece)) ||
@@ -168,5 +155,17 @@ public class SANDecoder {
                 "Q".equalsIgnoreCase(pieceStr) && (Move.Piece.QUEEN_WHITE.equals(fromPiece) || Move.Piece.QUEEN_BLACK.equals(fromPiece));
     }
 
-
+    private static int getFileInt(String pawnCaptureFile) {
+        return switch (pawnCaptureFile) {
+            case "a" -> 0;
+            case "b" -> 1;
+            case "c" -> 2;
+            case "d" -> 3;
+            case "e" -> 4;
+            case "f" -> 5;
+            case "g" -> 6;
+            case "h" -> 7;
+            case null, default -> -1;
+        };
+    }
 }
