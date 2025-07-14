@@ -74,11 +74,17 @@ public class SANDecoder {
         String pawnPushPromotion = matcher.group("pawnpushpromotion");
 
         Move.Square toSquare = Move.Square.valueOf(pawnTo);
+        if (toSquare.getRank() == 0 || toSquare.getRank() == 7) {
+            if (pawnPushPromotion.isEmpty()) {
+                pawnPushPromotion = "Q";
+            }
+        }
+
         for (Move move : moves) {
             Move.Piece fromPiece = move.fromPiece();
             if (Move.Piece.PAWN_WHITE.equals(fromPiece) || Move.Piece.PAWN_BLACK.equals(fromPiece)) {
                 if (move.to() == toSquare) {
-                    if(Objects.equals(move.promotionPiece(), Move.PromotionPiece.from(pawnPushPromotion))) {
+                    if (Objects.equals(move.promotionPiece(), Move.PromotionPiece.from(pawnPushPromotion))) {
                         return move;
                     }
                 }
@@ -96,12 +102,18 @@ public class SANDecoder {
         int pawnCaptureFileInt = getFileInt(pawnCaptureFile);
 
         Move.Square toSquare = Move.Square.valueOf(pawnCaptureTo);
+        if (toSquare.getRank() == 0 || toSquare.getRank() == 7) {
+            if (pawnCapturePromotion.isEmpty()) {
+                pawnCapturePromotion = "Q";
+            }
+        }
+
         for (Move move : moves) {
             Move.Piece fromPiece = move.fromPiece();
             if (Move.Piece.PAWN_WHITE.equals(fromPiece) || Move.Piece.PAWN_BLACK.equals(fromPiece)) {
                 if (move.to() == toSquare) {
-                    if(move.from().getFile() == pawnCaptureFileInt) {
-                        if(Objects.equals(move.promotionPiece(), Move.PromotionPiece.from(pawnCapturePromotion))) {
+                    if (move.from().getFile() == pawnCaptureFileInt) {
+                        if (Objects.equals(move.promotionPiece(), Move.PromotionPiece.from(pawnCapturePromotion))) {
                             return move;
                         }
                     }
