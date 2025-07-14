@@ -24,7 +24,7 @@ public class SANEncoder {
     }
 
     private String encodePawnMove(Move move, MinChess minchess) {
-        if (move.toPiece() == Move.Piece.EMPTY) {
+        if (move.from().getFile() == move.to().getFile()) {
             return encodePawnPushMove(move, minchess);
         } else {
             return encodePawnCaptureMove(move, minchess);

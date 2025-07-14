@@ -45,7 +45,6 @@ public class SANEncoderTest {
         assertEquals("exd5", actual);
     }
 
-    /*
 
     @Test
     public void testPawnMoveCaptureEnpassant(){
@@ -54,16 +53,17 @@ public class SANEncoderTest {
         Move move = null;
         String actual = null;
 
-        move = Move.of(Move.Square.d5, Move.Square.e6);
+        move = Move.of(Move.Square.d5, Move.Square.e6, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY );
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("dxe6", actual);
 
-        move = Move.of(Move.Square.f5, Move.Square.e6);
+        move = Move.of(Move.Square.f5, Move.Square.e6, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("fxe6", actual);
     }
 
 
+        /*
     @Test
     public void testPawnMovePromotion(){
         FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
