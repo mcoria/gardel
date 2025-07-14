@@ -24,11 +24,35 @@ public class SANEncoder {
     }
 
     private String encodePawnMove(Move move, MinChess minchess) {
-        if (move.from().getFile() == move.to().getFile()) {
-            return move.to().toString();
+        if (move.toPiece() == Move.Piece.EMPTY) {
+            return encodePawnPushMove(move, minchess);
+        } else {
+            return encodePawnCaptureMove(move, minchess);
         }
-        return null;
     }
+
+    private String encodePawnPushMove(Move move, MinChess minchess) {
+        return move.to().toString();
+    }
+
+    private String encodePawnCaptureMove(Move move, MinChess minchess) {
+        return String.format("%sx%s", fileToLetter(move.from().getFile()), move.to().toString());
+    }
+
+    private String fileToLetter(int file) {
+        return switch (file) {
+            case 0 -> "a";
+            case 1 -> "b";
+            case 2 -> "c";
+            case 3 -> "d";
+            case 4 -> "e";
+            case 5 -> "f";
+            case 6 -> "g";
+            case 7 -> "h";
+            default -> null;
+        };
+    }
+
 
     private String encodePieceMove(Move move, MinChess minchess) {
         return null;
