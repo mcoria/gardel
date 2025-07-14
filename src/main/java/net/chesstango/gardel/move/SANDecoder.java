@@ -136,10 +136,23 @@ public class SANDecoder {
             case null, default -> -1;
         };
 
+        int pieceFromRankInt = switch (pieceFromRank) {
+            case "1" -> 0;
+            case "2" -> 1;
+            case "3" -> 2;
+            case "4" -> 3;
+            case "5" -> 4;
+            case "6" -> 5;
+            case "7" -> 6;
+            case "8" -> 7;
+            case null, default -> -1;
+        };
+
         for (Move move : moves) {
             if (isPiece(move, pieceStr) && move.to() == pieceToSquare &&
-                (pieceFromFileInt == -1 || pieceFromFileInt == move.from().getFile()))
-            {
+                    (pieceFromFileInt == -1 || pieceFromFileInt == move.from().getFile()) &&
+                    (pieceFromRankInt == -1 || pieceFromRankInt == move.from().getRank())
+            ) {
                 return move;
             }
         }
