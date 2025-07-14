@@ -16,7 +16,7 @@ public class SANDecoderTest {
 
 
     @Test
-    public void test_bishop() {
+    public void testBishop() {
         FEN fen = FEN.of("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
         Move expected = Move.of(Move.Square.c1, Move.Square.d2, Move.Piece.BISHOP_WHITE);
@@ -27,7 +27,7 @@ public class SANDecoderTest {
 
 
     @Test
-    public void test_pawn_push01() {
+    public void testPawnPush01() {
         FEN fen = FEN.of("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
         Move expected = Move.of(Move.Square.a2, Move.Square.a3, Move.Piece.PAWN_WHITE);
@@ -38,7 +38,7 @@ public class SANDecoderTest {
 
 
     @Test
-    public void test_pawnMove1() {
+    public void testPawnMove1() {
         FEN fen = FEN.of(FENParser.INITIAL_FEN);
 
         Move expected = Move.of(Move.Square.e2, Move.Square.e3, Move.Piece.PAWN_WHITE);
@@ -49,7 +49,7 @@ public class SANDecoderTest {
 
 
     @Test
-    public void test_pawnMove_capture() {
+    public void testPawnMoveCapture() {
         FEN fen = FEN.of("rnbqkbnr/ppp1p1pp/8/3p1p2/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq f6 0 3");
 
         Move expected = null;
@@ -70,7 +70,7 @@ public class SANDecoderTest {
 
 
     @Test
-    public void test_castling() {
+    public void testCastling() {
         FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1 ");
 
         Move expected = null;
@@ -86,7 +86,7 @@ public class SANDecoderTest {
     }
 
     @Test
-    public void test_knight_move01() {
+    public void testKnightMove01() {
         FEN fen = FEN.of("r1k4r/ppp4p/2nb1pq1/3p1np1/4p1Q1/4P3/PPPPNPPP/RNB1K2R w KQ - 0 1");
 
         Move expected = null;
@@ -107,7 +107,7 @@ public class SANDecoderTest {
     }
 
     @Test
-    public void test_knight_move02() {
+    public void testKnightMove02() {
         FEN fen = FEN.of("rk2q3/ppp5/6n1/2b5/4pp2/P1N5/1PPPKPRP/R1B5 b - - 19 47");
 
         Move expected = null;
@@ -119,7 +119,7 @@ public class SANDecoderTest {
     }
 
     @Test
-    public void test_knight_move03() {
+    public void testKnightMove03() {
         FEN fen = FEN.of("rk2q3/ppp5/5p2/2b2np1/4p3/P1N1Pn2/1PPPKPRP/R1B5 b - - 3 34");
 
         Move expected = null;
@@ -136,7 +136,7 @@ public class SANDecoderTest {
 
         /*
     @Test
-    public void test_knight_move04() {
+    public void testKnightMove04() {
         Game game = Game.fromFEN("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
         Move expected = Move.of(Move.Square.g1, Square.e2);
@@ -146,7 +146,7 @@ public class SANDecoderTest {
     }
 
     @Test
-    public void test_knight_move05() {
+    public void testKnightMove05() {
         Game game = Game.fromFEN("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
         Move expected = Move.of(Move.Square.g1, Square.f3);
@@ -156,7 +156,7 @@ public class SANDecoderTest {
     }
 
     @Test
-    public void test_pawnMove_promotion01() {
+    public void testPawnMovePromotion01() {
         Game game = Game.fromFEN("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
 
         Move expected = null;
@@ -172,7 +172,7 @@ public class SANDecoderTest {
     }
 
     @Test
-    public void test_pawnMove_promotion02() {
+    public void testPawnMovePromotion02() {
         Game game = Game.fromFEN("8/PR1nk2p/4p1p1/8/3p3P/5K2/8/8 w - - 9 54");
 
         Move expected = Move.of(Move.Square.a7, Square.a8, Piece.QUEEN_WHITE);
@@ -185,7 +185,7 @@ public class SANDecoderTest {
     }
 
     @Test
-    public void test_pawnMove_promotion03() {
+    public void testPawnMovePromotion03() {
         Game game = Game.fromFEN("2k1r3/1p1b4/p1p5/P1P5/1P1P1p2/3B1K2/6pP/3R4 b - - 0 37");
 
         Move expected = Move.of(Move.Square.g2, Square.g1, Piece.QUEEN_BLACK);
@@ -198,7 +198,7 @@ public class SANDecoderTest {
     }
 
     @Test
-    public void test_check01() {
+    public void testCheck01() {
         Game game = Game.fromFEN("6k1/5p2/p6p/1pQ3P1/2n1B3/2P1PpP1/q4r2/4R1K1 b - - 0 37");
 
         Move expected = Move.of(Move.Square.f2, Square.f1);
@@ -211,7 +211,7 @@ public class SANDecoderTest {
     }
 
     @Test
-    public void test_check02() {
+    public void testCheck02() {
         Game game = Game.fromFEN("r1bq1rk1/ppp2ppp/3p1n2/3Np3/1bPnP3/5NP1/PP1P1PBP/R1BQ1RK1 b - - 3 8");
 
         Move expected = Move.of(Move.Square.d4, Square.f3);
