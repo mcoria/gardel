@@ -6,6 +6,7 @@ import net.chesstango.gardel.fen.FENParser;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Mauricio Coria
@@ -145,41 +146,41 @@ public class SANDecoderTest {
         assertEquals(expected, actual);
     }
 
-    /*
     @Test
     public void testKnightMove05() {
-        Game game = Game.fromFEN("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
+        FEN fen = FEN.of("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
-        Move expected = Move.of(Move.Square.g1, Square.f3);
-        Move actual = decoder.decode("Nf3", game.getPossibleMoves());
+        Move expected = Move.of(Move.Square.g1, Move.Square.f3, Move.Piece.KNIGHT_WHITE);
+        Move actual = decoder.decode("Nf3", fen);
 
         assertEquals(expected, actual);
     }
 
+
     @Test
     public void testPawnMovePromotion01() {
-        Game game = Game.fromFEN("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
+        FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
 
         Move expected = null;
         Move actual = null;
 
-        expected = Move.of(Move.Square.c7, Square.c8, Piece.ROOK_WHITE);
-        actual = decoder.decode("c8=R", game.getPossibleMoves());
+        expected = Move.of(Move.Square.c7, Move.Square.c8, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY, Move.PromotionPiece.ROOK);
+        actual = decoder.decode("c8=R", fen);
         assertEquals(expected, actual);
 
-        expected = Move.of(Move.Square.c7, Square.d8, Piece.QUEEN_WHITE);
-        actual = decoder.decode("cxd8=Q", game.getPossibleMoves());
+        expected = Move.of(Move.Square.c7, Move.Square.d8, Move.Piece.PAWN_WHITE, Move.Piece.BISHOP_BLACK, Move.PromotionPiece.QUEEN);
+        actual = decoder.decode("cxd8=Q", fen);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testPawnMovePromotion02() {
-        Game game = Game.fromFEN("8/PR1nk2p/4p1p1/8/3p3P/5K2/8/8 w - - 9 54");
+        FEN fen = FEN.of("8/PR1nk2p/4p1p1/8/3p3P/5K2/8/8 w - - 9 54");
 
-        Move expected = Move.of(Move.Square.a7, Square.a8, Piece.QUEEN_WHITE);
+        Move expected = Move.of(Move.Square.a7, Move.Square.a8, Move.Piece.QUEEN_WHITE);
         assertNotNull(expected);
 
-        Move actual = decoder.decode("a8Q", game.getPossibleMoves());
+        Move actual = decoder.decode("a8Q", fen);
         assertNotNull(actual);
 
         assertEquals(expected, actual);
@@ -187,12 +188,12 @@ public class SANDecoderTest {
 
     @Test
     public void testPawnMovePromotion03() {
-        Game game = Game.fromFEN("2k1r3/1p1b4/p1p5/P1P5/1P1P1p2/3B1K2/6pP/3R4 b - - 0 37");
+        FEN fen = FEN.of("2k1r3/1p1b4/p1p5/P1P5/1P1P1p2/3B1K2/6pP/3R4 b - - 0 37");
 
-        Move expected = Move.of(Move.Square.g2, Square.g1, Piece.QUEEN_BLACK);
+        Move expected = Move.of(Move.Square.g2, Move.Square.g1, Move.Piece.QUEEN_BLACK);
         assertNotNull(expected);
 
-        Move actual = decoder.decode("g1", game.getPossibleMoves());
+        Move actual = decoder.decode("g1", fen);
         assertNotNull(actual);
 
         assertEquals(expected, actual);
@@ -200,12 +201,12 @@ public class SANDecoderTest {
 
     @Test
     public void testCheck01() {
-        Game game = Game.fromFEN("6k1/5p2/p6p/1pQ3P1/2n1B3/2P1PpP1/q4r2/4R1K1 b - - 0 37");
+        FEN fen = FEN.of("6k1/5p2/p6p/1pQ3P1/2n1B3/2P1PpP1/q4r2/4R1K1 b - - 0 37");
 
-        Move expected = Move.of(Move.Square.f2, Square.f1);
+        Move expected = Move.of(Move.Square.f2, Move.Square.f1, null);
         assertNotNull(expected);
 
-        Move actual =decoder.decode("Rf1+", game.getPossibleMoves());
+        Move actual = decoder.decode("Rf1+", fen);
         assertNotNull(actual);
 
         assertEquals(expected, actual);
@@ -213,16 +214,15 @@ public class SANDecoderTest {
 
     @Test
     public void testCheck02() {
-        Game game = Game.fromFEN("r1bq1rk1/ppp2ppp/3p1n2/3Np3/1bPnP3/5NP1/PP1P1PBP/R1BQ1RK1 b - - 3 8");
+        FEN fen = FEN.of("r1bq1rk1/ppp2ppp/3p1n2/3Np3/1bPnP3/5NP1/PP1P1PBP/R1BQ1RK1 b - - 3 8");
 
-        Move expected = Move.of(Move.Square.d4, Square.f3);
+        Move expected = Move.of(Move.Square.d4, Move.Square.f3, null);
         assertNotNull(expected);
 
-        Move actual = decoder.decode("Nxf3+", game.getPossibleMoves());
+        Move actual = decoder.decode("Nxf3+", fen);
         assertNotNull(actual);
 
         assertEquals(expected, actual);
     }
 
-     */
 }
