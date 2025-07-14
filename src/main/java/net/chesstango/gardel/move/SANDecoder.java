@@ -9,11 +9,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Mauricio Coria
  * <p>
  * <SAN move descriptor piece moves>   ::= <Piece symbol>[<from file>|<from rank>|<from square>]['x']<to square>
  * <SAN move descriptor pawn captures> ::= 			      <from file>[<from rank>]               'x' <to square>[<promoted to>]
  * <SAN move descriptor pawn push>     ::= 														     <to square>[<promoted to>]
+ *
+ * @author Mauricio Coria
  */
 public class SANDecoder {
     public static final Pattern movePattern = Pattern.compile("(" +

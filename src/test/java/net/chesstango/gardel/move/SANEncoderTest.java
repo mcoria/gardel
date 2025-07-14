@@ -1,6 +1,12 @@
 package net.chesstango.gardel.move;
 
 
+import net.chesstango.gardel.fen.FEN;
+import net.chesstango.gardel.fen.FENParser;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * @author Mauricio Coria
  */
@@ -9,17 +15,18 @@ public class SANEncoderTest {
     private SANEncoder encoder = new SANEncoder();
 
 
-    /*
     @Test
-    public void test_pawnMove1(){
-        Game game =  Game.fromFEN(FENParser.INITIAL_FEN);
+    public void test_pawnMove1() {
+        FEN fen = FEN.of(FENParser.INITIAL_FEN);
 
-        Move move = game.getMove(Square.e2, Square.e3);
+        Move move = Move.of(Move.Square.e2, Move.Square.e3, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY);
 
-        String encodedMove = encoder.encodeAlgebraicNotation(move, game.getPossibleMoves());
+        String encodedMove = encoder.encodeAlgebraicNotation(move, fen);
 
         assertEquals("e3", encodedMove);
     }
+
+        /*
 
     @Test
     public void test_pawnMove_capture01(){
