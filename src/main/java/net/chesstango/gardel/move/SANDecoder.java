@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class SANDecoder {
     public static final Pattern movePattern = Pattern.compile("(" +
-            "(?<piecemove>(?<piece>[RNBQK])(?<piecefrom>[a-h]|[1-8]|[a-h][1-8])?x?(?<pieceto>[a-h][1-8]))|" +
+            "(?<piecemove>(?<piece>[RNBQK])((?<piecefromfile>[a-h])|(?<piecefromrank>[1-8])|(?<piecefromsquare>[a-h][1-8]))?x?(?<pieceto>[a-h][1-8]))|" +
             "(?<pawncapture>(?<pawncapturefile>[a-h])[1-8]?x(?<pawncaptureto>[a-h][1-8])=?(?<pawncapturepromotion>[RNBQ]?))|" +
             "(?<pawnpush>(?<pawnto>[a-h][1-8])=?(?<pawnpushpromotion>[RNBQ]?))|" +
             "(?<queencaslting>O-O-O)|" +
@@ -99,7 +99,7 @@ public class SANDecoder {
             case "f" -> 5;
             case "g" -> 6;
             case "h" -> 7;
-            default -> throw new IllegalStateException("Unexpected value: " + pawnCaptureFile);
+            default -> -1;
         };
 
         Move.Square toSquare = Move.Square.valueOf(pawnCaptureTo);
@@ -116,34 +116,44 @@ public class SANDecoder {
     }
 
     private Move decodePieceMove(Matcher matcher, List<Move> moves) {
-        String piece = matcher.group("piece");
-        String pieceFrom = matcher.group("piecefrom");
+        String pieceStr = matcher.group("piece");
+        String pieceFromFile = matcher.group("piecefromfile");
+        String pieceFromRank = matcher.group("piecefromrank");
+        String pieceFromSquare = matcher.group("piecefromsquare");
         String pieceTo = matcher.group("pieceto");
 
-        Move.Square toSquare = Move.Square.valueOf(pieceTo);
+        Move.Square pieceToSquare = Move.Square.valueOf(pieceTo);
 
-        return pieceFrom == null ?
-                decodePieceMove(piece, toSquare, moves) :
-                decodePieceMove(piece, pieceFrom, toSquare, moves);
-    }
+        int pieceFromFileInt = switch (pieceFromFile) {
+            case "a" -> 0;
+            case "b" -> 1;
+            case "c" -> 2;
+            case "d" -> 3;
+            case "e" -> 4;
+            case "f" -> 5;
+            case "g" -> 6;
+            case "h" -> 7;
+            case null, default -> -1;
+        };
 
-    private Move decodePieceMove(String piece, Move.Square toSquare, List<Move> moves) {
         for (Move move : moves) {
-            Move.Piece fromPiece = move.fromPiece();
-            if ("B".equalsIgnoreCase(piece) && (Move.Piece.BISHOP_WHITE.equals(fromPiece) || Move.Piece.BISHOP_BLACK.equals(fromPiece)) ||
-                    "N".equalsIgnoreCase(piece) && (Move.Piece.KNIGHT_WHITE.equals(fromPiece) || Move.Piece.KNIGHT_BLACK.equals(fromPiece)) ||
-                    "R".equalsIgnoreCase(piece) && (Move.Piece.ROOK_WHITE.equals(fromPiece) || Move.Piece.ROOK_BLACK.equals(fromPiece)) ||
-                    "Q".equalsIgnoreCase(piece) && (Move.Piece.QUEEN_WHITE.equals(fromPiece) || Move.Piece.QUEEN_BLACK.equals(fromPiece))) {
-                if (move.to().equals(toSquare)) {
-                    return move;
-                }
+            if (isPiece(move, pieceStr) && move.to() == pieceToSquare &&
+                (pieceFromFileInt == -1 || pieceFromFileInt == move.from().getFile()))
+            {
+                return move;
             }
         }
+
         return null;
     }
 
-    private Move decodePieceMove(String piece, String pieceFrom, Move.Square toSquare, List<Move> moves) {
-        return null;
+    private boolean isPiece(Move move, String pieceStr) {
+        Move.Piece fromPiece = move.fromPiece();
+        return "B".equalsIgnoreCase(pieceStr) && (Move.Piece.BISHOP_WHITE.equals(fromPiece) || Move.Piece.BISHOP_BLACK.equals(fromPiece)) ||
+                "N".equalsIgnoreCase(pieceStr) && (Move.Piece.KNIGHT_WHITE.equals(fromPiece) || Move.Piece.KNIGHT_BLACK.equals(fromPiece)) ||
+                "R".equalsIgnoreCase(pieceStr) && (Move.Piece.ROOK_WHITE.equals(fromPiece) || Move.Piece.ROOK_BLACK.equals(fromPiece)) ||
+                "Q".equalsIgnoreCase(pieceStr) && (Move.Piece.QUEEN_WHITE.equals(fromPiece) || Move.Piece.QUEEN_BLACK.equals(fromPiece));
     }
+
 
 }
