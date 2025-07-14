@@ -16,7 +16,7 @@ public class SANEncoderTest {
 
 
     @Test
-    public void test_pawnMove1() {
+    public void testPawnMove() {
         FEN fen = FEN.of(FENParser.INITIAL_FEN);
 
         Move move = Move.of(Move.Square.e2, Move.Square.e3, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY);
@@ -29,7 +29,7 @@ public class SANEncoderTest {
         /*
 
     @Test
-    public void test_pawnMove_capture01(){
+    public void testPawnMoveCapture(){
         Game game =  Game.fromFEN("rnbqkbnr/ppp1p1pp/8/3p1p2/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq f6 0 3");
 
         Move move = null;
@@ -49,7 +49,7 @@ public class SANEncoderTest {
     }
 
     @Test
-    public void test_pawnMove_capture_enpassant(){
+    public void testPawnMoveCaptureEnpassant(){
         Game game =  Game.fromFEN("rnbqkbnr/1ppp1pp1/7p/p2PpP2/8/8/PPP1P1PP/RNBQKBNR w KQkq e6 0 5");
 
         Move move = null;
@@ -66,7 +66,7 @@ public class SANEncoderTest {
 
 
     @Test
-    public void test_pawnMove_promotion(){
+    public void testPawnMovePromotion(){
         Game game =  Game.fromFEN("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
 
         Move move = null;
@@ -82,7 +82,7 @@ public class SANEncoderTest {
     }
 
     @Test
-    public void test_castling(){
+    public void testCastling(){
         Game game =  Game.fromFEN("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1 ");
 
         Move move = null;
@@ -98,7 +98,7 @@ public class SANEncoderTest {
     }
 
     @Test
-    public void test_knight_move01(){
+    public void testKnightMove01(){
         Game game =  Game.fromFEN("r1k4r/ppp4p/2nb1pq1/3p1np1/4p1Q1/4P3/PPPPNPPP/RNB1K2R w KQ - 0 1");
 
         Move move = null;
@@ -110,7 +110,7 @@ public class SANEncoderTest {
     }
 
     @Test
-    public void test_knight_move02(){
+    public void testKnightMove02(){
         Game game =  Game.fromFEN("rk2q3/ppp5/6n1/2b5/4pp2/P1N5/1PPPKPRP/R1B5 b - - 19 47");
 
         Move move = null;
@@ -123,7 +123,7 @@ public class SANEncoderTest {
 
 
     @Test
-    public void test_knight_move03(){
+    public void testKnightMove03(){
         Game game =  Game.fromFEN("rk2q3/ppp5/5p2/2b2np1/4p3/P1N1Pn2/1PPPKPRP/R1B5 b - - 3 34");
 
         Move move = null;
@@ -139,7 +139,7 @@ public class SANEncoderTest {
     }
 
     @Test
-    public void test_bishop_move01(){
+    public void testBishopMove01(){
         Game game =  Game.fromFEN("r3r1k1/pp1n1ppp/2p5/4Pb2/2B2P2/B1P5/P5PP/R2R2K1 w - - 0 1");
 
         Move move = null;
