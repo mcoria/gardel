@@ -11,25 +11,7 @@ import lombok.Getter;
  */
 public record Move(Square from,
                    Square to,
-                   Piece fromPiece,
-                   Piece toPiece,
                    PromotionPiece promotionPiece) {
-
-    public enum Piece {
-        EMPTY,
-        PAWN_WHITE,
-        PAWN_BLACK,
-        KNIGHT_WHITE,
-        KNIGHT_BLACK,
-        BISHOP_WHITE,
-        BISHOP_BLACK,
-        ROOK_WHITE,
-        ROOK_BLACK,
-        QUEEN_WHITE,
-        QUEEN_BLACK,
-        KING_WHITE,
-        KING_BLACK;
-    }
 
     /**
      * Represents the possible pieces a pawn can promote to in chess.
@@ -114,21 +96,13 @@ public record Move(Square from,
         }
     }
 
-    public static Move of(Square from, Square to, Piece fromPiece) {
-        return of(from, to, fromPiece, Piece.EMPTY, null);
+
+    public static Move of(Square from, Square to) {
+        return of(from, to, null);
     }
 
-
-    public static Move of(Square from, Square to, Piece fromPiece, Piece toPiece) {
-        return of(from, to, fromPiece, toPiece, null);
-    }
-
-    public static Move of(Square from, Square to, Piece fromPiece, PromotionPiece promotionPiece) {
-        return of(from, to, fromPiece, Piece.EMPTY, promotionPiece);
-    }
-
-    public static Move of(Square from, Square to, Piece fromPiece, Piece toPiece, PromotionPiece promotionPiece) {
-        return new Move(from, to, fromPiece, toPiece, promotionPiece);
+    public static Move of(Square from, Square to, PromotionPiece promotionPiece) {
+        return new Move(from, to, promotionPiece);
     }
 
     /**
@@ -152,6 +126,6 @@ public record Move(Square from,
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Move that = (Move) o;
-        return from == that.from && to == that.to && fromPiece == that.fromPiece && toPiece == that.toPiece && promotionPiece == that.promotionPiece;
+        return from == that.from && to == that.to && promotionPiece == that.promotionPiece;
     }
 }

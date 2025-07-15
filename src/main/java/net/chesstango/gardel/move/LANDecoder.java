@@ -3,8 +3,7 @@ package net.chesstango.gardel.move;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.minchess.MinChess;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,17 +26,17 @@ public class LANDecoder {
     public Move decode(String moveLongAlgNotation, FEN fen) {
         final Matcher matcher = edpMovePattern.matcher(moveLongAlgNotation);
         if (matcher.matches()) {
-            List<Move> moves = MinChessToMove.extractMoves(fen);
+            MinChess minchess = MinChess.from(fen);
             if (matcher.group("piecemove") != null) {
-                return decodePieceMove(matcher, moves);
+                return decodePieceMove(matcher, minchess);
             } else if (matcher.group("pawnmove") != null) {
-                return decodePawnMove(matcher, moves);
+                return decodePawnMove(matcher, minchess);
             }
         }
         return null;
     }
 
-    private Move decodePieceMove(Matcher matcher, List<Move> moves) {
+    private Move decodePieceMove(Matcher matcher, MinChess minchess) {
         String pieceStr = matcher.group("piece");
         String fromStr = matcher.group("from");
         String fromFileStr = matcher.group("fromfile");
@@ -48,26 +47,60 @@ public class LANDecoder {
         return null;
     }
 
-    private Move decodePawnMove(Matcher matcher, List<Move> moves) {
+    private Move decodePawnMove(Matcher matcher, MinChess minchess) {
         String promotionPieceStr = matcher.group("promotionpiece");
         String fromStr = matcher.group("pawnfrom");
         String toStr = matcher.group("pawnto");
 
-        Move.Square fromSquare = Move.Square.valueOf(fromStr);
-        Move.Square toSquare = Move.Square.valueOf(toStr);
-        Move.PromotionPiece promotionPiece = Move.PromotionPiece.from(promotionPieceStr);
+        Move.Square fromSquareFilter = Move.Square.valueOf(fromStr);
+        Move.Square toSquareFilter = Move.Square.valueOf(toStr);
+        Move.PromotionPiece promotionPieceFilter = Move.PromotionPiece.from(promotionPieceStr);
 
-        for (Move move : moves) {
-            Move.Piece fromPiece = move.fromPiece();
-            if (Move.Piece.PAWN_WHITE.equals(fromPiece) || Move.Piece.PAWN_BLACK.equals(fromPiece)) {
-                if (move.from() == fromSquare && move.to() == toSquare) {
-                    if (move.promotionPiece() == promotionPiece) {
-                        return move;
-                    }
-                }
+        MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) -> {
+            final Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
+            final Move.Square toSquare = Move.Square.of(toFile, toRank);
+            final Move.PromotionPiece promotionPiece = toMovePromotion(promotion);
+            return fromPiece == MinChess.PAWN &&
+                    fromSquareFilter.equals(fromSquare) &&
+                    toSquareFilter.equals(toSquare) &&
+                    Objects.equals(promotionPieceFilter, promotionPiece);
+        };
+
+        return extractMoves(minchess, moveFilter);
+    }
+
+
+    private Move extractMoves(MinChess minchess, MovePredicate moveFilter) {
+        short[] moves = new short[MAX_MOVES];
+        int size = minchess.generateMoves(moves);
+        for (int i = 0; i < size; i++) {
+            final short move = moves[i];
+            final int fromFile = MinChess.fromFile(move);
+            final int fromRank = MinChess.fromRank(move);
+            final int toFile = MinChess.toFile(move);
+            final int toRank = MinChess.toRank(move);
+            final int fromPiece = minchess.getFromPiece(move);
+            final int toPiece = minchess.getToPiece(move);
+            final int promotion = MinChess.getPromotionPiece(move);
+
+            if (moveFilter.test(fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)) {
+                final Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
+                final Move.Square toSquare = Move.Square.of(toFile, toRank);
+                final Move.PromotionPiece promotionPieceEnum = toMovePromotion(promotion);
+                return new Move(fromSquare, toSquare, promotionPieceEnum);
             }
         }
+
         return null;
     }
 
+    private static Move.PromotionPiece toMovePromotion(int promotionPiece) {
+        return switch (promotionPiece) {
+            case MinChess.KNIGHT -> Move.PromotionPiece.KNIGHT;
+            case MinChess.BISHOP -> Move.PromotionPiece.BISHOP;
+            case MinChess.ROOK -> Move.PromotionPiece.ROOK;
+            case MinChess.QUEEN -> Move.PromotionPiece.QUEEN;
+            default -> null;
+        };
+    }
 }

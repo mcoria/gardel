@@ -2,11 +2,12 @@ package net.chesstango.gardel.move;
 
 
 import net.chesstango.gardel.fen.FEN;
+import net.chesstango.gardel.minchess.MinChess;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
 
 /**
  * <p>
@@ -30,112 +31,123 @@ public class SANDecoder {
     public Move decode(String moveSAN, FEN fen) {
         final Matcher matcher = movePattern.matcher(moveSAN);
         if (matcher.matches()) {
-            List<Move> moves = MinChessToMove.extractMoves(fen);
+            MinChess minchess = MinChess.from(fen);
             if (matcher.group("piecemove") != null) {
-                return decodePieceMove(matcher, moves);
+                return decodePieceMove(matcher, minchess);
             } else if (matcher.group("pawnpush") != null) {
-                return decodePawnPush(matcher, moves);
+                return decodePawnPush(matcher, minchess);
             } else if (matcher.group("pawncapture") != null) {
-                return decodePawnCapture(matcher, moves);
+                return decodePawnCapture(matcher, minchess);
             } else if (matcher.group("queencaslting") != null) {
-                return searchQueenCastling(moves);
+                return searchQueenCastling(minchess);
             } else if (matcher.group("kingcastling") != null) {
-                return searchKingCastling(moves);
+                return searchKingCastling(minchess);
             }
         }
         return null;
     }
 
-    private Move searchKingCastling(List<Move> moves) {
-        for (Move move : moves) {
-            Move.Piece fromPiece = move.fromPiece();
-            if (Move.Piece.KING_WHITE.equals(fromPiece) || Move.Piece.KING_BLACK.equals(fromPiece)) {
-                if (move.to().getFile() - move.from().getFile() == 2) {
-                    return move;
-                }
-            }
-        }
-        return null;
+    private Move searchKingCastling(MinChess minchess) {
+        MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
+                fromPiece == MinChess.KING && toFile - fromFile == 2;
+        return extractMoves(minchess, moveFilter);
     }
 
-    private Move searchQueenCastling(List<Move> moves) {
-        for (Move move : moves) {
-            Move.Piece fromPiece = move.fromPiece();
-            if (Move.Piece.KING_WHITE.equals(fromPiece) || Move.Piece.KING_BLACK.equals(fromPiece)) {
-                if (move.from().getFile() - move.to().getFile() == 2) {
-                    return move;
-                }
-            }
-        }
-        return null;
+    private Move searchQueenCastling(MinChess minchess) {
+        MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
+                fromPiece == MinChess.KING && fromFile - toFile == 2;
+        return extractMoves(minchess, moveFilter);
     }
 
-    private Move decodePawnPush(Matcher matcher, List<Move> moves) {
+    private Move decodePawnPush(Matcher matcher, MinChess minchess) {
         String pawnTo = matcher.group("pawnto");
         String pawnPushPromotion = matcher.group("pawnpushpromotion");
 
-        Move.Square toSquare = Move.Square.valueOf(pawnTo);
-        if (toSquare.getRank() == 0 || toSquare.getRank() == 7) {
+        Move.Square toSquareFilter = Move.Square.valueOf(pawnTo);
+
+        if (toSquareFilter.getRank() == 0 || toSquareFilter.getRank() == 7) {
             if (pawnPushPromotion.isEmpty()) {
                 pawnPushPromotion = "Q";
             }
         }
+        int pawnPushPromotionFilter = switch (pawnPushPromotion) {
+            case "N" -> MinChess.KNIGHT;
+            case "B" -> MinChess.BISHOP;
+            case "R" -> MinChess.ROOK;
+            case "Q" -> MinChess.QUEEN;
+            default -> 0;
+        };
 
-        for (Move move : moves) {
-            Move.Piece fromPiece = move.fromPiece();
-            if (Move.Piece.PAWN_WHITE.equals(fromPiece) || Move.Piece.PAWN_BLACK.equals(fromPiece)) {
-                if (move.to() == toSquare) {
-                    if (Objects.equals(move.promotionPiece(), Move.PromotionPiece.from(pawnPushPromotion))) {
-                        return move;
+        MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) -> {
+            if (fromPiece == MinChess.PAWN) {
+                Move.Square toSquare = Move.Square.of(toFile, toRank);
+                if (toSquare == toSquareFilter) {
+                    if (promotion == pawnPushPromotionFilter) {
+                        return true;
                     }
                 }
             }
-        }
+            return false;
+        };
 
-        return null;
+        return extractMoves(minchess, moveFilter);
     }
 
-    private Move decodePawnCapture(Matcher matcher, List<Move> moves) {
+    private Move decodePawnCapture(Matcher matcher, MinChess minchess) {
         String pawnCaptureFile = matcher.group("pawncapturefile");
         String pawnCaptureTo = matcher.group("pawncaptureto");
         String pawnCapturePromotion = matcher.group("pawncapturepromotion");
 
         int pawnCaptureFileInt = getFileInt(pawnCaptureFile);
 
-        Move.Square toSquare = Move.Square.valueOf(pawnCaptureTo);
-        if (toSquare.getRank() == 0 || toSquare.getRank() == 7) {
+        Move.Square toSquareFilter = Move.Square.valueOf(pawnCaptureTo);
+        if (toSquareFilter.getRank() == 0 || toSquareFilter.getRank() == 7) {
             if (pawnCapturePromotion.isEmpty()) {
                 pawnCapturePromotion = "Q";
             }
         }
+        int pawnPushPromotionFilter = switch (pawnCapturePromotion) {
+            case "N" -> MinChess.KNIGHT;
+            case "B" -> MinChess.BISHOP;
+            case "R" -> MinChess.ROOK;
+            case "Q" -> MinChess.QUEEN;
+            default -> 0;
+        };
 
-        for (Move move : moves) {
-            Move.Piece fromPiece = move.fromPiece();
-            if (Move.Piece.PAWN_WHITE.equals(fromPiece) || Move.Piece.PAWN_BLACK.equals(fromPiece)) {
-                if (move.to() == toSquare) {
-                    if (move.from().getFile() == pawnCaptureFileInt) {
-                        if (Objects.equals(move.promotionPiece(), Move.PromotionPiece.from(pawnCapturePromotion))) {
-                            return move;
-                        }
+        MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) -> {
+            if (fromPiece == MinChess.PAWN) {
+                Move.Square toSquare = Move.Square.of(toFile, toRank);
+                if (toSquare == toSquareFilter) {
+                    if (fromFile == pawnCaptureFileInt) {
+                        return promotion == pawnPushPromotionFilter;
                     }
                 }
             }
-        }
+            return false;
+        };
 
-        return null;
+        return extractMoves(minchess, moveFilter);
     }
 
-    private Move decodePieceMove(Matcher matcher, List<Move> moves) {
+    private Move decodePieceMove(Matcher matcher, MinChess minchess) {
         String pieceStr = matcher.group("piece");
         String pieceFromFile = matcher.group("piecefromfile");
         String pieceFromRank = matcher.group("piecefromrank");
         String pieceFromSquare = matcher.group("piecefromsquare");
         String pieceTo = matcher.group("pieceto");
 
+        int fromPieceFilter = switch (pieceStr) {
+            case "N" -> MinChess.KNIGHT;
+            case "B" -> MinChess.BISHOP;
+            case "R" -> MinChess.ROOK;
+            case "Q" -> MinChess.QUEEN;
+            case "K" -> MinChess.KING;
+            default -> throw new IllegalArgumentException("Invalid piece: " + pieceStr) ;
+        };
+
         Move.Square pieceToSquare = Move.Square.valueOf(pieceTo);
 
         int pieceFromFileInt = getFileInt(pieceFromFile);
-
         int pieceFromRankInt = switch (pieceFromRank) {
             case "1" -> 0;
             case "2" -> 1;
@@ -148,24 +160,18 @@ public class SANDecoder {
             case null, default -> -1;
         };
 
-        for (Move move : moves) {
-            if (isPiece(move, pieceStr) && move.to() == pieceToSquare &&
-                    (pieceFromFileInt == -1 || pieceFromFileInt == move.from().getFile()) &&
-                    (pieceFromRankInt == -1 || pieceFromRankInt == move.from().getRank())
-            ) {
-                return move;
+
+        MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) -> {
+            if (fromPieceFilter == fromPiece) {
+                Move.Square toSquare = Move.Square.of(toFile, toRank);
+                if (toSquare == pieceToSquare) {
+                    return (pieceFromFileInt == -1 || pieceFromFileInt == fromFile) && (pieceFromRankInt == -1 || pieceFromRankInt == fromRank);
+                }
             }
-        }
+            return false;
+        };
 
-        return null;
-    }
-
-    private static boolean isPiece(Move move, String pieceStr) {
-        Move.Piece fromPiece = move.fromPiece();
-        return "B".equalsIgnoreCase(pieceStr) && (Move.Piece.BISHOP_WHITE.equals(fromPiece) || Move.Piece.BISHOP_BLACK.equals(fromPiece)) ||
-                "N".equalsIgnoreCase(pieceStr) && (Move.Piece.KNIGHT_WHITE.equals(fromPiece) || Move.Piece.KNIGHT_BLACK.equals(fromPiece)) ||
-                "R".equalsIgnoreCase(pieceStr) && (Move.Piece.ROOK_WHITE.equals(fromPiece) || Move.Piece.ROOK_BLACK.equals(fromPiece)) ||
-                "Q".equalsIgnoreCase(pieceStr) && (Move.Piece.QUEEN_WHITE.equals(fromPiece) || Move.Piece.QUEEN_BLACK.equals(fromPiece));
+        return extractMoves(minchess, moveFilter);
     }
 
     private static int getFileInt(String pawnCaptureFile) {
@@ -179,6 +185,41 @@ public class SANDecoder {
             case "g" -> 6;
             case "h" -> 7;
             case null, default -> -1;
+        };
+    }
+
+
+    private Move extractMoves(MinChess minchess, MovePredicate moveFilter) {
+        short[] moves = new short[MAX_MOVES];
+        int size = minchess.generateMoves(moves);
+        for (int i = 0; i < size; i++) {
+            final short move = moves[i];
+            final int fromFile = MinChess.fromFile(move);
+            final int fromRank = MinChess.fromRank(move);
+            final int toFile = MinChess.toFile(move);
+            final int toRank = MinChess.toRank(move);
+            final int fromPiece = minchess.getFromPiece(move);
+            final int toPiece = minchess.getToPiece(move);
+            final int promotion = MinChess.getPromotionPiece(move);
+
+            if (moveFilter.test(fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)) {
+                final Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
+                final Move.Square toSquare = Move.Square.of(toFile, toRank);
+                final Move.PromotionPiece promotionPieceEnum = toMovePromotion(promotion);
+                return new Move(fromSquare, toSquare, promotionPieceEnum);
+            }
+        }
+
+        return null;
+    }
+
+    private static Move.PromotionPiece toMovePromotion(int promotionPiece) {
+        return switch (promotionPiece) {
+            case MinChess.KNIGHT -> Move.PromotionPiece.KNIGHT;
+            case MinChess.BISHOP -> Move.PromotionPiece.BISHOP;
+            case MinChess.ROOK -> Move.PromotionPiece.ROOK;
+            case MinChess.QUEEN -> Move.PromotionPiece.QUEEN;
+            default -> null;
         };
     }
 }

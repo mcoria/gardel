@@ -122,16 +122,28 @@ public class MinChess implements Cloneable {
         }
     }
 
-    public static int getFromIdx(short move) {
-        final int fromFile = (move & 0b00000001_11000000) >>> 6;
-        final int fromRank = (move & 0b00001110_00000000) >>> 9;
-        return fromRank * 8 + fromFile;
+    public static int fromIdx(short move) {
+        return fromRank(move) * 8 + fromFile(move);
     }
 
-    public static int getToIdx(short move) {
-        final int toFile = move & 0b00000000_00000111;
-        final int toRank = (move & 0b00000000_00111000) >>> 3;
-        return toRank * 8 + toFile;
+    public static int fromFile(short move) {
+        return (move & 0b00000001_11000000) >>> 6;
+    }
+
+    public static int fromRank(short move) {
+        return (move & 0b00001110_00000000) >>> 9;
+    }
+
+    public static int toIdx(short move) {
+        return toRank(move) * 8 + toFile(move);
+    }
+
+    public static int toFile(short move) {
+        return move & 0b00000000_00000111;
+    }
+
+    public static int toRank(short move) {
+        return (move & 0b00000000_00111000) >>> 3;
     }
 
     public static int getPromotionPiece(short move) {
@@ -139,11 +151,15 @@ public class MinChess implements Cloneable {
     }
 
     public int getFromPiece(short move) {
-        return getPiece(1L << getFromIdx(move));
+        return getPiece(1L << fromIdx(move));
     }
 
     public int getToPiece(short move) {
-        return getPiece(1L << getToIdx(move));
+        return getPiece(1L << toIdx(move));
+    }
+
+    public int getPiece(int file, int rank) {
+        return getPiece(1L << (rank * 8 + file));
     }
 
     public int getPiece(long position) {

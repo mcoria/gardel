@@ -19,7 +19,7 @@ public class SANEncoderTest {
     public void testPawnMovePush() {
         FEN fen = FEN.of(FENParser.INITIAL_FEN);
 
-        Move move = Move.of(Move.Square.e2, Move.Square.e3, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY);
+        Move move = Move.of(Move.Square.e2, Move.Square.e3);
         String actual = encoder.encodeAlgebraicNotation(move, fen);
 
         assertEquals("e3", actual);
@@ -32,32 +32,32 @@ public class SANEncoderTest {
         Move move = null;
         String actual = null;
 
-        move = Move.of(Move.Square.e4, Move.Square.f5, Move.Piece.PAWN_WHITE, Move.Piece.PAWN_BLACK);
+        move = Move.of(Move.Square.e4, Move.Square.f5);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("exf5", actual);
 
-        move = Move.of(Move.Square.c4, Move.Square.d5, Move.Piece.PAWN_WHITE, Move.Piece.PAWN_BLACK);
+        move = Move.of(Move.Square.c4, Move.Square.d5);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("cxd5", actual);
 
-        move = Move.of(Move.Square.e4, Move.Square.d5, Move.Piece.PAWN_WHITE, Move.Piece.PAWN_BLACK);
+        move = Move.of(Move.Square.e4, Move.Square.d5);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("exd5", actual);
     }
 
 
     @Test
-    public void testPawnMoveCaptureEnpassant(){
+    public void testPawnMoveCaptureEnPassant() {
         FEN fen = FEN.of("rnbqkbnr/1ppp1pp1/7p/p2PpP2/8/8/PPP1P1PP/RNBQKBNR w KQkq e6 0 5");
 
         Move move = null;
         String actual = null;
 
-        move = Move.of(Move.Square.d5, Move.Square.e6, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY );
+        move = Move.of(Move.Square.d5, Move.Square.e6);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("dxe6", actual);
 
-        move = Move.of(Move.Square.f5, Move.Square.e6, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY);
+        move = Move.of(Move.Square.f5, Move.Square.e6);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("fxe6", actual);
     }

@@ -20,7 +20,7 @@ public class SANDecoderTest {
     public void testBishop() {
         FEN fen = FEN.of("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
-        Move expected = Move.of(Move.Square.c1, Move.Square.d2, Move.Piece.BISHOP_WHITE);
+        Move expected = Move.of(Move.Square.c1, Move.Square.d2);
         Move actual = decoder.decode("Bd2", fen);
 
         assertEquals(expected, actual);
@@ -31,7 +31,7 @@ public class SANDecoderTest {
     public void testPawnPush01() {
         FEN fen = FEN.of("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
-        Move expected = Move.of(Move.Square.a2, Move.Square.a3, Move.Piece.PAWN_WHITE);
+        Move expected = Move.of(Move.Square.a2, Move.Square.a3);
         Move actual = decoder.decode("a3", fen);
 
         assertEquals(expected, actual);
@@ -42,7 +42,7 @@ public class SANDecoderTest {
     public void testPawnMove1() {
         FEN fen = FEN.of(FENParser.INITIAL_FEN);
 
-        Move expected = Move.of(Move.Square.e2, Move.Square.e3, Move.Piece.PAWN_WHITE);
+        Move expected = Move.of(Move.Square.e2, Move.Square.e3);
         Move actual = decoder.decode("e3", fen);
 
         assertEquals(expected, actual);
@@ -56,15 +56,15 @@ public class SANDecoderTest {
         Move expected = null;
         Move actual = null;
 
-        expected = Move.of(Move.Square.e4, Move.Square.f5, Move.Piece.PAWN_WHITE, Move.Piece.PAWN_BLACK);
+        expected = Move.of(Move.Square.e4, Move.Square.f5);
         actual = decoder.decode("exf5", fen);
         assertEquals(expected, actual);
 
-        expected = Move.of(Move.Square.c4, Move.Square.d5, Move.Piece.PAWN_WHITE, Move.Piece.PAWN_BLACK);
+        expected = Move.of(Move.Square.c4, Move.Square.d5);
         actual = decoder.decode("cxd5", fen);
         assertEquals(expected, actual);
 
-        expected = Move.of(Move.Square.e4, Move.Square.d5, Move.Piece.PAWN_WHITE, Move.Piece.PAWN_BLACK);
+        expected = Move.of(Move.Square.e4, Move.Square.d5);
         actual = decoder.decode("exd5", fen);
         assertEquals(expected, actual);
     }
@@ -77,11 +77,11 @@ public class SANDecoderTest {
         Move expected = null;
         Move actual = null;
 
-        expected = Move.of(Move.Square.e1, Move.Square.c1, Move.Piece.KING_WHITE);
+        expected = Move.of(Move.Square.e1, Move.Square.c1);
         actual = decoder.decode("O-O-O", fen);
         assertEquals(expected, actual);
 
-        expected = Move.of(Move.Square.e1, Move.Square.g1, Move.Piece.KING_WHITE);
+        expected = Move.of(Move.Square.e1, Move.Square.g1);
         actual = decoder.decode("O-O", fen);
         assertEquals(expected, actual);
     }
@@ -93,16 +93,16 @@ public class SANDecoderTest {
         Move expected = null;
         Move actual = null;
 
-        expected = Move.of(Move.Square.b1, Move.Square.a3, Move.Piece.KNIGHT_WHITE);
+        expected = Move.of(Move.Square.b1, Move.Square.a3);
         actual = decoder.decode("Na3", fen);
         assertEquals(expected, actual);
 
-        expected = Move.of(Move.Square.b1, Move.Square.c3, Move.Piece.KNIGHT_WHITE);
+        expected = Move.of(Move.Square.b1, Move.Square.c3);
         actual = decoder.decode("Nbc3", fen);
         assertEquals(expected, actual);
 
 
-        expected = Move.of(Move.Square.e2, Move.Square.c3, Move.Piece.KNIGHT_WHITE);
+        expected = Move.of(Move.Square.e2, Move.Square.c3);
         actual = decoder.decode("Nec3", fen);
         assertEquals(expected, actual);
     }
@@ -114,7 +114,7 @@ public class SANDecoderTest {
         Move expected = null;
         Move actual = null;
 
-        expected = Move.of(Move.Square.g6, Move.Square.h4, Move.Piece.KNIGHT_BLACK);
+        expected = Move.of(Move.Square.g6, Move.Square.h4);
         actual = decoder.decode("Nh4", fen);
         assertEquals(expected, actual);
     }
@@ -126,11 +126,11 @@ public class SANDecoderTest {
         Move expected = null;
         Move actual = null;
 
-        expected = Move.of(Move.Square.f3, Move.Square.h4, Move.Piece.KNIGHT_BLACK);
+        expected = Move.of(Move.Square.f3, Move.Square.h4);
         actual = decoder.decode("N3h4", fen);
         assertEquals(expected, actual);
 
-        expected = Move.of(Move.Square.f5, Move.Square.h4, Move.Piece.KNIGHT_BLACK);
+        expected = Move.of(Move.Square.f5, Move.Square.h4);
         actual = decoder.decode("N5h4", fen);
         assertEquals(expected, actual);
     }
@@ -140,7 +140,7 @@ public class SANDecoderTest {
     public void testKnightMove04() {
         FEN fen = FEN.of("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
-        Move expected = Move.of(Move.Square.g1, Move.Square.e2, Move.Piece.KNIGHT_WHITE);
+        Move expected = Move.of(Move.Square.g1, Move.Square.e2);
         Move actual = decoder.decode("Nge2", fen);
 
         assertEquals(expected, actual);
@@ -150,7 +150,7 @@ public class SANDecoderTest {
     public void testKnightMove05() {
         FEN fen = FEN.of("rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N1P3/PP3PPP/R1BQKBNR w KQkq c6 0 5");
 
-        Move expected = Move.of(Move.Square.g1, Move.Square.f3, Move.Piece.KNIGHT_WHITE);
+        Move expected = Move.of(Move.Square.g1, Move.Square.f3);
         Move actual = decoder.decode("Nf3", fen);
 
         assertEquals(expected, actual);
@@ -164,11 +164,11 @@ public class SANDecoderTest {
         Move expected = null;
         Move actual = null;
 
-        expected = Move.of(Move.Square.c7, Move.Square.c8, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY, Move.PromotionPiece.ROOK);
+        expected = Move.of(Move.Square.c7, Move.Square.c8, Move.PromotionPiece.ROOK);
         actual = decoder.decode("c8=R", fen);
         assertEquals(expected, actual);
 
-        expected = Move.of(Move.Square.c7, Move.Square.d8, Move.Piece.PAWN_WHITE, Move.Piece.BISHOP_BLACK, Move.PromotionPiece.QUEEN);
+        expected = Move.of(Move.Square.c7, Move.Square.d8, Move.PromotionPiece.QUEEN);
         actual = decoder.decode("cxd8=Q", fen);
         assertEquals(expected, actual);
     }
@@ -177,7 +177,7 @@ public class SANDecoderTest {
     public void testPawnMovePromotion02() {
         FEN fen = FEN.of("8/PR1nk2p/4p1p1/8/3p3P/5K2/8/8 w - - 9 54");
 
-        Move expected = Move.of(Move.Square.a7, Move.Square.a8, Move.Piece.PAWN_WHITE, Move.Piece.EMPTY, Move.PromotionPiece.QUEEN);
+        Move expected = Move.of(Move.Square.a7, Move.Square.a8, Move.PromotionPiece.QUEEN);
         assertNotNull(expected);
 
         Move actual = decoder.decode("a8Q", fen);
@@ -190,7 +190,7 @@ public class SANDecoderTest {
     public void testPawnMovePromotion03() {
         FEN fen = FEN.of("2k1r3/1p1b4/p1p5/P1P5/1P1P1p2/3B1K2/6pP/3R4 b - - 0 37");
 
-        Move expected = Move.of(Move.Square.g2, Move.Square.g1, Move.Piece.PAWN_BLACK, Move.Piece.EMPTY, Move.PromotionPiece.QUEEN);
+        Move expected = Move.of(Move.Square.g2, Move.Square.g1, Move.PromotionPiece.QUEEN);
         assertNotNull(expected);
 
         Move actual = decoder.decode("g1", fen);
@@ -203,7 +203,7 @@ public class SANDecoderTest {
     public void testCheck01() {
         FEN fen = FEN.of("6k1/5p2/p6p/1pQ3P1/2n1B3/2P1PpP1/q4r2/4R1K1 b - - 0 37");
 
-        Move expected = Move.of(Move.Square.f2, Move.Square.f1, Move.Piece.ROOK_BLACK, Move.Piece.EMPTY);
+        Move expected = Move.of(Move.Square.f2, Move.Square.f1);
         assertNotNull(expected);
 
         Move actual = decoder.decode("Rf1+", fen);
@@ -216,7 +216,7 @@ public class SANDecoderTest {
     public void testCheck02() {
         FEN fen = FEN.of("r1bq1rk1/ppp2ppp/3p1n2/3Np3/1bPnP3/5NP1/PP1P1PBP/R1BQ1RK1 b - - 3 8");
 
-        Move expected = Move.of(Move.Square.d4, Move.Square.f3, Move.Piece.KNIGHT_BLACK, Move.Piece.KNIGHT_WHITE);
+        Move expected = Move.of(Move.Square.d4, Move.Square.f3);
         assertNotNull(expected);
 
         Move actual = decoder.decode("Nxf3+", fen);

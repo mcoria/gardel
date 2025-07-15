@@ -16,7 +16,9 @@ public class SANEncoder {
     public String encodeAlgebraicNotation(Move move, FEN fen) {
         MinChess minchess = MinChess.from(fen);
 
-        if (move.fromPiece() == Move.Piece.PAWN_WHITE || move.fromPiece() == Move.Piece.PAWN_BLACK) {
+        int fromPiece = minchess.getPiece(move.from().getFile(), move.from().getRank());
+
+        if (fromPiece == MinChess.PAWN) {
             return encodePawnMove(move, minchess);
         }
 
