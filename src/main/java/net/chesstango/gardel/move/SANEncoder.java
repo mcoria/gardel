@@ -95,7 +95,7 @@ public class SANEncoder {
             }
         }
 
-        if (!collisions.isEmpty()) {
+        if (collisions.size() > 1) {
             long fileCount = collisions.stream().map(MinChess::fromFile).distinct().count();
             long rankCount = collisions.stream().map(MinChess::fromRank).distinct().count();
             if (fileCount == collisions.size()) {

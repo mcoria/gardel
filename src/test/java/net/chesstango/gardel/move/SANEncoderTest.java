@@ -112,7 +112,6 @@ public class SANEncoderTest {
         assertEquals("Nec3", actual);
     }
 
-    /*
     @Test
     public void testKnightMove02(){
         FEN fen = FEN.of("rk2q3/ppp5/6n1/2b5/4pp2/P1N5/1PPPKPRP/R1B5 b - - 19 47");
@@ -154,7 +153,5 @@ public class SANEncoderTest {
         assertEquals("Be6", actual);
 
     }
-
-     */
 
 }
