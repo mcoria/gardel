@@ -27,10 +27,10 @@ public record Move(Square from,
         @Override
         public String toString() {
             return switch (this) {
-                case KNIGHT -> "n";
-                case QUEEN -> "q";
-                case ROOK -> "r";
-                case BISHOP -> "b";
+                case KNIGHT -> "N";
+                case BISHOP -> "B";
+                case ROOK -> "R";
+                case QUEEN -> "Q";
             };
         }
 

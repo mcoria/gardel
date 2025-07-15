@@ -63,23 +63,23 @@ public class SANEncoderTest {
     }
 
 
-        /*
     @Test
-    public void testPawnMovePromotion(){
+    public void testPawnMovePromotion() {
         FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
 
         Move move = null;
         String actual = null;
 
-        move = Move.of(Move.Square.c7, Move.Square.c8, Piece.ROOK_WHITE);
+        move = Move.of(Move.Square.c7, Move.Square.c8, Move.PromotionPiece.ROOK);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("c8=R", actual);
 
-        move = Move.of(Move.Square.c7, Move.Square.d8, Piece.QUEEN_WHITE);
+        move = Move.of(Move.Square.c7, Move.Square.d8, Move.PromotionPiece.QUEEN);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("cxd8=Q", actual);
     }
 
+        /*
     @Test
     public void testCastling(){
         FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1 ");
