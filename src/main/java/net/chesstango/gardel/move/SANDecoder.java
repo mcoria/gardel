@@ -17,7 +17,7 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
  *
  * @author Mauricio Coria
  */
-public class SANDecoder {
+public class SANDecoder implements MoveDecoder{
     public static final Pattern movePattern = Pattern.compile("(" +
             "(?<piecemove>(?<piece>[RNBQK])((?<piecefromfile>[a-h])|(?<piecefromrank>[1-8])|(?<piecefromsquare>[a-h][1-8]))?x?(?<pieceto>[a-h][1-8]))|" +
             "(?<pawncapture>(?<pawncapturefile>[a-h])[1-8]?x(?<pawncaptureto>[a-h][1-8])=?(?<pawncapturepromotion>[RNBQ]?))|" +
@@ -28,8 +28,9 @@ public class SANDecoder {
     );
 
 
-    public Move decode(String moveSAN, FEN fen) {
-        final Matcher matcher = movePattern.matcher(moveSAN);
+    @Override
+    public Move decode(String moveStr, FEN fen) {
+        final Matcher matcher = movePattern.matcher(moveStr);
         if (matcher.matches()) {
             MinChess minchess = MinChess.from(fen);
             if (matcher.group("piecemove") != null) {

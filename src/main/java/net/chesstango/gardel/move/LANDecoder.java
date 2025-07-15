@@ -17,14 +17,15 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
  * <LAN move descriptor pawn moves>  ::= <from square>['-'|'x']<to square>[<promoted to>]
  * <Piece symbol> ::= 'N' | 'B' | 'R' | 'Q' | 'K'
  */
-public class LANDecoder {
+class LANDecoder implements MoveDecoder {
     private static final Pattern edpMovePattern = Pattern.compile("(" +
             "(?<piecemove>(?<piece>[RNBQK]?)((?<from>[a-h][1-8])|(?<fromfile>[a-h])|(?<fromrank>[1-8]))?[-x]?(?<to>[a-h][1-8]))|" +
             "(?<pawnmove>(?<pawnfrom>[a-h][1-8])[-x](?<pawnto>[a-h][1-8])(?<promotionpiece>[RNBQK]))" +
             ")[+#]?");
 
-    public Move decode(String moveLongAlgNotation, FEN fen) {
-        final Matcher matcher = edpMovePattern.matcher(moveLongAlgNotation);
+    @Override
+    public Move decode(String moveStr, FEN fen) {
+        final Matcher matcher = edpMovePattern.matcher(moveStr);
         if (matcher.matches()) {
             MinChess minchess = MinChess.from(fen);
             if (matcher.group("piecemove") != null) {
