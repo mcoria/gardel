@@ -50,26 +50,16 @@ public class SANEncoder {
         return String.format("%sx%s", fileToLetter(move.from().getFile()), move.to().toString());
     }
 
-    private String fileToLetter(int file) {
-        return switch (file) {
-            case 0 -> "a";
-            case 1 -> "b";
-            case 2 -> "c";
-            case 3 -> "d";
-            case 4 -> "e";
-            case 5 -> "f";
-            case 6 -> "g";
-            case 7 -> "h";
-            default -> null;
-        };
-    }
-
-
     private String encodePieceMove(Move move, MinChess minchess) {
-        return null;
-    }
+        int fromPiece = minchess.getPiece(move.from().getFile(), move.from().getRank());
+        if (fromPiece == MinChess.KING) {
+            if (move.from().getFile() - move.to().getFile() == 2) {
+                return "O-O-O";
+            } else if (move.to().getFile() - move.from().getFile() == 2) {
+                return "O-O";
+            }
+        }
 
-    private String encodeMoveCastling(Move moveCastling) {
         return null;
     }
 
@@ -87,8 +77,6 @@ public class SANEncoder {
             final int toFile = MinChess.toFile(move);
             final int toRank = MinChess.toRank(move);
             final int promotion = MinChess.getPromotionPiece(move);
-
-
             if (theMove.from().getFile() == fromFile && theMove.from().getRank() == fromRank &&
                     theMove.to().getFile() == toFile && theMove.to().getRank() == toRank) {
 
@@ -101,8 +89,21 @@ public class SANEncoder {
                 }
             }
         }
-
         return false;
+    }
+
+    private String fileToLetter(int file) {
+        return switch (file) {
+            case 0 -> "a";
+            case 1 -> "b";
+            case 2 -> "c";
+            case 3 -> "d";
+            case 4 -> "e";
+            case 5 -> "f";
+            case 6 -> "g";
+            case 7 -> "h";
+            default -> null;
+        };
     }
 
 }

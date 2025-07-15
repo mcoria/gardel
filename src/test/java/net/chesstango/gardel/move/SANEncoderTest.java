@@ -79,10 +79,10 @@ public class SANEncoderTest {
         assertEquals("cxd8=Q", actual);
     }
 
-        /*
+
     @Test
     public void testCastling(){
-        FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1 ");
+        FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
 
         Move move = null;
         String actual = null;
@@ -96,6 +96,7 @@ public class SANEncoderTest {
         assertEquals("O-O", actual);
     }
 
+            /*
     @Test
     public void testKnightMove01(){
         FEN fen = FEN.of("r1k4r/ppp4p/2nb1pq1/3p1np1/4p1Q1/4P3/PPPPNPPP/RNB1K2R w KQ - 0 1");
