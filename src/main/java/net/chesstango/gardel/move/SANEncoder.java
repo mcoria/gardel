@@ -3,6 +3,9 @@ package net.chesstango.gardel.move;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.minchess.MinChess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
 
 /**
@@ -18,12 +21,15 @@ public class SANEncoder {
     public String encodeAlgebraicNotation(Move move, FEN fen) {
         MinChess minchess = MinChess.from(fen);
 
-        if (moveExists(move, minchess)) {
+        short[] moves = new short[MAX_MOVES];
+        minchess.generateMoves(moves);
+
+        if (moveExists(move, moves)) {
             int fromPiece = minchess.getPiece(move.from().getFile(), move.from().getRank());
             if (fromPiece == MinChess.PAWN) {
                 return encodePawnMove(move, minchess);
             }
-            return encodePieceMove(move, minchess);
+            return encodePieceMove(move, minchess, moves);
         }
         return null;
     }
@@ -50,7 +56,7 @@ public class SANEncoder {
         return String.format("%sx%s", fileToLetter(move.from().getFile()), move.to().toString());
     }
 
-    private String encodePieceMove(Move move, MinChess minchess) {
+    private String encodePieceMove(Move move, MinChess minchess, short[] moves) {
         int fromPiece = minchess.getPiece(move.from().getFile(), move.from().getRank());
         if (fromPiece == MinChess.KING) {
             if (move.from().getFile() - move.to().getFile() == 2) {
@@ -60,31 +66,67 @@ public class SANEncoder {
             }
         }
 
-        return null;
+        String fromPieceStr = switch (fromPiece){
+            case MinChess.PAWN -> "P";
+            case MinChess.KNIGHT -> "N";
+            case MinChess.BISHOP -> "B";
+            case MinChess.ROOK -> "R";
+            case MinChess.QUEEN -> "Q";
+            case MinChess.KING -> "K";
+            default -> throw new IllegalArgumentException("Invalid piece: " + fromPiece);
+        };
+
+        String solvePieceAmbiguityFrom = solvePieceAmbiguityFrom(move, minchess, moves);
+
+        return String.format("%s%s%s", fromPieceStr, solvePieceAmbiguityFrom, move.to().toString());
     }
 
-    private String solvePieceAmbiguityFrom(Move move, MinChess minchess) {
-        return null;
+    private String solvePieceAmbiguityFrom(Move move, MinChess minchess, short[] moves) {
+        int fromPiece = minchess.getPiece(move.from().getFile(), move.from().getRank());
+        List<Short> collisions = new ArrayList<>();
+        for (int i = 0; moves[i] != 0; i++) {
+            final short theMove = moves[i];
+            final int toFile = MinChess.toFile(theMove);
+            final int toRank = MinChess.toRank(theMove);
+            final int theMovePiece = minchess.getFromPiece(theMove);
+            if (theMovePiece == fromPiece &&
+                    move.to().getFile() == toFile && move.to().getRank() == toRank) { // different FROM Square
+                collisions.add(theMove);
+            }
+        }
+
+        if (!collisions.isEmpty()) {
+            long fileCount = collisions.stream().map(MinChess::fromFile).distinct().count();
+            long rankCount = collisions.stream().map(MinChess::fromRank).distinct().count();
+            if (fileCount == collisions.size()) {
+                return fileToLetter(move.from().getFile());
+            } else if (rankCount == collisions.size()) {
+                return rankToLetter(move.from().getRank());
+            } else {
+                return Move.Square.of(move.from().getFile(), move.from().getRank()).toString();
+            }
+        }
+
+        return "";
     }
 
-    private boolean moveExists(Move theMove, MinChess minchess) {
-        short[] moves = new short[MAX_MOVES];
-        int size = minchess.generateMoves(moves);
-        for (int i = 0; i < size; i++) {
-            final short move = moves[i];
-            final int fromFile = MinChess.fromFile(move);
-            final int fromRank = MinChess.fromRank(move);
-            final int toFile = MinChess.toFile(move);
-            final int toRank = MinChess.toRank(move);
-            final int promotion = MinChess.getPromotionPiece(move);
-            if (theMove.from().getFile() == fromFile && theMove.from().getRank() == fromRank &&
-                    theMove.to().getFile() == toFile && theMove.to().getRank() == toRank) {
 
-                if (promotion == 0 && theMove.promotionPiece() == null ||
-                        promotion == MinChess.KNIGHT && theMove.promotionPiece() == Move.PromotionPiece.KNIGHT ||
-                        promotion == MinChess.BISHOP && theMove.promotionPiece() == Move.PromotionPiece.BISHOP ||
-                        promotion == MinChess.ROOK && theMove.promotionPiece() == Move.PromotionPiece.ROOK ||
-                        promotion == MinChess.QUEEN && theMove.promotionPiece() == Move.PromotionPiece.QUEEN) {
+    private boolean moveExists(Move move, short[] moves) {
+        for (int i = 0; moves[i] != 0; i++) {
+            final short theMove = moves[i];
+            final int fromFile = MinChess.fromFile(theMove);
+            final int fromRank = MinChess.fromRank(theMove);
+            final int toFile = MinChess.toFile(theMove);
+            final int toRank = MinChess.toRank(theMove);
+            final int promotion = MinChess.getPromotionPiece(theMove);
+            if (move.from().getFile() == fromFile && move.from().getRank() == fromRank &&
+                    move.to().getFile() == toFile && move.to().getRank() == toRank) {
+
+                if (promotion == 0 && move.promotionPiece() == null ||
+                        promotion == MinChess.KNIGHT && move.promotionPiece() == Move.PromotionPiece.KNIGHT ||
+                        promotion == MinChess.BISHOP && move.promotionPiece() == Move.PromotionPiece.BISHOP ||
+                        promotion == MinChess.ROOK && move.promotionPiece() == Move.PromotionPiece.ROOK ||
+                        promotion == MinChess.QUEEN && move.promotionPiece() == Move.PromotionPiece.QUEEN) {
                     return true;
                 }
             }
@@ -106,4 +148,17 @@ public class SANEncoder {
         };
     }
 
+    private String rankToLetter(int rank) {
+        return switch (rank) {
+            case 0 -> "1";
+            case 1 -> "2";
+            case 2 -> "3";
+            case 3 -> "4";
+            case 4 -> "5";
+            case 5 -> "6";
+            case 6 -> "7";
+            case 7 -> "8";
+            default -> null;
+        };
+    }
 }

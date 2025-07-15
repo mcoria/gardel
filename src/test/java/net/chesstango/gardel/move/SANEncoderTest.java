@@ -96,7 +96,6 @@ public class SANEncoderTest {
         assertEquals("O-O", actual);
     }
 
-            /*
     @Test
     public void testKnightMove01(){
         FEN fen = FEN.of("r1k4r/ppp4p/2nb1pq1/3p1np1/4p1Q1/4P3/PPPPNPPP/RNB1K2R w KQ - 0 1");
@@ -107,8 +106,13 @@ public class SANEncoderTest {
         move = Move.of(Move.Square.b1, Move.Square.c3);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("Nbc3", actual);
+
+        move = Move.of(Move.Square.e2, Move.Square.c3);
+        actual = encoder.encodeAlgebraicNotation(move, fen);
+        assertEquals("Nec3", actual);
     }
 
+    /*
     @Test
     public void testKnightMove02(){
         FEN fen = FEN.of("rk2q3/ppp5/6n1/2b5/4pp2/P1N5/1PPPKPRP/R1B5 b - - 19 47");
