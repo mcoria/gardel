@@ -66,7 +66,9 @@ public class SANEncoder {
             }
         }
 
-        String fromPieceStr = switch (fromPiece){
+        int toPiece = minchess.getPiece(move.to().getFile(), move.to().getRank());
+
+        String fromPieceStr = switch (fromPiece) {
             case MinChess.PAWN -> "P";
             case MinChess.KNIGHT -> "N";
             case MinChess.BISHOP -> "B";
@@ -78,7 +80,9 @@ public class SANEncoder {
 
         String solvePieceAmbiguityFrom = solvePieceAmbiguityFrom(move, minchess, moves);
 
-        return String.format("%s%s%s", fromPieceStr, solvePieceAmbiguityFrom, move.to().toString());
+        String captureStr = toPiece == 0 ? "" : "x";
+
+        return String.format("%s%s%s%s", fromPieceStr, solvePieceAmbiguityFrom, captureStr, move.to());
     }
 
     private String solvePieceAmbiguityFrom(Move move, MinChess minchess, short[] moves) {
@@ -106,7 +110,6 @@ public class SANEncoder {
                 return Move.Square.of(move.from().getFile(), move.from().getRank()).toString();
             }
         }
-
         return "";
     }
 

@@ -8,3 +8,4 @@ package net.chesstango.gardel.move;
 public interface MovePredicate {
     boolean test(int fromFile, int fromRank, int toFile, int toRank, int fromPiece, int toPiece, int promotion);
 }
+

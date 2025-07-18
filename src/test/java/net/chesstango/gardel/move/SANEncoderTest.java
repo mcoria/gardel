@@ -14,7 +14,6 @@ public class SANEncoderTest {
 
     private SANEncoder encoder = new SANEncoder();
 
-
     @Test
     public void testPawnMovePush() {
         FEN fen = FEN.of(FENParser.INITIAL_FEN);
@@ -151,7 +150,19 @@ public class SANEncoderTest {
         move = Move.of(Move.Square.c4, Move.Square.e6);
         actual = encoder.encodeAlgebraicNotation(move, fen);
         assertEquals("Be6", actual);
+    }
 
+
+    @Test
+    public void testQueenCaptureMove01(){
+        FEN fen = FEN.of("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4");
+
+        Move move = null;
+        String actual = null;
+
+        move = Move.of(Move.Square.f3, Move.Square.f7);
+        actual = encoder.encodeAlgebraicNotation(move, fen);
+        assertEquals("Qxf7", actual);
     }
 
 }

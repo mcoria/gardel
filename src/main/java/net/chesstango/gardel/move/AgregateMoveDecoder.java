@@ -7,7 +7,7 @@ import net.chesstango.gardel.fen.FEN;
  * @author Mauricio Coria
  *
  */
-class AgregateMoveDecoder implements MoveDecoder {
+public class AgregateMoveDecoder implements MoveDecoder {
 
     @Override
     public Move decode(String moveStr, FEN fen) {

@@ -1,7 +1,9 @@
 package net.chesstango.gardel.minchess;
 
 import net.chesstango.gardel.fen.FEN;
+import net.chesstango.gardel.fen.FENBuilder;
 import net.chesstango.gardel.fen.FENExporter;
+import net.chesstango.gardel.polyglot.PolyglotKeyBuilder;
 
 /**
  * @author Mauricio Coria
@@ -25,13 +27,6 @@ public class MinChess implements Cloneable {
     final Pawn pawn;
 
     boolean validate = false;
-
-    public static MinChess from(FEN fen) {
-        MinChessBuilder builder = new MinChessBuilder();
-        FENExporter exporter = new FENExporter(builder);
-        exporter.export(fen);
-        return builder.getPositionRepresentation();
-    }
 
     public MinChess(boolean whiteTurn,
                     boolean castlingBlackKingAllowed,
@@ -228,5 +223,26 @@ public class MinChess implements Cloneable {
 
     public boolean getTurn() {
         return workspace.whiteTurn;
+    }
+
+    public static MinChess from(FEN fen) {
+        MinChessBuilder builder = new MinChessBuilder();
+        FENExporter exporter = new FENExporter(builder);
+        exporter.export(fen);
+        return builder.getPositionRepresentation();
+    }
+
+    public FEN toFEN() {
+        FENBuilder fenBuilder = new FENBuilder();
+        MinChessExporter exporter = new MinChessExporter(fenBuilder);
+        exporter.export(this);
+        return fenBuilder.getPositionRepresentation();
+    }
+
+    public long toPolyglotKey() {
+        PolyglotKeyBuilder polyglotKeyBuilder = new PolyglotKeyBuilder();
+        MinChessExporter exporter = new MinChessExporter(polyglotKeyBuilder);
+        exporter.export(this);
+        return polyglotKeyBuilder.getPositionRepresentation();
     }
 }
