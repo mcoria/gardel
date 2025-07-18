@@ -27,7 +27,7 @@ public class PGN {
     private String round;
     private String white;
     private String black;
-    private String fen;
+    private FEN fen;
     private String result;
     private List<String> moveList;
 
@@ -46,7 +46,7 @@ public class PGN {
 
         Stream.Builder<EPD> fenStreamBuilder = Stream.builder();
 
-        MinChess game = MinChess.from(FEN.of(getFen() == null ? FENParser.INITIAL_FEN : getFen()));
+        MinChess game = MinChess.from(getFen() == null ? FEN.of(FENParser.INITIAL_FEN) : getFen());
 
         List<EPD> epdList = new ArrayList<>(getMoveList().size());
 

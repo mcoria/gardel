@@ -126,7 +126,7 @@ public class PGNStringDecoderTest {
         assertEquals("10", pgn.getRound());
         assertEquals("Tango", pgn.getWhite());
         assertEquals("Chacarera", pgn.getBlack());
-        assertEquals("rn1qkbnr/pp2ppp1/2p4p/3pPb2/3P2PP/8/PPP2P2/RNBQKBNR b KQkq g3 0 5", pgn.getFen());
+        assertEquals("rn1qkbnr/pp2ppp1/2p4p/3pPb2/3P2PP/8/PPP2P2/RNBQKBNR b KQkq g3 0 5", pgn.getFen().toString());
         assertEquals("1/2-1/2", pgn.getResult());
     }
 

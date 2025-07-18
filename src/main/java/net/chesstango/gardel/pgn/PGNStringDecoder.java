@@ -2,6 +2,7 @@ package net.chesstango.gardel.pgn;
 
 
 
+import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.move.SANDecoder;
 
 import java.io.BufferedReader;
@@ -83,7 +84,7 @@ public class PGNStringDecoder {
                         result.setBlack(headerText);
                         break;
                     case "FEN":
-                        result.setFen(headerText);
+                        result.setFen(FEN.of(headerText));
                         break;
                     case "RESULT":
                         result.setResult(headerText);

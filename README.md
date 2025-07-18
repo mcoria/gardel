@@ -27,14 +27,14 @@ To use **gardel** in your project, add the dependency to your `pom.xml` (for Mav
 <dependency>
     <groupId>net.chesstango</groupId>
     <artifactId>gardel</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-implementation 'net.chesstango:gardel:1.0.1'
+implementation 'net.chesstango:gardel:1.0.3'
 ```
 
 ## Usage
