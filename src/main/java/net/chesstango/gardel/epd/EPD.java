@@ -2,7 +2,13 @@ package net.chesstango.gardel.epd;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.chesstango.gardel.fen.FEN;
+import net.chesstango.gardel.minchess.MinChess;
+import net.chesstango.gardel.move.AgregateMoveDecoder;
+import net.chesstango.gardel.move.Move;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -63,12 +69,11 @@ public class EPD {
                 enPassantSquare;
     }
 
-    public boolean isMoveSuccess(short move) {
-        throw new RuntimeException("Not implemented yet");
-    }
-
-    /*
-    public boolean isMoveSuccess(short move) {
+    /**
+     * @param move coordinate encoding
+     * @return
+     */
+    public boolean isMoveSuccess(String move) {
         if (bestMovesStr != null && !bestMovesStr.isEmpty()) {
             return isMoveSuccess(move, bestMovesStr);
         } else if (avoidMovesStr != null && !avoidMovesStr.isEmpty()) {
@@ -81,10 +86,11 @@ public class EPD {
     }
 
 
-    boolean isMoveSuccess(short move, String movesStr) {
-        List<Move> movesFromString = movesStringToMoves(movesStr);
-        for (Move moveFromString : movesFromString) {
-            if (move.equals(moveFromString)) {
+    boolean isMoveSuccess(String move, String movesListStr) {
+        Move theMove = Move.of(move);
+        List<Move> movesFromString = movesStringToMoves(movesListStr);
+        for (Move aMove : movesFromString) {
+            if (aMove.equals(theMove)) {
                 return true;
             }
         }
@@ -92,12 +98,12 @@ public class EPD {
     }
 
     List<Move> movesStringToMoves(String movesString) {
-        Game game = Game.from(this);
-        String[] bestMoves = movesString.split(" ");
-        List<Move> moveList = new ArrayList<>(bestMoves.length);
-        MoveDecoder moveDecoder = new MoveDecoder();
-        for (String bestMove : bestMoves) {
-            Move move = moveDecoder.decode(bestMove, game.getPossibleMoves());
+        FEN fen = FEN.of(getFenWithoutClocks() + " 0 1");
+        String[] bestMovesStr = movesString.split(" ");
+        List<Move> moveList = new ArrayList<>(bestMovesStr.length);
+        AgregateMoveDecoder moveDecoder = new AgregateMoveDecoder();
+        for (String bestMove : bestMovesStr) {
+            Move move = moveDecoder.decode(bestMove, fen);
             if (move != null) {
                 moveList.add(move);
             } else {
@@ -106,6 +112,4 @@ public class EPD {
         }
         return moveList;
     }
-     */
-
 }

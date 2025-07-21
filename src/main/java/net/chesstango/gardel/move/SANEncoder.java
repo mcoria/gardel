@@ -44,14 +44,14 @@ public class SANEncoder {
 
     private String encodePawnPushMove(Move move, MinChess minchess) {
         if (move.promotionPiece() != null) {
-            return String.format("%s=%s", move.to().toString(), move.promotionPiece());
+            return String.format("%s=%s", move.to().toString(), encodePromotion(move.promotionPiece()));
         }
         return move.to().toString();
     }
 
     private String encodePawnCaptureMove(Move move, MinChess minchess) {
         if (move.promotionPiece() != null) {
-            return String.format("%sx%s=%s", fileToLetter(move.from().getFile()), move.to().toString(), move.promotionPiece());
+            return String.format("%sx%s=%s", fileToLetter(move.from().getFile()), move.to().toString(), encodePromotion(move.promotionPiece()));
         }
         return String.format("%sx%s", fileToLetter(move.from().getFile()), move.to().toString());
     }
@@ -162,6 +162,16 @@ public class SANEncoder {
             case 6 -> "7";
             case 7 -> "8";
             default -> null;
+        };
+    }
+
+    private String encodePromotion(Move.PromotionPiece promotionPiece) {
+        return switch (promotionPiece) {
+            case KNIGHT -> "N";
+            case BISHOP -> "B";
+            case ROOK -> "R";
+            case QUEEN -> "Q";
+            default -> throw new IllegalArgumentException("Invalid promotion piece: " + promotionPiece);
         };
     }
 }

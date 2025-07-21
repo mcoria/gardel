@@ -15,7 +15,6 @@ public class AgregateMoveDecoder implements MoveDecoder {
         LANDecoder lanDecoder = new LANDecoder();
 
         Move move = sanDecoder.decode(moveStr, fen);
-
         if (move == null) {
             move = lanDecoder.decode(moveStr, fen);
         }

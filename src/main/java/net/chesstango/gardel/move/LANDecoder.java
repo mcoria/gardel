@@ -17,10 +17,10 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
  * <LAN move descriptor pawn moves>  ::= <from square>['-'|'x']<to square>[<promoted to>]
  * <Piece symbol> ::= 'N' | 'B' | 'R' | 'Q' | 'K'
  */
-class LANDecoder implements MoveDecoder {
+public class LANDecoder implements MoveDecoder {
     private static final Pattern edpMovePattern = Pattern.compile("(" +
-            "(?<piecemove>(?<piece>[RNBQK]?)((?<from>[a-h][1-8])|(?<fromfile>[a-h])|(?<fromrank>[1-8]))?[-x]?(?<to>[a-h][1-8]))|" +
-            "(?<pawnmove>(?<pawnfrom>[a-h][1-8])[-x](?<pawnto>[a-h][1-8])(?<promotionpiece>[RNBQK]))" +
+            "(?<piecemove>(?<piece>[RNBQK])(?<from>[a-h][1-8])[-x]?(?<to>[a-h][1-8]))|" +
+            "(?<pawnmove>(?<pawnfrom>[a-h][1-8])[-x](?<pawnto>[a-h][1-8])(?<promotionpiece>[RNBQK])?)" +
             ")[+#]?");
 
     @Override
@@ -40,18 +40,35 @@ class LANDecoder implements MoveDecoder {
     private Move decodePieceMove(Matcher matcher, MinChess minchess) {
         String pieceStr = matcher.group("piece");
         String fromStr = matcher.group("from");
-        String fromFileStr = matcher.group("fromfile");
-        String fromRankStr = matcher.group("fromrank");
         String toStr = matcher.group("to");
 
 
-        return null;
+        final Move.Square fromSquareFilter = Move.Square.valueOf(fromStr);
+        final Move.Square toSquareFilter = Move.Square.valueOf(toStr);
+        final int pieceFilter = switch (pieceStr) {
+            case "N" -> MinChess.KNIGHT;
+            case "B" -> MinChess.BISHOP;
+            case "R" -> MinChess.ROOK;
+            case "Q" -> MinChess.QUEEN;
+            case "K" -> MinChess.KING;
+            default -> -1;
+        };
+
+        MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) -> {
+            final Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
+            final Move.Square toSquare = Move.Square.of(toFile, toRank);
+            return fromPiece == pieceFilter &&
+                    fromSquareFilter.equals(fromSquare) &&
+                    toSquareFilter.equals(toSquare);
+        };
+
+        return extractMoves(minchess, moveFilter);
     }
 
     private Move decodePawnMove(Matcher matcher, MinChess minchess) {
-        String promotionPieceStr = matcher.group("promotionpiece");
         String fromStr = matcher.group("pawnfrom");
         String toStr = matcher.group("pawnto");
+        String promotionPieceStr = matcher.group("promotionpiece");
 
         Move.Square fromSquareFilter = Move.Square.valueOf(fromStr);
         Move.Square toSquareFilter = Move.Square.valueOf(toStr);

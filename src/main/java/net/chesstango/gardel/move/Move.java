@@ -27,20 +27,22 @@ public record Move(Square from,
         @Override
         public String toString() {
             return switch (this) {
-                case KNIGHT -> "N";
-                case BISHOP -> "B";
-                case ROOK -> "R";
-                case QUEEN -> "Q";
+                case KNIGHT -> "n";
+                case BISHOP -> "b";
+                case ROOK -> "r";
+                case QUEEN -> "w";
             };
         }
 
-        static PromotionPiece from(String charRepresentation) {
-            return switch (charRepresentation) {
-                case "N" -> KNIGHT;
-                case "B" -> BISHOP;
-                case "R" -> ROOK;
-                case "Q" -> QUEEN;
-                case null, default -> null;
+        static PromotionPiece from(String promotionStr) {
+            if (promotionStr == null) return null;
+            return switch (promotionStr.toLowerCase()) {
+                case "n" -> KNIGHT;
+                case "b" -> BISHOP;
+                case "r" -> ROOK;
+                case "q" -> QUEEN;
+                default ->
+                        throw new IllegalArgumentException(String.format("Promotion piece must be one of the following: n, b, r, q, but was %s", promotionStr));
             };
         }
     }
@@ -102,6 +104,21 @@ public record Move(Square from,
     }
 
     public static Move of(Square from, Square to, PromotionPiece promotionPiece) {
+        return new Move(from, to, promotionPiece);
+    }
+
+    public static Move of(String moveStr) {
+        if (moveStr.length() < 4 || moveStr.length() > 5) {
+            throw new IllegalArgumentException(String.format("Move string must be of length 4, but was %d", moveStr.length()));
+        }
+        Square from = Square.valueOf(moveStr.substring(0, 2));
+        Square to = Square.valueOf(moveStr.substring(2, 4));
+        PromotionPiece promotionPiece = moveStr.length() == 5 ? PromotionPiece.from(moveStr.substring(4, 5)) : null;
+
+        if (from == null || to == null) {
+            throw new IllegalArgumentException(String.format("Move string must be of the form [from square][to square][promotion piece], but was %s", moveStr));
+        }
+
         return new Move(from, to, promotionPiece);
     }
 
