@@ -6,7 +6,6 @@ import net.chesstango.gardel.epd.EPD;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.fen.FENParser;
 import net.chesstango.gardel.minchess.MinChess;
-import net.chesstango.gardel.move.Move;
 import net.chesstango.gardel.move.SANDecoder;
 
 import java.util.ArrayList;
@@ -42,8 +41,6 @@ public class PGN {
      * @return
      */
     public Stream<EPD> toEPD() {
-        SANDecoder sanDecoder = new SANDecoder();
-
         Stream.Builder<EPD> fenStreamBuilder = Stream.builder();
 
         MinChess game = MinChess.from(getFen() == null ? FEN.of(FENParser.INITIAL_FEN) : getFen());
@@ -52,11 +49,16 @@ public class PGN {
 
         int lastClock = 2;
 
+        SANDecoder<Short> sanDecoder = new SANDecoder<>(
+                (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
+                        get(game, fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)
+        );
+
         for (String moveStr : getMoveList()) {
 
             FEN fenGame = game.toFEN();
 
-            Move legalMoveToExecute = sanDecoder.decode(moveStr, fenGame);
+            Short legalMoveToExecute = sanDecoder.decode(moveStr, fenGame);
 
             if (legalMoveToExecute != null) {
                 EPD epd = new EPD();
@@ -93,7 +95,7 @@ public class PGN {
 
                 epdList.add(epd);
 
-                executeMove(game, legalMoveToExecute);
+                game.doMove(legalMoveToExecute);
 
             } else {
                 throw new RuntimeException(String.format("[%s] %s is not in the list of legal moves for %s", getEvent(), moveStr, fenGame.toString()));
@@ -108,34 +110,27 @@ public class PGN {
         return fenStreamBuilder.build();
     }
 
-    private void executeMove(MinChess minchess, Move moveToExecute) {
+    private Short get(MinChess minchess, int fromFile, int fromRank, int toFile, int toRank, int fromPiece, int toPiece, int promotion) {
         short[] moves = new short[MAX_MOVES];
         int size = minchess.generateMoves(moves);
         for (int i = 0; i < size; i++) {
             final short move = moves[i];
-            final int fromFile = MinChess.fromFile(move);
-            final int fromRank = MinChess.fromRank(move);
-            final int toFile = MinChess.toFile(move);
-            final int toRank = MinChess.toRank(move);
-            final int promotion = MinChess.getPromotionPiece(move);
+            final int fromFileFilter = MinChess.fromFile(move);
+            final int fromRankFilter = MinChess.fromRank(move);
+            final int fromPieceFilter = minchess.getFromPiece(move);
 
-            final Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
-            final Move.Square toSquare = Move.Square.of(toFile, toRank);
-            final Move.PromotionPiece promotionPieceEnum = toMovePromotion(promotion);
+            final int toFileFilter = MinChess.toFile(move);
+            final int toRankFilter = MinChess.toRank(move);
+            final int toPieceFilter = minchess.getToPiece(move);
 
-            if (moveToExecute.from() == fromSquare && moveToExecute.to() == toSquare && moveToExecute.promotionPiece() == promotionPieceEnum) {
-                minchess.doMove(move);
+            final int promotionFilter = MinChess.getPromotionPiece(move);
+
+            if (fromFile == fromFileFilter && fromRank == fromRankFilter && fromPiece == fromPieceFilter &&
+                    toFile == toFileFilter && toRank == toRankFilter && toPiece == toPieceFilter &&
+                    promotion == promotionFilter) {
+                return move;
             }
         }
-    }
-
-    private static Move.PromotionPiece toMovePromotion(int promotionPiece) {
-        return switch (promotionPiece) {
-            case MinChess.KNIGHT -> Move.PromotionPiece.KNIGHT;
-            case MinChess.BISHOP -> Move.PromotionPiece.BISHOP;
-            case MinChess.ROOK -> Move.PromotionPiece.ROOK;
-            case MinChess.QUEEN -> Move.PromotionPiece.QUEEN;
-            default -> null;
-        };
+        return null;
     }
 }

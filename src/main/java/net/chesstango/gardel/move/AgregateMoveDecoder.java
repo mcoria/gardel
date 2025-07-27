@@ -7,14 +7,20 @@ import net.chesstango.gardel.fen.FEN;
  * @author Mauricio Coria
  *
  */
-public class AgregateMoveDecoder implements MoveDecoder {
+public class AgregateMoveDecoder<M> implements MoveDecoder<M> {
+
+    private final SANDecoder<M> sanDecoder;
+    private final LANDecoder<M> lanDecoder;
+
+    public AgregateMoveDecoder(MoveSupplier<M> moveSupplier) {
+        this.sanDecoder = new SANDecoder<>(moveSupplier);
+        this.lanDecoder = new LANDecoder<>(moveSupplier);
+    }
 
     @Override
-    public Move decode(String moveStr, FEN fen) {
-        SANDecoder sanDecoder = new SANDecoder();
-        LANDecoder lanDecoder = new LANDecoder();
+    public M decode(String moveStr, FEN fen) {
 
-        Move move = sanDecoder.decode(moveStr, fen);
+        M move = sanDecoder.decode(moveStr, fen);
         if (move == null) {
             move = lanDecoder.decode(moveStr, fen);
         }

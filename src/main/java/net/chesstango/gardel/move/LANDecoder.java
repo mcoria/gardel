@@ -17,14 +17,20 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
  * <LAN move descriptor pawn moves>  ::= <from square>['-'|'x']<to square>[<promoted to>]
  * <Piece symbol> ::= 'N' | 'B' | 'R' | 'Q' | 'K'
  */
-public class LANDecoder implements MoveDecoder {
+public class LANDecoder<M> implements MoveDecoder<M> {
     private static final Pattern edpMovePattern = Pattern.compile("(" +
             "(?<piecemove>(?<piece>[RNBQK])(?<from>[a-h][1-8])[-x]?(?<to>[a-h][1-8]))|" +
             "(?<pawnmove>(?<pawnfrom>[a-h][1-8])[-x](?<pawnto>[a-h][1-8])(?<promotionpiece>[RNBQK])?)" +
             ")[+#]?");
 
+    private final MoveSupplier<M> moveSupplier;
+
+    public LANDecoder(MoveSupplier<M> moveSupplier) {
+        this.moveSupplier = moveSupplier;
+    }
+
     @Override
-    public Move decode(String moveStr, FEN fen) {
+    public M decode(String moveStr, FEN fen) {
         final Matcher matcher = edpMovePattern.matcher(moveStr);
         if (matcher.matches()) {
             MinChess minchess = MinChess.from(fen);
@@ -37,7 +43,7 @@ public class LANDecoder implements MoveDecoder {
         return null;
     }
 
-    private Move decodePieceMove(Matcher matcher, MinChess minchess) {
+    private M decodePieceMove(Matcher matcher, MinChess minchess) {
         String pieceStr = matcher.group("piece");
         String fromStr = matcher.group("from");
         String toStr = matcher.group("to");
@@ -65,7 +71,7 @@ public class LANDecoder implements MoveDecoder {
         return extractMoves(minchess, moveFilter);
     }
 
-    private Move decodePawnMove(Matcher matcher, MinChess minchess) {
+    private M decodePawnMove(Matcher matcher, MinChess minchess) {
         String fromStr = matcher.group("pawnfrom");
         String toStr = matcher.group("pawnto");
         String promotionPieceStr = matcher.group("promotionpiece");
@@ -88,7 +94,7 @@ public class LANDecoder implements MoveDecoder {
     }
 
 
-    private Move extractMoves(MinChess minchess, MovePredicate moveFilter) {
+    private M extractMoves(MinChess minchess, MovePredicate moveFilter) {
         short[] moves = new short[MAX_MOVES];
         int size = minchess.generateMoves(moves);
         for (int i = 0; i < size; i++) {
@@ -102,13 +108,9 @@ public class LANDecoder implements MoveDecoder {
             final int promotion = MinChess.getPromotionPiece(move);
 
             if (moveFilter.test(fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)) {
-                final Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
-                final Move.Square toSquare = Move.Square.of(toFile, toRank);
-                final Move.PromotionPiece promotionPieceEnum = toMovePromotion(promotion);
-                return new Move(fromSquare, toSquare, promotionPieceEnum);
+                return moveSupplier.get(fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion);
             }
         }
-
         return null;
     }
 

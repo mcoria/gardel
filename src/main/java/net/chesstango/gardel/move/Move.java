@@ -1,6 +1,7 @@
 package net.chesstango.gardel.move;
 
 import lombok.Getter;
+import net.chesstango.gardel.minchess.MinChess;
 
 /**
  * Represents a chess move in pure algebraic notation.
@@ -144,5 +145,26 @@ public record Move(Square from,
         if (o == null || getClass() != o.getClass()) return false;
         Move that = (Move) o;
         return from == that.from && to == that.to && promotionPiece == that.promotionPiece;
+    }
+
+
+    public static class GardelMoveSupplier implements MoveSupplier<Move> {
+        @Override
+        public Move get(int fromFile, int fromRank, int toFile, int toRank, int fromPiece, int toPiece, int promotion) {
+            final Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
+            final Move.Square toSquare = Move.Square.of(toFile, toRank);
+            final Move.PromotionPiece promotionPieceEnum = toMovePromotion(promotion);
+            return new Move(fromSquare, toSquare, promotionPieceEnum);
+        }
+
+        private static Move.PromotionPiece toMovePromotion(int promotionPiece) {
+            return switch (promotionPiece) {
+                case MinChess.KNIGHT -> Move.PromotionPiece.KNIGHT;
+                case MinChess.BISHOP -> Move.PromotionPiece.BISHOP;
+                case MinChess.ROOK -> Move.PromotionPiece.ROOK;
+                case MinChess.QUEEN -> Move.PromotionPiece.QUEEN;
+                default -> null;
+            };
+        }
     }
 }

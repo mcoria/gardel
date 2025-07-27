@@ -17,7 +17,7 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
  *
  * @author Mauricio Coria
  */
-public class SANDecoder implements MoveDecoder{
+public class SANDecoder<M> implements MoveDecoder<M> {
     public static final Pattern movePattern = Pattern.compile("(" +
             "(?<piecemove>(?<piece>[RNBQK])((?<piecefromfile>[a-h])|(?<piecefromrank>[1-8])|(?<piecefromsquare>[a-h][1-8]))?x?(?<pieceto>[a-h][1-8]))|" +
             "(?<pawncapture>(?<pawncapturefile>[a-h])[1-8]?x(?<pawncaptureto>[a-h][1-8])=?(?<pawncapturepromotion>[RNBQ]?))|" +
@@ -27,9 +27,14 @@ public class SANDecoder implements MoveDecoder{
             ")[+#]?"
     );
 
+    private final MoveSupplier<M> moveSupplier;
+
+    public SANDecoder(MoveSupplier<M> moveSupplier) {
+        this.moveSupplier = moveSupplier;
+    }
 
     @Override
-    public Move decode(String moveStr, FEN fen) {
+    public M decode(String moveStr, FEN fen) {
         final Matcher matcher = movePattern.matcher(moveStr);
         if (matcher.matches()) {
             MinChess minchess = MinChess.from(fen);
@@ -48,19 +53,19 @@ public class SANDecoder implements MoveDecoder{
         return null;
     }
 
-    private Move searchKingCastling(MinChess minchess) {
+    private M searchKingCastling(MinChess minchess) {
         MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
                 fromPiece == MinChess.KING && toFile - fromFile == 2;
         return extractMoves(minchess, moveFilter);
     }
 
-    private Move searchQueenCastling(MinChess minchess) {
+    private M searchQueenCastling(MinChess minchess) {
         MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
                 fromPiece == MinChess.KING && fromFile - toFile == 2;
         return extractMoves(minchess, moveFilter);
     }
 
-    private Move decodePawnPush(Matcher matcher, MinChess minchess) {
+    private M decodePawnPush(Matcher matcher, MinChess minchess) {
         String pawnTo = matcher.group("pawnto");
         String pawnPushPromotion = matcher.group("pawnpushpromotion");
 
@@ -94,7 +99,8 @@ public class SANDecoder implements MoveDecoder{
         return extractMoves(minchess, moveFilter);
     }
 
-    private Move decodePawnCapture(Matcher matcher, MinChess minchess) {
+
+    private M decodePawnCapture(Matcher matcher, MinChess minchess) {
         String pawnCaptureFile = matcher.group("pawncapturefile");
         String pawnCaptureTo = matcher.group("pawncaptureto");
         String pawnCapturePromotion = matcher.group("pawncapturepromotion");
@@ -130,7 +136,7 @@ public class SANDecoder implements MoveDecoder{
         return extractMoves(minchess, moveFilter);
     }
 
-    private Move decodePieceMove(Matcher matcher, MinChess minchess) {
+    private M decodePieceMove(Matcher matcher, MinChess minchess) {
         String pieceStr = matcher.group("piece");
         String pieceFromFile = matcher.group("piecefromfile");
         String pieceFromRank = matcher.group("piecefromrank");
@@ -190,7 +196,7 @@ public class SANDecoder implements MoveDecoder{
     }
 
 
-    private Move extractMoves(MinChess minchess, MovePredicate moveFilter) {
+    private M extractMoves(MinChess minchess, MovePredicate moveFilter) {
         short[] moves = new short[MAX_MOVES];
         int size = minchess.generateMoves(moves);
         for (int i = 0; i < size; i++) {
@@ -204,23 +210,9 @@ public class SANDecoder implements MoveDecoder{
             final int promotion = MinChess.getPromotionPiece(move);
 
             if (moveFilter.test(fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)) {
-                final Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
-                final Move.Square toSquare = Move.Square.of(toFile, toRank);
-                final Move.PromotionPiece promotionPieceEnum = toMovePromotion(promotion);
-                return new Move(fromSquare, toSquare, promotionPieceEnum);
+                return moveSupplier.get(fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion);
             }
         }
-
         return null;
-    }
-
-    private static Move.PromotionPiece toMovePromotion(int promotionPiece) {
-        return switch (promotionPiece) {
-            case MinChess.KNIGHT -> Move.PromotionPiece.KNIGHT;
-            case MinChess.BISHOP -> Move.PromotionPiece.BISHOP;
-            case MinChess.ROOK -> Move.PromotionPiece.ROOK;
-            case MinChess.QUEEN -> Move.PromotionPiece.QUEEN;
-            default -> null;
-        };
     }
 }

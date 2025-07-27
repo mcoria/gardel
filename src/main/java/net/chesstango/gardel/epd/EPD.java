@@ -3,7 +3,6 @@ package net.chesstango.gardel.epd;
 import lombok.Getter;
 import lombok.Setter;
 import net.chesstango.gardel.fen.FEN;
-import net.chesstango.gardel.minchess.MinChess;
 import net.chesstango.gardel.move.AgregateMoveDecoder;
 import net.chesstango.gardel.move.Move;
 
@@ -86,11 +85,11 @@ public class EPD {
     }
 
 
-    boolean isMoveSuccess(String move, String movesListStr) {
-        Move theMove = Move.of(move);
-        List<Move> movesFromString = movesStringToMoves(movesListStr);
-        for (Move aMove : movesFromString) {
-            if (aMove.equals(theMove)) {
+    boolean isMoveSuccess(String moveStr, String movesListStr) {
+        Move theMove = Move.of(moveStr);
+        List<Move> moveList = movesStringToMoves(movesListStr);
+        for (Move move : moveList) {
+            if (move.equals(theMove)) {
                 return true;
             }
         }
@@ -99,15 +98,15 @@ public class EPD {
 
     List<Move> movesStringToMoves(String movesString) {
         FEN fen = FEN.of(getFenWithoutClocks() + " 0 1");
-        String[] bestMovesStr = movesString.split(" ");
-        List<Move> moveList = new ArrayList<>(bestMovesStr.length);
-        AgregateMoveDecoder moveDecoder = new AgregateMoveDecoder();
-        for (String bestMove : bestMovesStr) {
-            Move move = moveDecoder.decode(bestMove, fen);
+        String[] movesStringArray = movesString.split(" ");
+        List<Move> moveList = new ArrayList<>(movesStringArray.length);
+        AgregateMoveDecoder<Move> moveDecoder = new AgregateMoveDecoder<>(new Move.GardelMoveSupplier());
+        for (String moveStr : movesStringArray) {
+            Move move = moveDecoder.decode(moveStr, fen);
             if (move != null) {
                 moveList.add(move);
             } else {
-                throw new RuntimeException(String.format("Unable to find move %s", bestMove));
+                throw new RuntimeException(String.format("Unable to find move %s", moveStr));
             }
         }
         return moveList;

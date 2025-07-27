@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class LANDecoderTest {
 
-    private LANDecoder decoder = new LANDecoder();
+    private final LANDecoder<Move> decoder = new LANDecoder<>(new Move.GardelMoveSupplier());
 
     @Test
     public void testDecodeLAN01_Promotion() {

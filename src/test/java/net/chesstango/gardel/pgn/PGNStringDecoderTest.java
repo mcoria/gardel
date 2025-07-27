@@ -11,6 +11,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author Mauricio Coria
+ */
 public class PGNStringDecoderTest {
 
     private PGNStringDecoder decoder;

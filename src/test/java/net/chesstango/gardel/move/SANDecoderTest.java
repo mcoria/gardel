@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 public class SANDecoderTest {
 
-    private SANDecoder decoder = new SANDecoder();
+    private final SANDecoder<Move> decoder = new SANDecoder<>(new Move.GardelMoveSupplier());
 
 
     @Test
