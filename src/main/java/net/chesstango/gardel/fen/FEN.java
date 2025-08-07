@@ -45,10 +45,9 @@ public final class FEN implements PositionExporter {
     }
 
     @Override
-    public <T> T export(PositionBuilder<T> positionBuilder) {
+    public <T> void export(PositionBuilder<T> positionBuilder) {
         FENExporter fenExporter = new FENExporter(positionBuilder);
         fenExporter.export(this);
-        return positionBuilder.getPositionRepresentation();
     }
 
     @Override
