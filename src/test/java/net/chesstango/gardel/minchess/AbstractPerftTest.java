@@ -4,7 +4,6 @@ package net.chesstango.gardel.minchess;
 import net.chesstango.gardel.MirrorPositionBuilder;
 import net.chesstango.gardel.ascii.ASCIIBuilder;
 import net.chesstango.gardel.fen.FEN;
-import net.chesstango.gardel.fen.FENExporter;
 
 import java.util.Map;
 import java.util.Set;
@@ -16,16 +15,14 @@ public abstract class AbstractPerftTest {
 
     protected MinChess createGame(String string) {
         MinChessBuilder builder = new MinChessBuilder();
-        FENExporter exporter = new FENExporter(builder);
-        exporter.export(FEN.of(string));
+        FEN.of(string).export(builder);
         return builder.getPositionRepresentation();
     }
 
     protected MinChess createMirrorGame(String string) {
         MinChessBuilder builder = new MinChessBuilder();
         MirrorPositionBuilder<MinChess> mirrorBuilder = new MirrorPositionBuilder<>(builder);
-        FENExporter exporter = new FENExporter(mirrorBuilder);
-        exporter.export(FEN.of(string));
+        FEN.of(string).export(mirrorBuilder);
         return builder.getPositionRepresentation();
     }
 
@@ -53,7 +50,7 @@ public abstract class AbstractPerftTest {
         }
     }
 
-    void printAscii(MinChess minChess){
+    void printAscii(MinChess minChess) {
         ASCIIBuilder asciiBuilder = new ASCIIBuilder();
         MinChessExporter builder = new MinChessExporter(asciiBuilder);
         builder.export(minChess);

@@ -1,7 +1,6 @@
 package net.chesstango.gardel.ascii;
 
 import net.chesstango.gardel.fen.FEN;
-import net.chesstango.gardel.fen.FENExporter;
 import net.chesstango.gardel.fen.FENParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,12 +18,9 @@ public class ASCIIBuilderTest {
 
     private ASCIIBuilder builder;
 
-    private FENExporter exporter;
-
     @BeforeEach
     public void setUp() throws Exception {
         builder = new ASCIIBuilder();
-        exporter = new FENExporter(builder);
     }
 
     @Test
@@ -54,7 +50,7 @@ public class ASCIIBuilderTest {
         }
 
         //Actual
-        exporter.export(FEN.of(FENParser.INITIAL_FEN));
+        FEN.of(FENParser.INITIAL_FEN).export(builder);
 
         final ByteArrayOutputStream baosActual = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baosActual)) {
@@ -74,7 +70,7 @@ public class ASCIIBuilderTest {
         }
 
         //Actual
-        exporter.export(FEN.of(FENParser.INITIAL_FEN));
+        FEN.of(FENParser.INITIAL_FEN).export(builder);
 
         final ByteArrayOutputStream baosActual = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baosActual)) {
@@ -112,7 +108,7 @@ public class ASCIIBuilderTest {
         }
 
         //Actual
-        exporter.export(FEN.of(FENParser.INITIAL_FEN));
+        FEN.of(FENParser.INITIAL_FEN).export(builder);
 
         String stringRepresentation = builder.getPositionRepresentation();
 
@@ -147,7 +143,7 @@ public class ASCIIBuilderTest {
         }
 
         //Actual
-        exporter.export(FEN.of("rnbqkb1r/5ppp/p2ppn2/1p6/3NP3/2N1BP2/PPP3PP/R2QKB1R w KQkq b6 0 8"));
+        FEN.of("rnbqkb1r/5ppp/p2ppn2/1p6/3NP3/2N1BP2/PPP3PP/R2QKB1R w KQkq b6 0 8").export(builder);
 
         String stringRepresentation = builder.getPositionRepresentation();
 

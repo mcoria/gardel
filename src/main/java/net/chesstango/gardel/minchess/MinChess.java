@@ -2,7 +2,7 @@ package net.chesstango.gardel.minchess;
 
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.fen.FENBuilder;
-import net.chesstango.gardel.fen.FENExporter;
+
 import net.chesstango.gardel.polyglot.PolyglotKeyBuilder;
 
 /**
@@ -227,8 +227,7 @@ public class MinChess implements Cloneable {
 
     public static MinChess from(FEN fen) {
         MinChessBuilder builder = new MinChessBuilder();
-        FENExporter exporter = new FENExporter(builder);
-        exporter.export(fen);
+        fen.export(builder);
         return builder.getPositionRepresentation();
     }
 

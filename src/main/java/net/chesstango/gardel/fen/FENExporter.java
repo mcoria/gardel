@@ -5,15 +5,14 @@ import net.chesstango.gardel.PositionBuilder;
 /**
  * @author Mauricio Coria
  */
-public class FENExporter {
+class FENExporter {
     private final PositionBuilder<?> positionBuilder;
 
-    public FENExporter(PositionBuilder<?> positionBuilder) {
+    FENExporter(PositionBuilder<?> positionBuilder) {
         this.positionBuilder = positionBuilder;
     }
 
-
-    public void export(FEN fen) {
+    void export(FEN fen) {
         positionBuilder.withWhiteTurn(parseTurn(fen.getActiveColor()));
 
         parsePiecePlacement(fen.getPiecePlacement());

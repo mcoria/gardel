@@ -2,6 +2,7 @@ package net.chesstango.gardel.fen;
 
 import lombok.Getter;
 import net.chesstango.gardel.PositionBuilder;
+import net.chesstango.gardel.PositionExporter;
 
 import java.util.Objects;
 
@@ -9,7 +10,7 @@ import java.util.Objects;
  * @author Mauricio Coria
  */
 @Getter
-public final class FEN {
+public final class FEN implements PositionExporter {
 
     private final String piecePlacement;
 
@@ -43,6 +44,7 @@ public final class FEN {
         return parser.parseFEN(fenString);
     }
 
+    @Override
     public <T> T export(PositionBuilder<T> positionBuilder) {
         FENExporter fenExporter = new FENExporter(positionBuilder);
         fenExporter.export(this);
@@ -64,5 +66,4 @@ public final class FEN {
     public int hashCode() {
         return Objects.hash(piecePlacement, activeColor, castingsAllowed, enPassantSquare, halfMoveClock, fullMoveClock);
     }
-
 }
