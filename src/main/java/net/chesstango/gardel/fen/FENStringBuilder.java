@@ -1,7 +1,6 @@
 package net.chesstango.gardel.fen;
 
 import lombok.Setter;
-import net.chesstango.gardel.polyglot.PolyglotKeyBuilder;
 
 /**
  * @author Mauricio Coria
@@ -32,11 +31,17 @@ public class FENStringBuilder extends AbstractFENBuilder<String> {
 
         if (!ignoreEnPassantSquareIfNotCapturePresente) {
             sb.append(" ").append(enPassantSquare);
-        } else if (PolyglotKeyBuilder.pawnsAttackingEnPassantSquare(this.whiteTurn, this.whitePositions, this.blackPositions, this.pawnPositions, this.enPassantSquare) != 0) {
-            sb.append(" ").append(enPassantSquare);
         } else {
-            sb.append(" ").append("-");
+            throw new UnsupportedOperationException("Not supported yet.");
         }
+
+        /*
+        if (PolyglotKeyBuilder.pawnsAttackingEnPassantSquare(this.whiteTurn, this.whitePositions, this.blackPositions, this.pawnPositions, this.enPassantSquare) != 0) {
+                sb.append(" ").append(enPassantSquare);
+            } else {
+                sb.append(" ").append("-");
+            }
+        }*/
 
         if (!ignoreClocks) {
             sb.append(" ").append(halfMoveClock);

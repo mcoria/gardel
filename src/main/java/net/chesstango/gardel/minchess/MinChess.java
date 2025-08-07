@@ -3,7 +3,6 @@ package net.chesstango.gardel.minchess;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.fen.FENBuilder;
 
-import net.chesstango.gardel.polyglot.PolyglotKeyBuilder;
 
 /**
  * @author Mauricio Coria
@@ -238,10 +237,12 @@ public class MinChess implements Cloneable {
         return fenBuilder.getPositionRepresentation();
     }
 
-    public long toPolyglotKey() {
-        PolyglotKeyBuilder polyglotKeyBuilder = new PolyglotKeyBuilder();
-        MinChessExporter exporter = new MinChessExporter(polyglotKeyBuilder);
-        exporter.export(this);
-        return polyglotKeyBuilder.getPositionRepresentation();
+    public long hash() {
+        return workspace.kingPositions |
+                workspace.queenPositions |
+                workspace.rookPositions |
+                workspace.bishopPositions |
+                workspace.knightPositions |
+                workspace.pawnPositions;
     }
 }

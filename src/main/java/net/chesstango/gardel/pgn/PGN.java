@@ -68,7 +68,7 @@ public class PGN {
                 epd.setCastingsAllowed(fenGame.getCastingsAllowed());
                 epd.setEnPassantSquare(fenGame.getEnPassantSquare());
 
-                epd.setId(String.format("%s", Long.toHexString(game.toPolyglotKey())));
+                epd.setId(String.format("%s", Long.toHexString(game.hash())));
 
                 if (event != null) {
                     epd.setC0(String.format("event='%s'", event));
