@@ -5,7 +5,7 @@ import lombok.Setter;
 /**
  * @author Mauricio Coria
  */
-public class FENStringBuilder extends AbstractFENBuilder<String> {
+class FENStringBuilder extends AbstractFENBuilder<String> {
 
     @Setter
     boolean ignoreEnPassantSquareIfNotCapturePresente;

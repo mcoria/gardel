@@ -236,13 +236,4 @@ public class MinChess implements Cloneable {
         exporter.export(this);
         return fenBuilder.getPositionRepresentation();
     }
-
-    public long hash() {
-        return workspace.kingPositions |
-                workspace.queenPositions |
-                workspace.rookPositions |
-                workspace.bishopPositions |
-                workspace.knightPositions |
-                workspace.pawnPositions;
-    }
 }
