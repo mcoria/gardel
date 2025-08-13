@@ -1,7 +1,6 @@
 package net.chesstango.gardel.pgn;
 
 
-
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.move.SANDecoder;
 
@@ -40,7 +39,7 @@ public class PGNStringDecoder {
         while ((game = decodePGN(bufferReader)) != null) {
             pgnStreamBuilder.add(game);
         }
-        
+
         return pgnStreamBuilder.build();
     }
 
@@ -87,7 +86,12 @@ public class PGNStringDecoder {
                         result.setFen(FEN.of(headerText));
                         break;
                     case "RESULT":
-                        result.setResult(headerText);
+                        result.setResult(switch (headerText) {
+                            case "1-0" -> PGN.Result.WHITE_WINS;
+                            case "0-1" -> PGN.Result.BLACK_WINS;
+                            case "1/2-1/2" -> PGN.Result.DRAW;
+                            default -> PGN.Result.ONGOING;
+                        });
                         break;
                 }
             }

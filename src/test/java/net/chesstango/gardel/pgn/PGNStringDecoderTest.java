@@ -130,7 +130,7 @@ public class PGNStringDecoderTest {
         assertEquals("Tango", pgn.getWhite());
         assertEquals("Chacarera", pgn.getBlack());
         assertEquals("rn1qkbnr/pp2ppp1/2p4p/3pPb2/3P2PP/8/PPP2P2/RNBQKBNR b KQkq g3 0 5", pgn.getFen().toString());
-        assertEquals("1/2-1/2", pgn.getResult());
+        assertEquals(PGN.Result.DRAW, pgn.getResult());
     }
 
     @Test
@@ -161,7 +161,7 @@ public class PGNStringDecoderTest {
         assertEquals("10", game.getRound());
         assertEquals("Tango", game.getWhite());
         assertEquals("Chacarera", game.getBlack());
-        assertEquals("1/2-1/2", game.getResult());
+        assertEquals(PGN.Result.DRAW, game.getResult());
 
         List<String> moves = game.getMoveList();
         assertEquals("e4", moves.get(0));
@@ -205,7 +205,7 @@ public class PGNStringDecoderTest {
         assertEquals("2024.02.20", game.getDate());
         assertEquals("ChessChildren", game.getWhite());
         assertEquals("chesstango_bot", game.getBlack());
-        assertEquals("1-0", game.getResult());
+        assertEquals(PGN.Result.WHITE_WINS, game.getResult());
 
         List<String> moves = game.getMoveList();
         assertEquals("Qb4", moves.get(22));
@@ -237,7 +237,7 @@ public class PGNStringDecoderTest {
         assertEquals("2024.06.12", game.getDate());
         assertEquals("Tango v0.0.28-SNAPSHOT", game.getWhite());
         assertEquals("Spike 1.4", game.getBlack());
-        assertEquals("0-1", game.getResult());
+        assertEquals(PGN.Result.BLACK_WINS, game.getResult());
 
         List<String> moves = game.getMoveList();
         assertEquals("Qh1#", moves.get(31));

@@ -20,6 +20,20 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
 @Getter
 @Setter
 public class PGN {
+    public enum Result {
+        WHITE_WINS, BLACK_WINS, DRAW, ONGOING;
+
+        @Override
+        public String toString() {
+            return switch (this) {
+                case WHITE_WINS -> "1-0";
+                case BLACK_WINS -> "0-1";
+                case DRAW -> "1/2-1/2";
+                case ONGOING -> "*";
+            };
+        }
+    }
+
     private String event;
     private String site;
     private String date;
@@ -27,7 +41,7 @@ public class PGN {
     private String white;
     private String black;
     private FEN fen;
-    private String result;
+    private Result result;
     private List<String> moveList;
 
     @Override
@@ -68,7 +82,7 @@ public class PGN {
                 epd.setCastingsAllowed(fenGame.getCastingsAllowed());
                 epd.setEnPassantSquare(fenGame.getEnPassantSquare());
 
-                epd.setId(String.format("%s", Long.toHexString(fenGame.hashCode())));
+                epd.setId(String.format("%s", Integer.toHexString(fenGame.hashCode())));
 
                 if (event != null) {
                     epd.setC0(String.format("event='%s'", event));
