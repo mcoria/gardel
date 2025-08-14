@@ -116,10 +116,6 @@ public record Move(Square from,
         Square to = Square.valueOf(moveStr.substring(2, 4));
         PromotionPiece promotionPiece = moveStr.length() == 5 ? PromotionPiece.from(moveStr.substring(4, 5)) : null;
 
-        if (from == null || to == null) {
-            throw new IllegalArgumentException(String.format("Move string must be of the form [from square][to square][promotion piece], but was %s", moveStr));
-        }
-
         return new Move(from, to, promotionPiece);
     }
 
