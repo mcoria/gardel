@@ -4,13 +4,14 @@ import lombok.Getter;
 import net.chesstango.gardel.PositionBuilder;
 import net.chesstango.gardel.PositionExporter;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * @author Mauricio Coria
  */
 @Getter
-public final class FEN implements PositionExporter {
+public final class FEN implements PositionExporter, Serializable {
 
     private final String piecePlacement;
 

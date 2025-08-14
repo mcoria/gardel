@@ -8,6 +8,7 @@ import net.chesstango.gardel.fen.FENParser;
 import net.chesstango.gardel.minchess.MinChess;
 import net.chesstango.gardel.move.SANDecoder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -19,7 +20,7 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
  */
 @Getter
 @Setter
-public class PGN {
+public class PGN implements Serializable {
     public enum Result {
         WHITE_WINS, BLACK_WINS, DRAW, ONGOING;
 
