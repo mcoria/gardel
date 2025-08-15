@@ -1,4 +1,5 @@
 [![Java CI with Maven](https://github.com/mcoria/gardel/actions/workflows/maven.yml/badge.svg)](https://github.com/mcoria/gardel/actions/workflows/maven.yml)
+[![Coverage](.github/badges/jacoco.svg)](https://github.com/mcoria/gardel/actions/workflows/build.yml)
 
 # gardel
 A lightweight Java library for encoding and decoding common chess notations, including FEN (Forsyth–Edwards Notation), PGN (Portable Game Notation), and SAN (Standard Algebraic Notation).
