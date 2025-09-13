@@ -69,6 +69,16 @@ public class SANDecoderTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testRookCapture() {
+        FEN fen = FEN.of("r1b1Rbkr/pp4pp/2p3n1/3p2BB/8/2N2R2/PPP2PPP/2K5 w - - 0 1");
+
+        Move expected = Move.of(Move.Square.e8, Move.Square.f8);
+        Move actual = decoder.decode("Re8xf8+", fen);
+
+        assertEquals(expected, actual);
+    }
+
 
     @Test
     public void testCastling() {

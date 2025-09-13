@@ -4,6 +4,7 @@ package net.chesstango.gardel.move;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.minchess.MinChess;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -140,7 +141,7 @@ public class SANDecoder<M> implements MoveDecoder<M> {
         String pieceStr = matcher.group("piece");
         String pieceFromFile = matcher.group("piecefromfile");
         String pieceFromRank = matcher.group("piecefromrank");
-        String pieceFromSquare = matcher.group("piecefromsquare");
+        String pieceFromSquareStr = matcher.group("piecefromsquare");
         String pieceTo = matcher.group("pieceto");
 
         int fromPieceFilter = switch (pieceStr) {
@@ -149,10 +150,8 @@ public class SANDecoder<M> implements MoveDecoder<M> {
             case "R" -> MinChess.ROOK;
             case "Q" -> MinChess.QUEEN;
             case "K" -> MinChess.KING;
-            default -> throw new IllegalArgumentException("Invalid piece: " + pieceStr) ;
+            default -> throw new IllegalArgumentException("Invalid piece: " + pieceStr);
         };
-
-        Move.Square pieceToSquare = Move.Square.valueOf(pieceTo);
 
         int pieceFromFileInt = getFileInt(pieceFromFile);
         int pieceFromRankInt = switch (pieceFromRank) {
@@ -167,12 +166,20 @@ public class SANDecoder<M> implements MoveDecoder<M> {
             case null, default -> -1;
         };
 
+        Move.Square pieceFromSquare = pieceFromSquareStr != null ? Move.Square.valueOf(pieceFromSquareStr) : null;
+
+        Move.Square pieceToSquare = Move.Square.valueOf(pieceTo);
 
         MovePredicate moveFilter = (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) -> {
             if (fromPieceFilter == fromPiece) {
-                Move.Square toSquare = Move.Square.of(toFile, toRank);
-                if (toSquare == pieceToSquare) {
-                    return (pieceFromFileInt == -1 || pieceFromFileInt == fromFile) && (pieceFromRankInt == -1 || pieceFromRankInt == fromRank);
+                Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
+                if (pieceFromFileInt == -1 && pieceFromRankInt == -1 && pieceFromSquare == null ||
+                        pieceFromFileInt == fromFile ||
+                        pieceFromRankInt == fromRank ||
+                        Objects.equals(fromSquare, pieceFromSquare)
+                ) {
+                    Move.Square toSquare = Move.Square.of(toFile, toRank);
+                    return toSquare == pieceToSquare;
                 }
             }
             return false;
