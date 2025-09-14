@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Mauricio Coria
@@ -138,7 +139,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void testReadMateAll() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\Java\\projects\\chess\\chess-utils\\testing\\40H-EPD-databases\\mate-all.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\Java\\projects\\chess\\chess-utils\\testing\\40H-EPD-databases\\mate-all.epd");
 
         assertEquals(23268, entryList.size());
     }
@@ -147,7 +148,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void testReadWAC() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\wac.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\wac.epd");
 
         assertEquals(300, entryList.size());
     }
@@ -155,7 +156,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void testReadWAC2018() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\wac-2018.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\wac-2018.epd");
 
         assertEquals(201, entryList.size());
     }
@@ -163,7 +164,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void testSilentButDeadly() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\sbd.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\sbd.epd");
 
         assertEquals(134, entryList.size());
     }
@@ -171,7 +172,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void testPET() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\pet.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\pet.epd");
 
         assertEquals(48, entryList.size());
     }
@@ -179,7 +180,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void test_arasana2023() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\arasan2023.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\arasan2023.epd");
 
         assertEquals(200, entryList.size());
     }
@@ -187,7 +188,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void test_eet() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\eet.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\eet.epd");
 
         assertEquals(100, entryList.size());
     }
@@ -195,7 +196,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void test_bt2630() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\bt2630.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\bt2630.epd");
 
         assertEquals(30, entryList.size());
     }
@@ -203,7 +204,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void test_Kaufman() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\Kaufman.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\Kaufman.epd");
 
         assertEquals(25, entryList.size());
     }
@@ -211,7 +212,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void test_lapuce2() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\lapuce2.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\lapuce2.epd");
 
         assertEquals(35, entryList.size());
     }
@@ -219,7 +220,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void test_LCTII() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\LCTII.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\LCTII.epd");
 
         assertEquals(35, entryList.size());
     }
@@ -227,7 +228,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void test_CCROneHourTest() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\CCROneHourTest.epd").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\CCROneHourTest.epd");
 
         assertEquals(24, entryList.size());
     }
@@ -236,7 +237,7 @@ public class EPDDecoderTest {
     @Test
     @Disabled
     public void testReadEvalTunnerWhite() {
-        List<EPD> entryList = epdDecoder.readEdpFile("C:\\Java\\projects\\chess\\chess-utils\\testing\\positions\\Texel\\eval-tunner-white.txt").toList();
+        List<EPD> entryList = epdDecoder.readEpdFile("C:\\Java\\projects\\chess\\chess-utils\\testing\\positions\\Texel\\eval-tunner-white.txt");
 
         assertEquals(32571, entryList.size());
     }
@@ -275,7 +276,7 @@ public class EPDDecoderTest {
                 "C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\database\\STS15.epd"
         );
 
-        epdFiles.forEach(fileName -> epdDecoder.readEdpFile(fileName));
+        epdFiles.forEach(fileName -> epdDecoder.readEpdFile(fileName));
     }
 
     /*
