@@ -74,18 +74,18 @@ public class EPD {
      */
     public boolean isMoveSuccess(String move) {
         if (bestMovesStr != null && !bestMovesStr.isEmpty()) {
-            return isMoveSuccess(move, bestMovesStr);
+            return moveListContainsMove(bestMovesStr, move);
         } else if (avoidMovesStr != null && !avoidMovesStr.isEmpty()) {
-            return isMoveSuccess(move, avoidMovesStr);
+            return !moveListContainsMove(avoidMovesStr, move);
         } else if (suppliedMoveStr != null && !suppliedMoveStr.isEmpty()) {
-            return isMoveSuccess(move, suppliedMoveStr);
+            return moveListContainsMove(suppliedMoveStr, move);
         } else {
             throw new RuntimeException("Undefined expected EPD result");
         }
     }
 
 
-    boolean isMoveSuccess(String moveStr, String movesListStr) {
+    boolean moveListContainsMove(String movesListStr, String moveStr) {
         Move theMove = Move.of(moveStr);
         List<Move> moveList = movesStringToMoves(movesListStr);
         for (Move move : moveList) {

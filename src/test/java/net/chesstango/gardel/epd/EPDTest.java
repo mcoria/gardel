@@ -29,4 +29,10 @@ public class EPDTest {
         EPD epd = epdDecoder.readEdpLine("r1b1Rbkr/pp4pp/2p3n1/3p2BB/8/2N2R2/PPP2PPP/2K5 w - - bm Re8xf8+; ce +M2; pv Re8xf8+ Ng6xf8 Bh5-f7+; id \"1043\";");
         assertTrue(epd.isMoveSuccess("e8f8"));
     }
+
+    @Test
+    public void testIsMoveSuccess03() {
+        EPD epd = epdDecoder.readEdpLine("3r2k1/1p3ppp/2pq4/p1n5/P6P/1P6/1PB2QP1/1K2R3 w - - am Rd1; id \"position 03\";");
+        assertTrue(epd.isMoveSuccess("e1f8"));
+    }
 }
