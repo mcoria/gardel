@@ -48,8 +48,6 @@ public class EPDDecoder {
             throw new RuntimeException(String.format("file not found: %s", filePath.getFileName()));
         }
 
-        System.out.println("Reading suite " + filePath);
-
         try (InputStream in = new FileInputStream(filePath.toFile())) {
             return readEpdInputStream(in);
         } catch (IOException e) {
