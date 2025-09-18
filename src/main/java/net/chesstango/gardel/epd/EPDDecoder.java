@@ -4,9 +4,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /**
  * This class reads Extended Position Description files.
@@ -36,28 +37,26 @@ public class EPDDecoder {
                     "|[^;]+;)*"
     );
 
-    public Stream<EPD> readEdpFile(String filename) {
-        return readEdpFile(Paths.get(filename));
+    public List<EPD> readEpdFile(String filename) {
+        return readEpdFile(Paths.get(filename));
 
     }
 
-    public Stream<EPD> readEdpFile(Path filePath) {
+    public List<EPD> readEpdFile(Path filePath) {
         if (!Files.exists(filePath)) {
             System.err.printf("file not found: %s\n", filePath.getFileName());
             throw new RuntimeException(String.format("file not found: %s", filePath.getFileName()));
         }
 
-        System.out.println("Reading suite " + filePath);
-
         try (InputStream in = new FileInputStream(filePath.toFile())) {
-            return readEdpInputStream(in);
+            return readEpdInputStream(in);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Stream<EPD> readEdpInputStream(InputStream in) throws IOException {
-        Stream.Builder<EPD> epdEntryStreamBuilder = Stream.builder();
+    public List<EPD> readEpdInputStream(InputStream in) throws IOException {
+        List<EPD> epdList = new LinkedList<>();
         try (InputStreamReader inputStreamReader = new InputStreamReader(in);
              BufferedReader rr = new BufferedReader(inputStreamReader)) {
 
@@ -68,14 +67,14 @@ public class EPDDecoder {
                 if (!line.startsWith("#") && !line.isEmpty()) {
                     try {
                         EPD entry = readEdpLine(line);
-                        epdEntryStreamBuilder.add(entry);
+                        epdList.add(entry);
                     } catch (RuntimeException e) {
                         System.err.printf("Error decoding: %s\n", line);
                         e.printStackTrace(System.err);
                     }
                 }
             }
-            return epdEntryStreamBuilder.build();
+            return epdList;
         }
     }
 

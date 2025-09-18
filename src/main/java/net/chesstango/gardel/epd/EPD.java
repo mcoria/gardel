@@ -6,6 +6,7 @@ import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.move.AgregateMoveDecoder;
 import net.chesstango.gardel.move.Move;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +16,7 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-public class EPD {
+public class EPD implements Serializable {
     private String text;
 
     private String piecePlacement;
