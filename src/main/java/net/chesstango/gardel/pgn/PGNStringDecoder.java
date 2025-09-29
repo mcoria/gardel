@@ -8,6 +8,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -21,15 +23,18 @@ public class PGNStringDecoder {
 
     private static final Pattern headerPattern = Pattern.compile("\\[(\\w*) \"(.*)\"\\]");
 
-    public Stream<PGN> decodePGNs(InputStream inputStream) {
+    public Stream<PGN> decodePGNs(Path pgnFile) throws IOException {
+        try (InputStream inputStream = Files.newInputStream(pgnFile)) {
+            return decodePGNs(inputStream);
+        }
+    }
+
+    public Stream<PGN> decodePGNs(InputStream inputStream) throws IOException {
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
              BufferedReader bufferReader = new BufferedReader(inputStreamReader)
         ) {
             return decodePGNs(bufferReader);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-
     }
 
     public Stream<PGN> decodePGNs(BufferedReader bufferReader) throws IOException {

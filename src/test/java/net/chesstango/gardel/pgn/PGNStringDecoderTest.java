@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -284,6 +286,19 @@ public class PGNStringDecoderTest {
                 .forEach(fenStream -> kasparovEPDs.addAll(fenStream.toList()));
 
         assertEquals(162894, kasparovEPDs.size());
+    }
+
+    @Test
+    @Disabled
+    public void testBols() throws IOException {
+        Path pgnDirectory = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\matches");
+
+        Stream<PGN> bolsa10 = decoder.decodePGNs(pgnDirectory.resolve("Balsa_Top10.pgn"));
+        assertEquals(10L, bolsa10.count());
+
+
+        Stream<PGN> bolsa2724 = decoder.decodePGNs(pgnDirectory.resolve("Balsa_v2724.pgn"));
+        assertEquals(2724L, bolsa2724.count());
     }
 }
 
