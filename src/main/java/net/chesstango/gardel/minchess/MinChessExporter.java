@@ -26,8 +26,8 @@ public class MinChessExporter {
 
         if (workspace.enPassantSquare != 0) {
             final int enPassantSquareIdx = Long.numberOfTrailingZeros(workspace.enPassantSquare);
-            final int file = enPassantSquareIdx / 8;
-            final int rank = enPassantSquareIdx % 8;
+            final int file = enPassantSquareIdx % 8;
+            final int rank = enPassantSquareIdx / 8;
             this.positionBuilder.withEnPassantSquare(file, rank);
         }
 

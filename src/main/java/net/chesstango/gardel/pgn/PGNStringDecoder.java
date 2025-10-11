@@ -61,7 +61,7 @@ public class PGNStringDecoder {
         PGN result = new PGN();
         String line;
         while ((line = bufferReader.readLine()) != null) {
-            if ("".equals(line.trim())) {
+            if (line.trim().isEmpty()) {
                 break;
             }
             Matcher headerMather = headerPattern.matcher(line);
