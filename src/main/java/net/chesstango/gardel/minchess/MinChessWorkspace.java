@@ -1,8 +1,5 @@
 package net.chesstango.gardel.minchess;
 
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
-
 import static net.chesstango.gardel.minchess.MinChessConstants.*;
 
 /**

@@ -113,7 +113,8 @@ public class PGN implements Serializable {
                 game.doMove(legalMoveToExecute);
 
             } else {
-                throw new RuntimeException(String.format("[%s] %s is not in the list of legal moves for %s", getEvent(), moveStr, fenGame.toString()));
+                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), moveStr, fenGame.toString());
+                return Stream.empty();
             }
         }
 
@@ -123,6 +124,46 @@ public class PGN implements Serializable {
         }
 
         return fenStreamBuilder.build();
+    }
+
+    /**
+     * Cada entrada EPD representa la posicion y el movimiento ejecutado
+     *
+     * @return
+     */
+    public Stream<FEN> toFEN() {
+        Stream.Builder<FEN> fenBuilder = Stream.builder();
+
+        MinChess game = MinChess.from(getFen() == null ? FEN.of(FENParser.INITIAL_FEN) : getFen());
+
+        SANDecoder<Short> sanDecoder = new SANDecoder<>(
+                (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
+                        get(game, fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)
+        );
+
+        FEN fenGame = game.toFEN();
+
+        fenBuilder.add(fenGame);
+
+        for (String moveStr : getMoveList()) {
+
+            Short legalMoveToExecute = sanDecoder.decode(moveStr, fenGame);
+
+            if (legalMoveToExecute != null) {
+
+                game.doMove(legalMoveToExecute);
+
+                fenGame = game.toFEN();
+
+                fenBuilder.add(fenGame);
+
+            } else {
+                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), moveStr, fenGame.toString());
+                return Stream.empty();
+            }
+        }
+
+        return fenBuilder.build();
     }
 
     private Short get(MinChess minchess, int fromFile, int fromRank, int toFile, int toRank, int fromPiece, int toPiece, int promotion) {

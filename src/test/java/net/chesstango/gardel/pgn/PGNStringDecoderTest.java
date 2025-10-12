@@ -248,13 +248,9 @@ public class PGNStringDecoderTest {
 
     @Test
     public void readGames() throws IOException {
-        InputStream instr = this.getClass().getClassLoader().getResourceAsStream("main/pgn/Balsa_Top10.pgn");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("main/pgn/Balsa_Top10.pgn");
 
-        InputStreamReader inputStreamReader = new InputStreamReader(instr);
-
-        BufferedReader bufferReader = new BufferedReader(inputStreamReader);
-
-        List<PGN> games = decoder.decodePGNs(bufferReader).toList();
+        List<PGN> games = decoder.decodePGNs(inputStream).toList();
 
         assertEquals(10, games.size());
 
@@ -271,9 +267,9 @@ public class PGNStringDecoderTest {
     @Test
     @Disabled
     public void Kasparov() throws IOException {
-        InputStream instr = new FileInputStream("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\players\\Kasparov.pgn");
+        InputStream inputStream = new FileInputStream("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\players\\Kasparov.pgn");
 
-        InputStreamReader inputStreamReader = new InputStreamReader(instr);
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 
         BufferedReader bufferReader = new BufferedReader(inputStreamReader);
 
@@ -290,7 +286,7 @@ public class PGNStringDecoderTest {
 
     @Test
     @Disabled
-    public void balsaTest() throws IOException {
+    public void Balsa_Top10() throws IOException {
         Path pgnDirectory = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\matches");
 
         Stream<PGN> bolsa10 = decoder.decodePGNs(pgnDirectory.resolve("Balsa_Top10.pgn"));
@@ -304,15 +300,13 @@ public class PGNStringDecoderTest {
     @Test
     @Disabled
     public void LumbrasGigaBase_OTB_2025() throws IOException {
-        Path lumbrasGigaBase_OTB_2025 = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\matches\\LumbrasGigaBase_OTB_2025\\LumbrasGigaBase_OTB_2025.pgn");
+        Path lumbrasGigaBase_OTB_2025 = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\matches\\LumbrasGigaBase\\LumbrasGigaBase_OTB_2025.pgn");
 
         System.out.println("LumbrasGigaBase_OTB_2025: " + lumbrasGigaBase_OTB_2025.toAbsolutePath());
+
         Stream<PGN> lumbrasGigaBase_OTB_2025_PGN = decoder.decodePGNs(lumbrasGigaBase_OTB_2025);
 
-        //assertEquals(105601L, lumbrasGigaBase_OTB_2025_PGN.count());
-
-        lumbrasGigaBase_OTB_2025_PGN
-                .forEach(pgn -> pgn.toEPD().forEach(System.out::println));
+        assertEquals(105601L, lumbrasGigaBase_OTB_2025_PGN.count());
     }
 }
 
