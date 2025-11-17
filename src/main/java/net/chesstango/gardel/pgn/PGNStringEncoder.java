@@ -1,52 +1,68 @@
 package net.chesstango.gardel.pgn;
 
-import net.chesstango.gardel.fen.FENParser;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author Mauricio Coria
  */
 public class PGNStringEncoder {
 
-    public String encode(PGN game) {
+    public String encode(PGN pgn) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("[Event \"").append(game.getEvent() == null ? "?" : game.getEvent()).append("\"]\n");
-        sb.append("[Site \"").append(game.getSite() == null ? getComputerName() : game.getSite()).append("\"]\n");
-        sb.append("[Date \"").append(game.getDate() == null ? getToday() : game.getDate()).append("\"]\n");
-        sb.append("[Round \"").append(game.getRound() == null ? "?" : game.getRound()).append("\"]\n");
-        sb.append("[White \"").append(game.getWhite() == null ? "X" : game.getWhite()).append("\"]\n");
-        sb.append("[Black \"").append(game.getBlack() == null ? "X" : game.getBlack()).append("\"]\n");
-        if (game.getFen() != null && !Objects.equals(FENParser.INITIAL_FEN, game.getFen())) {
-            sb.append("[FEN \"").append(game.getFen()).append("\"]\n");
+        sb.append("[Event \"").append(pgn.getEvent() == null ? "?" : pgn.getEvent()).append("\"]\n");
+        sb.append("[Site \"").append(pgn.getSite() == null ? getComputerName() : pgn.getSite()).append("\"]\n");
+        sb.append("[Date \"").append(pgn.getDate() == null ? getToday() : pgn.getDate()).append("\"]\n");
+        sb.append("[Round \"").append(pgn.getRound() == null ? "?" : pgn.getRound()).append("\"]\n");
+        sb.append("[White \"").append(pgn.getWhite() == null ? "X" : pgn.getWhite()).append("\"]\n");
+        sb.append("[Black \"").append(pgn.getBlack() == null ? "X" : pgn.getBlack()).append("\"]\n");
+        if (pgn.getFen() != null) {
+            sb.append("[FEN \"").append(pgn.getFen()).append("\"]\n");
         }
-        sb.append("[Result \"").append(game.getResult()).append("\"]\n");
+        sb.append("[Result \"").append(pgn.getResult()).append("\"]\n");
         sb.append("\n");
 
-        int moveCounter = 0;
-        for (String moveStr : game.getMoveList()) {
-            if (moveCounter > 0 && moveCounter % 10 == 0) {
-                sb.append("\n");
-            }
 
-            if (moveCounter % 2 == 0) {
-                if (moveCounter % 10 == 0) {
-                    sb.append((moveCounter / 2 + 1)).append(".");
-                } else {
-                    sb.append(" ").append(moveCounter / 2 + 1).append(".");
+        List<String> moveList = pgn.getMoveList();
+
+
+        if (!moveList.isEmpty()) {
+            int clock = pgn.getFen() != null ? Integer.parseInt(pgn.getFen().getFullMoveClock()) : 1;
+
+            boolean whiteTurn = pgn.getFen() != null ? pgn.getFen().getActiveColor().equals("w") : true;
+
+            boolean firstMovePrinted = false;
+
+            for (int i = 0; i < moveList.size(); i++) {
+                if (i > 0 && i % 10 == 0) {
+                    sb.append("\n");
                 }
+
+                if (whiteTurn) {
+                    sb.append(clock)
+                            .append(". ")
+                            .append(moveList.get(i))
+                            .append(" ");
+                    whiteTurn = false;
+                } else {
+                    if (!firstMovePrinted) {
+                        sb.append(clock)
+                                .append("... ");
+                    }
+                    sb.append(moveList.get(i))
+                            .append(" ");
+                    whiteTurn = true;
+                    clock++;
+                }
+
+                firstMovePrinted = true;
             }
-
-            sb.append(" ").append(moveStr);
-
-            moveCounter++;
         }
 
-        sb.append(" ").append(game.getResult());
+        sb.append(pgn.getResult()).append("\n");
 
         return sb.toString();
     }
