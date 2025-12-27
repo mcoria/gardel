@@ -23,6 +23,9 @@ public class PGNStringEncoder {
             sb.append("[FEN \"").append(pgn.getFen()).append("\"]\n");
         }
         sb.append("[Result \"").append(pgn.getResult()).append("\"]\n");
+        if(pgn.getTermination()!=null){
+            sb.append("[Termination \"").append(pgn.getTermination()).append("\"]\n");
+        }
         sb.append("\n");
 
 

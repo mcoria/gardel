@@ -35,6 +35,19 @@ public class PGN implements Serializable {
         }
     }
 
+    public enum Termination {
+        NORMAL, ABANDONED, TIME_FORFEIT;
+
+        @Override
+        public String toString() {
+            return switch (this) {
+                case NORMAL -> "normal";
+                case ABANDONED -> "abandoned";
+                case TIME_FORFEIT -> "time forfeit";
+            };
+        }
+    }
+
     private String event;
     private String site;
     private String date;
@@ -43,6 +56,7 @@ public class PGN implements Serializable {
     private String black;
     private FEN fen;
     private Result result;
+    private Termination termination;
     private List<String> moveList;
 
     @Override

@@ -91,12 +91,25 @@ public class PGNStringDecoder {
                         result.setFen(FEN.of(headerText));
                         break;
                     case "RESULT":
-                        result.setResult(switch (headerText) {
-                            case "1-0" -> PGN.Result.WHITE_WINS;
-                            case "0-1" -> PGN.Result.BLACK_WINS;
-                            case "1/2-1/2" -> PGN.Result.DRAW;
-                            default -> PGN.Result.ONGOING;
-                        });
+                        result.setResult(
+                                switch (headerText) {
+                                    case "1-0" -> PGN.Result.WHITE_WINS;
+                                    case "0-1" -> PGN.Result.BLACK_WINS;
+                                    case "1/2-1/2" -> PGN.Result.DRAW;
+                                    default -> PGN.Result.ONGOING;
+                                });
+                        break;
+
+                    case "TERMINATION":
+                        result.setTermination(
+                                switch (headerText.toUpperCase()) {
+                                    case "NORMAL" -> PGN.Termination.NORMAL;
+                                    case "ABANDONED" -> PGN.Termination.ABANDONED;
+                                    case "TIME FORFEIT" -> PGN.Termination.TIME_FORFEIT;
+                                    default ->
+                                            throw new IllegalStateException("Unexpected value: " + headerText.toUpperCase());
+                                }
+                        );
                         break;
                 }
             }

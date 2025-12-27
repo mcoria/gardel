@@ -21,7 +21,7 @@ public class PGNStringDecoderTest {
     private PGNStringDecoder decoder;
 
     @BeforeEach
-    public void settup() {
+    public void setup() {
         decoder = new PGNStringDecoder();
     }
 
@@ -208,6 +208,7 @@ public class PGNStringDecoderTest {
         assertEquals("ChessChildren", game.getWhite());
         assertEquals("chesstango_bot", game.getBlack());
         assertEquals(PGN.Result.WHITE_WINS, game.getResult());
+        assertEquals(PGN.Termination.TIME_FORFEIT, game.getTermination());
 
         List<String> moves = game.getMoveList();
         assertEquals("Qb4", moves.get(22));
@@ -245,6 +246,40 @@ public class PGNStringDecoderTest {
         assertEquals("Qh1#", moves.get(31));
     }
 
+    @Test
+    public void decodePGN04() throws IOException {
+        String lines = "[Event \"b3644c68-3c6a-40ab-870a-3b965dd38c6c\"]\n" +
+                "[Site \"LAPTOP-PTVVKHNB\"]\n" +
+                "[Date \"2024.06.12\"]\n" +
+                "[Round \"?\"]\n" +
+                "[White \"Tango v0.0.28-SNAPSHOT\"]\n" +
+                "[Black \"Spike 1.4\"]\n" +
+                "[FEN \"r1bqkb1r/pp1p1ppp/2n1pn2/8/2PN4/2N5/PP2PPPP/R1BQKB1R w KQkq - 0 6\"]\n" +
+                "[Result \"0-1\"]\n" +
+                "[Termination \"normal\"]\n" +
+                "\n" +
+                "1. e4 e5 2. Nf5 b6 3. Bd3 g6 4. Ne3 Nb4 5. O-O Bb7\n" +
+                "6. Ncd5 Nfxd5 7. cxd5 Rc8 8. Re1 Nxd3 9. Qxd3 Bb4 10. Bd2 Bc5\n" +
+                "11. Bc3 Qg5 12. Rad1 O-O 13. d6 Qf4 14. g3 Qf3 15. Bxe5 Bxe4\n" +
+                "16. Qb3 Qh1# 0-1\n";
+        Reader reader = new StringReader(lines);
+
+        BufferedReader bufferReader = new BufferedReader(reader);
+
+        PGN game = decoder.decodePGN(bufferReader);
+
+        assertEquals("b3644c68-3c6a-40ab-870a-3b965dd38c6c", game.getEvent());
+        assertEquals("LAPTOP-PTVVKHNB", game.getSite());
+        assertEquals("2024.06.12", game.getDate());
+        assertEquals("Tango v0.0.28-SNAPSHOT", game.getWhite());
+        assertEquals("Spike 1.4", game.getBlack());
+        assertEquals(PGN.Result.BLACK_WINS, game.getResult());
+        assertEquals(PGN.Termination.NORMAL, game.getTermination());
+
+        List<String> moves = game.getMoveList();
+        assertEquals("Qh1#", moves.get(31));
+    }
+
 
     @Test
     public void readGames() throws IOException {
@@ -267,7 +302,7 @@ public class PGNStringDecoderTest {
     @Test
     @Disabled
     public void Kasparov() throws IOException {
-        InputStream inputStream = new FileInputStream("C:\\java\\projects\\chess\\chess-utils\\testing\\positions\\players\\Kasparov.pgn");
+        InputStream inputStream = new FileInputStream("C:\\java\\projects\\chess\\chess-utils\\testing\\PGN\\full\\players\\Kasparov\\Kasparov.pgn");
 
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 
@@ -287,7 +322,7 @@ public class PGNStringDecoderTest {
     @Test
     @Disabled
     public void Balsa_Top10() throws IOException {
-        Path pgnDirectory = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\matches");
+        Path pgnDirectory = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\PGN\\openings\\Balsa_v2724");
 
         Stream<PGN> bolsa10 = decoder.decodePGNs(pgnDirectory.resolve("Balsa_Top10.pgn"));
         assertEquals(10L, bolsa10.count());
@@ -300,7 +335,7 @@ public class PGNStringDecoderTest {
     @Test
     @Disabled
     public void LumbrasGigaBase_OTB_2025() throws IOException {
-        Path lumbrasGigaBase_OTB_2025 = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\matches\\LumbrasGigaBase\\LumbrasGigaBase_OTB_2025.pgn");
+        Path lumbrasGigaBase_OTB_2025 = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\PGN\\full\\LumbrasGigaBase\\OverTheBoard\\LumbrasGigaBase_OTB_2025.pgn");
 
         System.out.println("LumbrasGigaBase_OTB_2025: " + lumbrasGigaBase_OTB_2025.toAbsolutePath());
 
