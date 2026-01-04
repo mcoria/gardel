@@ -56,7 +56,7 @@ public class PGNStringDecoder {
 
         walker.walk(listener, tree); // Initiate the walk through the parse tree
 
-        return listener.pgnList.stream();
+        return listener.getPgnList().stream();
     }
 
     PGN decodePGN(CharStream input) {
@@ -73,7 +73,7 @@ public class PGNStringDecoder {
 
         walker.walk(listener, tree); // Initiate the walk through the parse tree
 
-        return listener.pgn;
+        return listener.getPgn();
     }
 
     PGN decodePGNHeaders(BufferedReader bufferReader) throws IOException {

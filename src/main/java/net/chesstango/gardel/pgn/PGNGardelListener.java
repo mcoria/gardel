@@ -5,6 +5,7 @@ import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.internal.antlr4.PGNBaseListener;
 import net.chesstango.gardel.internal.antlr4.PGNParser;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,17 +14,33 @@ import java.util.List;
  * @author Mauricio Coria
  */
 class PGNGardelListener extends PGNBaseListener {
-    List<PGN> pgnList;
+    @Getter
+    private List<PGN> pgnList;
 
-    PGN pgn;
+    @Getter
+    private PGN pgn;
 
-    String tagName;
-    String tagValue;
+    private String tagName;
+    private String tagValue;
+    private List<String> moveList;
+
+    @Override
+    public void enterPgn_database(PGNParser.Pgn_databaseContext ctx) {
+        pgnList = new LinkedList<>();
+    }
 
     @Override
     public void enterPgn_game(PGNParser.Pgn_gameContext ctx) {
         pgn = new PGN();
     }
+
+    @Override
+    public void exitPgn_game(PGNParser.Pgn_gameContext ctx) {
+        if (pgnList != null) {
+            pgnList.add(pgn);
+        }
+    }
+
 
     @Override
     public void enterTag_name(PGNParser.Tag_nameContext ctx) {
@@ -75,11 +92,25 @@ class PGNGardelListener extends PGNBaseListener {
                             case "NORMAL" -> PGN.Termination.NORMAL;
                             case "ABANDONED" -> PGN.Termination.ABANDONED;
                             case "TIME FORFEIT" -> PGN.Termination.TIME_FORFEIT;
-                            default ->
-                                    throw new IllegalStateException("Unexpected value: " + tagValue.toUpperCase());
+                            default -> throw new IllegalStateException("Unexpected value: " + tagValue.toUpperCase());
                         }
                 );
                 break;
         }
+    }
+
+    @Override
+    public void enterElement_sequence(PGNParser.Element_sequenceContext ctx) {
+        moveList = new ArrayList<>();
+    }
+
+    @Override
+    public void exitElement_sequence(PGNParser.Element_sequenceContext ctx) {
+        pgn.setMoveList(moveList);
+    }
+
+    @Override
+    public void enterSan_move(PGNParser.San_moveContext ctx) {
+        moveList.add(ctx.getText());
     }
 }
