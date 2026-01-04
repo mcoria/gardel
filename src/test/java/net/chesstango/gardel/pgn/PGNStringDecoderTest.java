@@ -1,6 +1,8 @@
 package net.chesstango.gardel.pgn;
 
 import net.chesstango.gardel.epd.EPD;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -151,11 +153,8 @@ public class PGNStringDecoderTest {
                 "[Source \"Sedat Canbaz\"]\n" +
                 "\n" +
                 "1. e4 c6 2. d4 d5 3. e5 Bf5 4. c3 e6 5. Nf3 Nd7 6. Be2 *\n";
-        Reader reader = new StringReader(lines);
 
-        BufferedReader bufferReader = new BufferedReader(reader);
-
-        PGN game = decoder.decodePGN(bufferReader);
+        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
 
         assertEquals("Balsa - Top 10", game.getEvent());
         assertEquals("KANO-LENOVO", game.getSite());
@@ -196,11 +195,8 @@ public class PGNStringDecoderTest {
                 "[Annotator \"lichess.org\"]\n" +
                 "\n" +
                 "1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. a3 Bxc3+ 5. bxc3 c5 6. f3 d5 7. cxd5 Nxd5 8. dxc5 { E25 Nimzo-Indian Defense: Sämisch Variation, Keres Variation } Qa5 9. Bd2 Qxc5 10. e4 Nf6 11. Qb3 O-O 12. Qb4 Re8 13. Qxc5 Na6 14. Bxa6 bxa6 15. e5 Nd7 16. Qc6 Rb8 17. Be3 Rf8 18. Qd6 { White wins on time. } 1-0";
-        Reader reader = new StringReader(lines);
 
-        BufferedReader bufferReader = new BufferedReader(reader);
-
-        PGN game = decoder.decodePGN(bufferReader);
+        PGN game = decoder.decodePGN(CharStreams.fromString(lines));;
 
         assertEquals("Rated Rapid game", game.getEvent());
         assertEquals("https://lichess.org/cjatYH5c", game.getSite());
@@ -229,11 +225,8 @@ public class PGNStringDecoderTest {
                 "6. Ncd5 Nfxd5 7. cxd5 Rc8 8. Re1 Nxd3 9. Qxd3 Bb4 10. Bd2 Bc5\n" +
                 "11. Bc3 Qg5 12. Rad1 O-O 13. d6 Qf4 14. g3 Qf3 15. Bxe5 Bxe4\n" +
                 "16. Qb3 Qh1# 0-1\n";
-        Reader reader = new StringReader(lines);
 
-        BufferedReader bufferReader = new BufferedReader(reader);
-
-        PGN game = decoder.decodePGN(bufferReader);
+        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
 
         assertEquals("b3644c68-3c6a-40ab-870a-3b965dd38c6c", game.getEvent());
         assertEquals("LAPTOP-PTVVKHNB", game.getSite());
@@ -262,11 +255,8 @@ public class PGNStringDecoderTest {
                 "6. Ncd5 Nfxd5 7. cxd5 Rc8 8. Re1 Nxd3 9. Qxd3 Bb4 10. Bd2 Bc5\n" +
                 "11. Bc3 Qg5 12. Rad1 O-O 13. d6 Qf4 14. g3 Qf3 15. Bxe5 Bxe4\n" +
                 "16. Qb3 Qh1# 0-1\n";
-        Reader reader = new StringReader(lines);
 
-        BufferedReader bufferReader = new BufferedReader(reader);
-
-        PGN game = decoder.decodePGN(bufferReader);
+        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
 
         assertEquals("b3644c68-3c6a-40ab-870a-3b965dd38c6c", game.getEvent());
         assertEquals("LAPTOP-PTVVKHNB", game.getSite());
@@ -278,6 +268,40 @@ public class PGNStringDecoderTest {
 
         List<String> moves = game.getMoveList();
         assertEquals("Qh1#", moves.get(31));
+    }
+
+    @Test
+    public void decodePGN05() throws IOException {
+        String lines = "[Event \"F/S Return Match\"]\n" +
+                "[Site \"Belgrade, Serbia JUG\"]\n" +
+                "[Date \"1992.11.04\"]\n" +
+                "[Round \"29\"]\n" +
+                "[White \"Fischer, Robert J.\"]\n" +
+                "[Black \"Spassky, Boris V.\"]\n" +
+                "[Result \"1/2-1/2\"]\n" +
+                "1. e4 {[%clk 1:05:23]} e5 {[%clk 1:05:21]} \n" +
+                "2. Nf3 {[%clk 1:04:50]} Nc6 {[%clk 1:04:48]} \n" +
+                "3. Bb5 {[%clk 1:04:15]} a6 {[%clk 1:04:12]} \n" +
+                "4. Ba4 {[%clk 1:03:40]} Nf6 {[%clk 1:03:38]} \n" +
+                "5. O-O {[%clk 1:03:00]} Be7 {[%clk 1:02:57]} \n" +
+                "6. Re1 {[%clk 1:02:20]} b5 {[%clk 1:02:15]} \n" +
+                "7. Bb3 {[%clk 1:01:45]} O-O {[%clk 1:01:42]} \n" +
+                "8. c3 {[%clk 1:01:10]} d5 {[%clk 1:01:08]} \n" +
+                "9. exd5 {[%clk 1:00:30]} Nxd5 {[%clk 1:00:25]} \n" +
+                "10. Nxe5 {[%clk 1:00:00]} Nxe5 {[%clk 0:59:55]} \n" +
+                "1/2-1/2";
+
+        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+
+        assertEquals("F/S Return Match", game.getEvent());
+        assertEquals("Belgrade, Serbia JUG", game.getSite());
+        assertEquals("1992.11.04", game.getDate());
+        assertEquals("Fischer, Robert J.", game.getWhite());
+        assertEquals("Spassky, Boris V.", game.getBlack());
+        assertEquals(PGN.Result.DRAW, game.getResult());
+
+        List<String> moves = game.getMoveList();
+        assertEquals("Nxe5", moves.get(10));
     }
 
 
@@ -302,13 +326,10 @@ public class PGNStringDecoderTest {
     @Test
     @Disabled
     public void Kasparov() throws IOException {
-        InputStream inputStream = new FileInputStream("C:\\java\\projects\\chess\\chess-utils\\testing\\PGN\\full\\players\\Kasparov\\Kasparov.pgn");
+        Path resource = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\PGN\\full\\players\\Kasparov\\Kasparov.pgn");
 
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        List<PGN> pgnGames = decoder.decodePGNs(resource).toList();
 
-        BufferedReader bufferReader = new BufferedReader(inputStreamReader);
-
-        List<PGN> pgnGames = decoder.decodePGNs(bufferReader).toList();
         assertEquals(2128, pgnGames.size());
 
         List<EPD> kasparovEPDs = new LinkedList<>();
@@ -337,7 +358,7 @@ public class PGNStringDecoderTest {
     public void LumbrasGigaBase_OTB_2025() throws IOException {
         Path lumbrasGigaBase_OTB_2025 = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\PGN\\full\\LumbrasGigaBase\\OverTheBoard\\LumbrasGigaBase_OTB_2025.pgn");
 
-        System.out.println("LumbrasGigaBase_OTB_2025: " + lumbrasGigaBase_OTB_2025.toAbsolutePath());
+        //System.out.println("LumbrasGigaBase_OTB_2025: " + lumbrasGigaBase_OTB_2025.toAbsolutePath());
 
         Stream<PGN> lumbrasGigaBase_OTB_2025_PGN = decoder.decodePGNs(lumbrasGigaBase_OTB_2025);
 
