@@ -271,7 +271,6 @@ public class PGNStringDecoderTest {
     }
 
     @Test
-    @Disabled
     public void decodePGN05() throws IOException {
         String lines = "[Event \"F/S Return Match\"]\n" +
                 "[Site \"Belgrade, Serbia JUG\"]\n" +
@@ -302,7 +301,107 @@ public class PGNStringDecoderTest {
         assertEquals(PGN.Result.DRAW, game.getResult());
 
         List<String> moves = game.getMoveList();
-        assertEquals("Nxe5", moves.get(10));
+        assertEquals("Nxe5", moves.get(19));
+    }
+
+    @Test
+    public void decodePGN06() throws IOException {
+        String lines = "[Event \"Leela Knight Odds vs GM Joel Benjamin\"]\n" +
+                "[Site \"?\"]\n" +
+                "[Date \"2025.01.27\"]\n" +
+                "[Round \"8\"]\n" +
+                "[White \"Leela Knight Odds\"]\n" +
+                "[Black \"Benjamin, Joel\"]\n" +
+                "[Result \"1/2-1/2\"]\n" +
+                "[BlackElo \"2473\"]\n" +
+                "[WhiteTitle \"BOT\"]\n" +
+                "[BlackTitle \"GM\"]\n" +
+                "[TimeControl \"3600+30\"]\n" +
+                "[SetUp \"1\"]\n" +
+                "[Source \"LichessBroadcast\"]\n" +
+                "[ImportDate \"2025-02-04\"]\n" +
+                "[BlackFideId \"2000091\"]\n" +
+                "[FEN \"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQkq - 0 1\"]\n" +
+                "\n" +
+                "1. e3 {[%clk 1:00:00]} 1. ... e5 {[%clk 1:00:00]} 2. b3 {[%clk 1:00:30]} \n" +
+                "2. ... d5 {[%clk 0:57:28]} 3. Bb2 {[%clk 1:00:59]} 3. ... Bd6 {[%clk\n" +
+                "0:57:53]} 4. c4 {[%clk 1:01:29]} 4. ... c6 {[%clk 0:56:29]} 5. Bd3 {[%clk \n" +
+                "1:01:58]} 5. ... Nf6 {[%clk 0:56:23]} 6. Ne2 {[%clk 1:02:28]} 6. ... O-O {\n" +
+                "[%clk 0:55:03]} 7. Rc1 {[%clk 1:02:53]} 7. ... Qe7 {[%clk 0:52:58]} 8. Bc2\n" +
+                "{[%clk 1:03:20]} 8. ... Ba3 {[%clk 0:51:36]} 9. Bxa3 {[%clk\n" +
+                "1:03:49]} 9. ... Qxa3 {[%clk 0:52:03]} 10. O-O {[%clk 1:04:17]} 10. ... \n" +
+                "Nbd7 {[%clk 0:43:34]} 11. Bb1 {[%clk 1:04:42]} 11. ... Re8 {[%clk\n" +
+                "0:43:21]} 12. h3 {[%clk 1:05:10]} 12. ... Qd6 {[%clk 0:43:11]} 13. d4 {\n" +
+                "[%clk 1:05:36]} 13. ... exd4 {[%clk 0:39:06]} 14. Nxd4 {[%clk 1:06:04]} \n" +
+                "14. ... dxc4 {[%clk 0:37:43]} 15. Rxc4 {[%clk 1:06:32]} 15. ... Ne5 {[%clk\n" +
+                "0:34:32]} 16. Rc1 {[%clk 1:07:00]} 16. ... Bd7 {[%clk 0:34:15]} 17. Qc2 {\n" +
+                "[%clk 1:07:28]} 17. ... b6 {[%clk 0:30:43]} 18. Rfd1 {[%clk 1:07:55]} \n" +
+                "18. ... Qe7 {[%clk 0:31:08]} 19. Ne2 {[%clk 1:08:25]} 19. ... Rad8 {[%clk\n" +
+                "0:28:54]} 20. Ng3 {[%clk 1:08:54]} 20. ... Ng6 {[%clk 0:25:56]} 21. Re1 {\n" +
+                "[%clk 1:09:21]} 21. ... c5 {[%clk 0:25:37]} 22. Qe2 {[%clk 1:09:49]} \n" +
+                "22. ... Bc8 {[%clk 0:25:00]} 23. a3 {[%clk 1:10:17]} 23. ... Nh4 {[%clk\n" +
+                "0:22:49]} 24. Bd3 {[%clk 1:10:43]} 24. ... Bb7 {[%clk 0:22:14]} 25. e4 {\n" +
+                "[%clk 1:11:12]} 25. ... Qe5 {[%clk 0:21:51]} 26. b4 {[%clk 1:11:40]} \n" +
+                "26. ... cxb4 {[%clk 0:18:16]} 27. Bb5 {[%clk 1:12:08]} 27. ... Re6 {[%clk\n" +
+                "0:13:50]} 28. Bc4 {[%clk 1:12:36]} 28. ... Red6 {[%clk 0:11:41]} 29. axb4 \n" +
+                "{[%clk 1:13:04]} 29. ... Rd2 {[%clk 0:10:29]} 30. Qe3 {[%clk\n" +
+                "1:13:32]} 30. ... Qd4 {[%clk 0:09:03]} 31. Qxd4 {[%clk 1:14:00]} 31. ... \n" +
+                "R2xd4 {[%clk 0:08:58]} 32. f3 {[%clk 1:14:29]} 32. ... Kf8 {[%clk\n" +
+                "0:08:22]} 33. b5 {[%clk 1:14:57]} 33. ... Bc8 {[%clk 0:06:41]} 34. Be2 {\n" +
+                "[%clk 1:15:24]} 34. ... Be6 {[%clk 0:06:28]} 35. Ra1 {[%clk 1:15:53]} \n" +
+                "35. ... R8d7 {[%clk 0:06:21]} 36. Ra3 {[%clk 1:16:22]} 36. ... Rc7 {[%clk\n" +
+                "0:05:09]} 37. Rea1 {[%clk 1:16:50]} 37. ... Rdd7 {[%clk 0:05:36]} 38. f4 {\n" +
+                "[%clk 1:17:19]} 38. ... Bc4 {[%clk 0:04:56]} 39. e5 {[%clk 1:17:47]} \n" +
+                "39. ... Bxe2 {[%clk 0:02:57]} 40. Nxe2 {[%clk 1:18:15]} 40. ... Nd5 {[%clk\n" +
+                "0:03:25]} 41. Ra4 {[%clk 1:18:42]} 41. ... Nf5 {[%clk 0:03:22]} 42. g4 {\n" +
+                "[%clk 1:19:10]} 42. ... Nfe3 {[%clk 0:02:57]} 43. R1a3 {[%clk 1:19:39]} \n" +
+                "43. ... Nc4 {[%clk 0:03:14]} 44. Rb3 {[%clk 1:20:07]} 44. ... Na5 {[%clk\n" +
+                "0:03:30]} 45. Rd3 {[%clk 1:20:36]} 45. ... Ke8 {[%clk 0:03:30]} 46. Rad4 {\n" +
+                "[%clk 1:21:04]} 46. ... Ne7 {[%clk 0:03:42]} 47. f5 {[%clk 1:21:32]} \n" +
+                "47. ... Rxd4 {[%clk 0:04:01]} 48. Nxd4 {[%clk 1:22:01]} 48. ... Rd7 {[%clk\n" +
+                "0:04:15]} 49. f6 {[%clk 1:22:30]} 49. ... gxf6 {[%clk 0:04:21]} 50. exf6 {\n" +
+                "[%clk 1:22:59]} 50. ... Ng6 {[%clk 0:04:36]} 51. Re3+ {[%clk 1:23:27]} \n" +
+                "51. ... Kd8 {[%clk 0:05:01]} 52. Nf5 {[%clk 1:23:56]} 52. ... Nc4 {[%clk\n" +
+                "0:05:21]} 53. Re2 {[%clk 1:24:25]} 53. ... Rd1+ {[%clk 0:04:38]} 54. Kf2 {\n" +
+                "[%clk 1:24:53]} 54. ... Nd6 {[%clk 0:05:03]} 55. Nh6 {[%clk 1:25:21]} \n" +
+                "55. ... Rd4 {[%clk 0:02:15]} 56. Ra2 {[%clk 1:25:47]} 56. ... Rf4+ {[%clk\n" +
+                "0:02:32]} 57. Kg2 {[%clk 1:26:15]} 57. ... Rxf6 {[%clk 0:02:44]} 58. g5 {\n" +
+                "[%clk 1:26:44]} 58. ... Re6 {[%clk 0:02:29]} 59. Rxa7 {[%clk 1:27:12]} \n" +
+                "59. ... Re5 {[%clk 0:02:07]} 60. Nxf7+ {[%clk 1:24:24]} 60. ... Nxf7 {\n" +
+                "[%clk 0:02:32]} 61. Rxf7 {[%clk 1:24:53]} 61. ... Rxg5+ {[%clk 0:03:01]} \n" +
+                "62. Kf2 {[%clk 1:25:23]} 62. ... Rh5 {[%clk 0:01:14]} 63. Rb7 {[%clk\n" +
+                "1:25:51]} 63. ... Rxh3 {[%clk 0:01:23]} 64. Rxb6 {[%clk 1:26:20]} 64. ... \n" +
+                "Kc7 {[%clk 0:01:51]} 65. Rc6+ {[%clk 1:26:48]} 65. ... Kb7 {[%clk\n" +
+                "0:02:19]} 66. Rf6 {[%clk 1:27:18]} 66. ... Ne5 {[%clk 0:02:34]} 67. Re6 {\n" +
+                "[%clk 1:27:46]} 67. ... Nd3+ {[%clk 0:02:53]} 68. Kg1 {[%clk 1:28:15]} \n" +
+                "68. ... Rg3+ {[%clk 0:02:35]} 69. Kh2 {[%clk 1:28:43]} 69. ... Rg7 {[%clk\n" +
+                "0:03:03]} 70. Rf6 {[%clk 1:29:13]} 70. ... Ne5 {[%clk 0:03:22]} 71. Kh3 {\n" +
+                "[%clk 1:29:42]} 71. ... Rg6 {[%clk 0:03:16]} 72. Rf5 {[%clk 1:30:11]} \n" +
+                "72. ... Re6 {[%clk 0:03:31]} 73. Kh4 {[%clk 1:30:40]} 73. ... Kb6 {[%clk\n" +
+                "0:03:45]} 74. Kg5 {[%clk 1:31:09]} 74. ... Rg6+ {[%clk 0:04:03]} 75. Kf4 {\n" +
+                "[%clk 1:31:36]} 75. ... Nd7 {[%clk 0:04:26]} 76. Rh5 {[%clk 1:32:05]} \n" +
+                "76. ... h6 {[%clk 0:04:19]} 77. Kf5 {[%clk 1:32:34]} 77. ... Rd6 {[%clk\n" +
+                "0:04:24]} 78. Kf4 {[%clk 1:33:03]} 78. ... Nc5 {[%clk 0:04:44]} 79. Ke5 {\n" +
+                "[%clk 1:33:32]} 79. ... Rg6 {[%clk 0:04:30]} 80. Kf5 {[%clk 1:34:01]} \n" +
+                "80. ... Re6 {[%clk 0:04:42]} 81. Rh4 {[%clk 1:34:29]} 81. ... Kxb5 {[%clk\n" +
+                "0:05:05]} 82. Rg4 {[%clk 1:34:59]} 82. ... Re8 {[%clk 0:04:42]} 83. Kg6 {\n" +
+                "[%clk 1:35:27]} 83. ... Re6+ {[%clk 0:03:15]} 84. Kg7 {[%clk 1:35:56]} \n" +
+                "84. ... h5 {[%clk 0:01:58]} 85. Rh4 {[%clk 1:36:25]} 85. ... Re5 {[%clk\n" +
+                "0:02:25]} 86. Kh6 {[%clk 1:36:54]} 86. ... Kc6 {[%clk 0:02:51]} 87. Rxh5 {\n" +
+                "[%clk 1:37:24]} 87. ... Rxh5+ {[%clk 0:03:19]} 88. Kxh5 {[%clk 1:37:24]} \n" +
+                "1/2-1/2";
+
+        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+
+        assertEquals("Leela Knight Odds vs GM Joel Benjamin", game.getEvent());
+        assertEquals("?", game.getSite());
+        assertEquals("2025.01.27", game.getDate());
+        assertEquals("Leela Knight Odds", game.getWhite());
+        assertEquals("Benjamin, Joel", game.getBlack());
+        assertEquals(PGN.Result.DRAW, game.getResult());
+
+        List<String> moves = game.getMoveList();
+        assertEquals(88 * 2 - 1, moves.size());
     }
 
 

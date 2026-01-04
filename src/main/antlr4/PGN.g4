@@ -65,6 +65,7 @@ move_number_indication
     : INTEGER
     | INTEGER PERIOD
     | INTEGER PERIOD PERIOD PERIOD
+    | INTEGER PERIOD PERIOD PERIOD PERIOD
     ;
 
 san_move
