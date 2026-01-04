@@ -1,7 +1,6 @@
 package net.chesstango.gardel.pgn;
 
 import net.chesstango.gardel.epd.EPD;
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -196,7 +195,8 @@ public class PGNStringDecoderTest {
                 "\n" +
                 "1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. a3 Bxc3+ 5. bxc3 c5 6. f3 d5 7. cxd5 Nxd5 8. dxc5 { E25 Nimzo-Indian Defense: Sämisch Variation, Keres Variation } Qa5 9. Bd2 Qxc5 10. e4 Nf6 11. Qb3 O-O 12. Qb4 Re8 13. Qxc5 Na6 14. Bxa6 bxa6 15. e5 Nd7 16. Qc6 Rb8 17. Be3 Rf8 18. Qd6 { White wins on time. } 1-0";
 
-        PGN game = decoder.decodePGN(CharStreams.fromString(lines));;
+        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+        ;
 
         assertEquals("Rated Rapid game", game.getEvent());
         assertEquals("https://lichess.org/cjatYH5c", game.getSite());
@@ -404,6 +404,44 @@ public class PGNStringDecoderTest {
         assertEquals(88 * 2 - 1, moves.size());
     }
 
+
+    @Test
+    public void decodePGN07() throws IOException {
+        String lines = "[Event \"Prague Open B\"]\n" +
+                "[Site \"?\"]\n" +
+                "[Date \"2025.01.10\"]\n" +
+                "[Round \"1.1\"]\n" +
+                "[White \"Illandzis, Spyridon\"]\n" +
+                "[Black \"Kotvalt, Antonin\"]\n" +
+                "[Result \"1-0\"]\n" +
+                "[WhiteElo \"1950\"]\n" +
+                "[BlackElo \"1618\"]\n" +
+                "[ECO \"A01\"]\n" +
+                "[EventDate \"2025.01.10\"]\n" +
+                "[PlyCount \"29\"]\n" +
+                "[Source \"GreekBase\"]\n" +
+                "[ImportDate \"2025-06-03\"]\n" +
+                "[BlackFideId \"23753722\"]\n" +
+                "\n" +
+                "1. b3 d5 2. Bb2 c5 3. e3 e6 4. f4 Nf6 5. Nf3 Be7 6. Bb5+ Nc6 ( 6. ... Bd7 \n" +
+                ") ( 6. ... Nbd7 ) 7. O-O O-O 8. Bxc6 bxc6 9. Ne5 Qb6 10. Rf3 Rd8?! {(6' \n" +
+                "\uE018 18')} 11. Rg3 Bf8? {[#]} ( 11. ... c4!? ) 12. Nc4! dxc4 13. Bxf6 Rd7 {\n" +
+                "[#]} 14. Rxg7+! ( 14. Bxg7? {he was hoping for} 14. ... Bxg7 15. Qg4 f5 ) \n" +
+                "14. ... Kh8 ( 14. ... Bxg7 15. Qg4 Kf8 16. Qxg7+ Ke8 17. Qg8# ) 15. Rg8+! \n" +
+                "1-0";
+
+        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+
+        assertEquals("Prague Open B", game.getEvent());
+        assertEquals("?", game.getSite());
+        assertEquals("2025.01.10", game.getDate());
+        assertEquals("Illandzis, Spyridon", game.getWhite());
+        assertEquals("Kotvalt, Antonin", game.getBlack());
+        assertEquals(PGN.Result.WHITE_WINS, game.getResult());
+
+        List<String> moves = game.getMoveList();
+        assertEquals(15 * 2 - 1, moves.size());
+    }
 
     @Test
     public void readGames() throws IOException {

@@ -69,7 +69,7 @@ move_number_indication
     ;
 
 san_move
-    : SYMBOL
+    : SYMBOL SUFFIX_ANNOTATION?
     ;
 
 /// <recursive-variation> ::= ( <element-sequence> )
