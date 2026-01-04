@@ -26,87 +26,6 @@ public class PGNStringDecoderTest {
         decoder = new PGNStringDecoder();
     }
 
-    @Test
-    public void decodeMoveList01() {
-        List<String> moves = decoder.decodePGNBody("1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 d6 6. Bg5 e6 7. Qd2 a6 8. O-O-O *");
-        assertEquals("e4", moves.get(0));
-        assertEquals("c5", moves.get(1));
-        assertEquals("Nf3", moves.get(2));
-        assertEquals("Nc6", moves.get(3));
-        assertEquals("d4", moves.get(4));
-        assertEquals("cxd4", moves.get(5));
-        assertEquals("Nxd4", moves.get(6));
-        assertEquals("Nf6", moves.get(7));
-        assertEquals("Nc3", moves.get(8));
-        assertEquals("d6", moves.get(9));
-        assertEquals("Bg5", moves.get(10));
-        assertEquals("e6", moves.get(11));
-        assertEquals("Qd2", moves.get(12));
-        assertEquals("a6", moves.get(13));
-        assertEquals("O-O-O", moves.get(14));
-    }
-
-    @Test
-    public void decodeMoveList02() {
-        List<String> moves = decoder.decodePGNBody("1. e3 d5 2. Nc3 e5 3. Bb5+ c6 4. Qh5 cxb5 5. Qxe5+ Be6 6. Nxb5 Na6 7. h4 Nf6 8. Nd4 Bd6 9. Qg5 O-O 10. Nf5 Bxf5 11. Qxf5 g6 12. Qg5 Rc8 13. c3 Nc5 14. Ke2 Qe7 15. f3 Kh8 16. b3 b6 17. Bb2 Rfe8 18. c4 Be5 19. d4 Bxd4 20. Bxd4 Kg7 21. cxd5 h6 22. Qf4 a5 23. h5 g5 24. Qf5 Red8 25. Nh3 Re8 26. f4 gxf4 27. Qxf4 Ne4 28. Qg4+ Kh8 29. Qf4 Rc2+ 30. Kd1 Rd2+ 31. Ke1 Kg7 32. Bxf6+ Qxf6 33. Qxf6+ Kxf6 34. g4 Rxd5 35. Rf1+ Ke7 36. Rc1 Rd3 37. Ke2 Rc3 38. Rg1 Rd8 39. Kf3 Nd2+ 40. Ke2 Ne4 41. Kf3 Nd2+ 42. Ke2 Ne4 1/2-1/2");
-        assertEquals("e3", moves.get(0));
-        assertEquals("d5", moves.get(1));
-        assertEquals("Ke2", moves.get(82));
-        assertEquals("Ne4", moves.get(83));
-    }
-
-    @Test
-    public void decodeMoveList03() {
-        List<String> moves = decoder.decodePGNBody("1. e3 d5 2. Nc3 e5 3. Bb5+ c6 4. Qh5 cxb5 5. Qxe5+ Be6 6. Nxb5 Na6 7. h4 Nf6 8. Nd4 Bd6 9. Qg5 O-O 10. Nf5 Bxf5 11. Qxf5 g6 12. Qg5 Rc8 13. c3 Nc5 14. Ke2 Qe7 15. f3 Kh8 16. b3 b6 17. Bb2 Rfe8 18. c4 Be5 19. d4 Bxd4 20. Bxd4 Kg7 21. cxd5 h6 22. Qf4 a5 23. h5 g5 24. Qf5 Red8 25. Nh3 Re8 26. f4 gxf4 27. Qxf4 Ne4 28. Qg4+ Kh8 29. Qf4 Rc2+ 30. Kd1 Rd2+ 31. Ke1 Kg7 32. Bxf6+ Qxf6 33. Qxf6+ Kxf6 34. g4 Rxd5 35. Rf1+ Ke7 36. Rc1 Rd3 37. Ke2 Rc3 38. Rg1 Rd8 39. Kf3 Nd2+ 40. Ke2 Ne4 41. Kf3 Nd2+ 42. Ke2 Ne4 1/2-1/2 ");
-        assertEquals("e3", moves.get(0));
-        assertEquals("d5", moves.get(1));
-        assertEquals("Ke2", moves.get(82));
-        assertEquals("Ne4", moves.get(83));
-    }
-
-
-    @Test
-    public void decodeMoveListInLines01() throws IOException {
-        String lines =
-                "1. e3 d5 2. Nc3 e5 3. Bb5+ c6 4. Qh5 cxb5 5. Qxe5+ Be6\n" +
-                        "6. Nxb5 Na6 7. h4 Nf6 8. Nd4 Bd6 9. Qg5 O-O 10. Nf5 Bxf5\n" +
-                        "11. Qxf5 g6 12. Qg5 Rc8 13. c3 Nc5 14. Ke2 Qe7 15. f3 Kh8\n" +
-                        "16. b3 b6 17. Bb2 Rfe8 18. c4 Be5 19. d4 Bxd4 20. Bxd4 Kg7\n" +
-                        "21. cxd5 h6 22. Qf4 a5 23. h5 g5 24. Qf5 Red8 25. Nh3 Re8\n" +
-                        "26. f4 gxf4 27. Qxf4 Ne4 28. Qg4+ Kh8 29. Qf4 Rc2+ 30. Kd1 Rd2+\n" +
-                        "31. Ke1 Kg7 32. Bxf6+ Qxf6 33. Qxf6+ Kxf6 34. g4 Rxd5 35. Rf1+ Ke7\n" +
-                        "36. Rc1 Rd3 37. Ke2 Rc3 38. Rg1 Rd8 39. Kf3 Nd2+ 40. Ke2 Ne4\n" +
-                        "41. Kf3 Nd2+ 42. Ke2 Ne4 1/2-1/2";
-
-        Reader reader = new StringReader(lines);
-
-        BufferedReader bufferReader = new BufferedReader(reader);
-
-        List<String> moves = decoder.decodePGNBody(bufferReader);
-
-        assertEquals("e3", moves.get(0));
-        assertEquals("d5", moves.get(1));
-        assertEquals("Ke2", moves.get(82));
-        assertEquals("Ne4", moves.get(83));
-    }
-
-    @Test
-    public void decodeMoveListInLines02() throws IOException {
-        String lines =
-                "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 d6 6. Bg5 e6 7. Qd2 a6 8.\n" +
-                        "O-O-O *";
-
-        Reader reader = new StringReader(lines);
-
-        BufferedReader bufferReader = new BufferedReader(reader);
-
-        List<String> moves = decoder.decodePGNBody(bufferReader);
-
-        assertEquals("e4", moves.get(0));
-        assertEquals("c5", moves.get(1));
-        assertEquals("O-O-O", moves.get(14));
-    }
-
 
     @Test
     public void decodePGNHeaders01() throws IOException {
@@ -120,11 +39,7 @@ public class PGNStringDecoderTest {
                         "[FEN \"rn1qkbnr/pp2ppp1/2p4p/3pPb2/3P2PP/8/PPP2P2/RNBQKBNR b KQkq g3 0 5\"]\n" +
                         "[Result \"1/2-1/2\"]\n" +
                         "\n";
-        Reader reader = new StringReader(lines);
-
-        BufferedReader bufferReader = new BufferedReader(reader);
-
-        PGN pgn = decoder.decodePGNHeaders(bufferReader);
+        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
 
         assertEquals("Computer chess game", pgn.getEvent());
         assertEquals("KANO-LENOVO", pgn.getSite());
@@ -153,17 +68,17 @@ public class PGNStringDecoderTest {
                 "\n" +
                 "1. e4 c6 2. d4 d5 3. e5 Bf5 4. c3 e6 5. Nf3 Nd7 6. Be2 *\n";
 
-        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
 
-        assertEquals("Balsa - Top 10", game.getEvent());
-        assertEquals("KANO-LENOVO", game.getSite());
-        assertEquals("2023.03.02", game.getDate());
-        assertEquals("10", game.getRound());
-        assertEquals("Tango", game.getWhite());
-        assertEquals("Chacarera", game.getBlack());
-        assertEquals(PGN.Result.DRAW, game.getResult());
+        assertEquals("Balsa - Top 10", pgn.getEvent());
+        assertEquals("KANO-LENOVO", pgn.getSite());
+        assertEquals("2023.03.02", pgn.getDate());
+        assertEquals("10", pgn.getRound());
+        assertEquals("Tango", pgn.getWhite());
+        assertEquals("Chacarera", pgn.getBlack());
+        assertEquals(PGN.Result.DRAW, pgn.getResult());
 
-        List<String> moves = game.getMoveList();
+        List<String> moves = pgn.getMoveList();
         assertEquals("e4", moves.get(0));
         assertEquals("c6", moves.get(1));
         assertEquals("Be2", moves.get(10));
@@ -195,18 +110,17 @@ public class PGNStringDecoderTest {
                 "\n" +
                 "1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. a3 Bxc3+ 5. bxc3 c5 6. f3 d5 7. cxd5 Nxd5 8. dxc5 { E25 Nimzo-Indian Defense: Sämisch Variation, Keres Variation } Qa5 9. Bd2 Qxc5 10. e4 Nf6 11. Qb3 O-O 12. Qb4 Re8 13. Qxc5 Na6 14. Bxa6 bxa6 15. e5 Nd7 16. Qc6 Rb8 17. Be3 Rf8 18. Qd6 { White wins on time. } 1-0";
 
-        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
-        ;
+        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
 
-        assertEquals("Rated Rapid game", game.getEvent());
-        assertEquals("https://lichess.org/cjatYH5c", game.getSite());
-        assertEquals("2024.02.20", game.getDate());
-        assertEquals("ChessChildren", game.getWhite());
-        assertEquals("chesstango_bot", game.getBlack());
-        assertEquals(PGN.Result.WHITE_WINS, game.getResult());
-        assertEquals(PGN.Termination.TIME_FORFEIT, game.getTermination());
+        assertEquals("Rated Rapid game", pgn.getEvent());
+        assertEquals("https://lichess.org/cjatYH5c", pgn.getSite());
+        assertEquals("2024.02.20", pgn.getDate());
+        assertEquals("ChessChildren", pgn.getWhite());
+        assertEquals("chesstango_bot", pgn.getBlack());
+        assertEquals(PGN.Result.WHITE_WINS, pgn.getResult());
+        assertEquals(PGN.Termination.TIME_FORFEIT, pgn.getTermination());
 
-        List<String> moves = game.getMoveList();
+        List<String> moves = pgn.getMoveList();
         assertEquals("Qb4", moves.get(22));
     }
 
@@ -226,16 +140,16 @@ public class PGNStringDecoderTest {
                 "11. Bc3 Qg5 12. Rad1 O-O 13. d6 Qf4 14. g3 Qf3 15. Bxe5 Bxe4\n" +
                 "16. Qb3 Qh1# 0-1\n";
 
-        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
 
-        assertEquals("b3644c68-3c6a-40ab-870a-3b965dd38c6c", game.getEvent());
-        assertEquals("LAPTOP-PTVVKHNB", game.getSite());
-        assertEquals("2024.06.12", game.getDate());
-        assertEquals("Tango v0.0.28-SNAPSHOT", game.getWhite());
-        assertEquals("Spike 1.4", game.getBlack());
-        assertEquals(PGN.Result.BLACK_WINS, game.getResult());
+        assertEquals("b3644c68-3c6a-40ab-870a-3b965dd38c6c", pgn.getEvent());
+        assertEquals("LAPTOP-PTVVKHNB", pgn.getSite());
+        assertEquals("2024.06.12", pgn.getDate());
+        assertEquals("Tango v0.0.28-SNAPSHOT", pgn.getWhite());
+        assertEquals("Spike 1.4", pgn.getBlack());
+        assertEquals(PGN.Result.BLACK_WINS, pgn.getResult());
 
-        List<String> moves = game.getMoveList();
+        List<String> moves = pgn.getMoveList();
         assertEquals("Qh1#", moves.get(31));
     }
 
@@ -256,17 +170,17 @@ public class PGNStringDecoderTest {
                 "11. Bc3 Qg5 12. Rad1 O-O 13. d6 Qf4 14. g3 Qf3 15. Bxe5 Bxe4\n" +
                 "16. Qb3 Qh1# 0-1\n";
 
-        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
 
-        assertEquals("b3644c68-3c6a-40ab-870a-3b965dd38c6c", game.getEvent());
-        assertEquals("LAPTOP-PTVVKHNB", game.getSite());
-        assertEquals("2024.06.12", game.getDate());
-        assertEquals("Tango v0.0.28-SNAPSHOT", game.getWhite());
-        assertEquals("Spike 1.4", game.getBlack());
-        assertEquals(PGN.Result.BLACK_WINS, game.getResult());
-        assertEquals(PGN.Termination.NORMAL, game.getTermination());
+        assertEquals("b3644c68-3c6a-40ab-870a-3b965dd38c6c", pgn.getEvent());
+        assertEquals("LAPTOP-PTVVKHNB", pgn.getSite());
+        assertEquals("2024.06.12", pgn.getDate());
+        assertEquals("Tango v0.0.28-SNAPSHOT", pgn.getWhite());
+        assertEquals("Spike 1.4", pgn.getBlack());
+        assertEquals(PGN.Result.BLACK_WINS, pgn.getResult());
+        assertEquals(PGN.Termination.NORMAL, pgn.getTermination());
 
-        List<String> moves = game.getMoveList();
+        List<String> moves = pgn.getMoveList();
         assertEquals("Qh1#", moves.get(31));
     }
 
@@ -291,16 +205,16 @@ public class PGNStringDecoderTest {
                 "10. Nxe5 {[%clk 1:00:00]} Nxe5 {[%clk 0:59:55]} \n" +
                 "1/2-1/2";
 
-        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
 
-        assertEquals("F/S Return Match", game.getEvent());
-        assertEquals("Belgrade, Serbia JUG", game.getSite());
-        assertEquals("1992.11.04", game.getDate());
-        assertEquals("Fischer, Robert J.", game.getWhite());
-        assertEquals("Spassky, Boris V.", game.getBlack());
-        assertEquals(PGN.Result.DRAW, game.getResult());
+        assertEquals("F/S Return Match", pgn.getEvent());
+        assertEquals("Belgrade, Serbia JUG", pgn.getSite());
+        assertEquals("1992.11.04", pgn.getDate());
+        assertEquals("Fischer, Robert J.", pgn.getWhite());
+        assertEquals("Spassky, Boris V.", pgn.getBlack());
+        assertEquals(PGN.Result.DRAW, pgn.getResult());
 
-        List<String> moves = game.getMoveList();
+        List<String> moves = pgn.getMoveList();
         assertEquals("Nxe5", moves.get(19));
     }
 
@@ -391,16 +305,16 @@ public class PGNStringDecoderTest {
                 "[%clk 1:37:24]} 87. ... Rxh5+ {[%clk 0:03:19]} 88. Kxh5 {[%clk 1:37:24]} \n" +
                 "1/2-1/2";
 
-        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
 
-        assertEquals("Leela Knight Odds vs GM Joel Benjamin", game.getEvent());
-        assertEquals("?", game.getSite());
-        assertEquals("2025.01.27", game.getDate());
-        assertEquals("Leela Knight Odds", game.getWhite());
-        assertEquals("Benjamin, Joel", game.getBlack());
-        assertEquals(PGN.Result.DRAW, game.getResult());
+        assertEquals("Leela Knight Odds vs GM Joel Benjamin", pgn.getEvent());
+        assertEquals("?", pgn.getSite());
+        assertEquals("2025.01.27", pgn.getDate());
+        assertEquals("Leela Knight Odds", pgn.getWhite());
+        assertEquals("Benjamin, Joel", pgn.getBlack());
+        assertEquals(PGN.Result.DRAW, pgn.getResult());
 
-        List<String> moves = game.getMoveList();
+        List<String> moves = pgn.getMoveList();
         assertEquals(88 * 2 - 1, moves.size());
     }
 
@@ -430,16 +344,16 @@ public class PGNStringDecoderTest {
                 "14. ... Kh8 ( 14. ... Bxg7 15. Qg4 Kf8 16. Qxg7+ Ke8 17. Qg8# ) 15. Rg8+! \n" +
                 "1-0";
 
-        PGN game = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
 
-        assertEquals("Prague Open B", game.getEvent());
-        assertEquals("?", game.getSite());
-        assertEquals("2025.01.10", game.getDate());
-        assertEquals("Illandzis, Spyridon", game.getWhite());
-        assertEquals("Kotvalt, Antonin", game.getBlack());
-        assertEquals(PGN.Result.WHITE_WINS, game.getResult());
+        assertEquals("Prague Open B", pgn.getEvent());
+        assertEquals("?", pgn.getSite());
+        assertEquals("2025.01.10", pgn.getDate());
+        assertEquals("Illandzis, Spyridon", pgn.getWhite());
+        assertEquals("Kotvalt, Antonin", pgn.getBlack());
+        assertEquals(PGN.Result.WHITE_WINS, pgn.getResult());
 
-        List<String> moves = game.getMoveList();
+        List<String> moves = pgn.getMoveList();
         assertEquals(15 * 2 - 1, moves.size());
     }
 
@@ -447,17 +361,17 @@ public class PGNStringDecoderTest {
     public void readGames() throws IOException {
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("main/pgn/Balsa_Top10.pgn");
 
-        List<PGN> games = decoder.decodePGNs(inputStream).toList();
+        List<PGN> pgnList = decoder.decodePGNs(inputStream).toList();
 
-        assertEquals(10, games.size());
+        assertEquals(10, pgnList.size());
 
         // 1st Game
-        assertEquals("Balsa - Top 10", games.get(0).getEvent());
-        assertEquals("Be2", games.get(0).getMoveList().get(10));
+        assertEquals("Balsa - Top 10", pgnList.get(0).getEvent());
+        assertEquals("Be2", pgnList.get(0).getMoveList().get(10));
 
         // 10th Game
-        assertEquals("13", games.get(9).getRound());
-        assertEquals("Bd2", games.get(9).getMoveList().get(10));
+        assertEquals("13", pgnList.get(9).getRound());
+        assertEquals("Bd2", pgnList.get(9).getMoveList().get(10));
     }
 
 
@@ -466,12 +380,12 @@ public class PGNStringDecoderTest {
     public void Kasparov() throws IOException {
         Path resource = Path.of("C:\\java\\projects\\chess\\chess-utils\\testing\\PGN\\full\\players\\Kasparov\\Kasparov.pgn");
 
-        List<PGN> pgnGames = decoder.decodePGNs(resource).toList();
+        List<PGN> pgnList = decoder.decodePGNs(resource).toList();
 
-        assertEquals(2128, pgnGames.size());
+        assertEquals(2128, pgnList.size());
 
         List<EPD> kasparovEPDs = new LinkedList<>();
-        pgnGames.stream()
+        pgnList.stream()
                 .map(PGN::toEPD)
                 .forEach(fenStream -> kasparovEPDs.addAll(fenStream.toList()));
 

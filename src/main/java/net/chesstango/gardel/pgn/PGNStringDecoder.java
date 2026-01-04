@@ -26,14 +26,10 @@ import java.util.stream.Stream;
  * @author Mauricio Coria
  */
 public class PGNStringDecoder {
-
-    private static final Pattern headerPattern = Pattern.compile("\\[(\\w*) \"(.*)\"]");
-    private static final Pattern movePattern = Pattern.compile("(?<moveOrder>\\d*)\\.(\\.\\.| )");
-
     public Stream<PGN> decodePGNs(Path pgnFile) throws IOException {
-        try (InputStream inputStream = Files.newInputStream(pgnFile)) {
-            return decodePGNs(inputStream);
-        }
+        // 1. Create a CharStream from the input source
+        CharStream input = CharStreams.fromPath(pgnFile);
+        return decodePGNs(input);
     }
 
     public Stream<PGN> decodePGNs(InputStream inputStream) throws IOException {
@@ -74,93 +70,6 @@ public class PGNStringDecoder {
         walker.walk(listener, tree); // Initiate the walk through the parse tree
 
         return listener.getPgn();
-    }
-
-    PGN decodePGNHeaders(BufferedReader bufferReader) throws IOException {
-        PGN result = new PGN();
-        String line;
-        while ((line = bufferReader.readLine()) != null) {
-            if (line.trim().isEmpty()) {
-                break;
-            }
-            Matcher headerMather = headerPattern.matcher(line);
-            if (headerMather.find()) {
-                String headerName = headerMather.group(1).toUpperCase();
-                String headerText = headerMather.group(2);
-                switch (headerName) {
-                    case "EVENT":
-                        result.setEvent(headerText);
-                        break;
-                    case "SITE":
-                        result.setSite(headerText);
-                        break;
-                    case "DATE":
-                        result.setDate(headerText);
-                        break;
-                    case "ROUND":
-                        result.setRound(headerText);
-                        break;
-                    case "WHITE":
-                        result.setWhite(headerText);
-                        break;
-                    case "BLACK":
-                        result.setBlack(headerText);
-                        break;
-                    case "FEN":
-                        result.setFen(FEN.of(headerText));
-                        break;
-                    case "RESULT":
-                        result.setResult(
-                                switch (headerText) {
-                                    case "1-0" -> PGN.Result.WHITE_WINS;
-                                    case "0-1" -> PGN.Result.BLACK_WINS;
-                                    case "1/2-1/2" -> PGN.Result.DRAW;
-                                    default -> PGN.Result.ONGOING;
-                                });
-                        break;
-
-                    case "TERMINATION":
-                        result.setTermination(
-                                switch (headerText.toUpperCase()) {
-                                    case "NORMAL" -> PGN.Termination.NORMAL;
-                                    case "ABANDONED" -> PGN.Termination.ABANDONED;
-                                    case "TIME FORFEIT" -> PGN.Termination.TIME_FORFEIT;
-                                    default ->
-                                            throw new IllegalStateException("Unexpected value: " + headerText.toUpperCase());
-                                }
-                        );
-                        break;
-                }
-            }
-        }
-        if (result.getEvent() == null) {
-            return null;
-        }
-        return result;
-    }
-
-    List<String> decodePGNBody(BufferedReader bufferReader) throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        while ((line = bufferReader.readLine()) != null) {
-            if (line.trim().isEmpty()) {
-                break;
-            }
-            stringBuilder.append(line.trim());
-            stringBuilder.append(" ");
-        }
-
-        return decodePGNBody(stringBuilder.toString());
-    }
-
-    List<String> decodePGNBody(String moveListStr) {
-        List<String> result = new ArrayList<>();
-        final Matcher matcher = SANDecoder.movePattern.matcher(moveListStr);
-        while (matcher.find()) {
-            String moveStr = matcher.group(0);
-            result.add(moveStr);
-        }
-        return result;
     }
 
     private PGNParser createParser(CharStream input) {
