@@ -38,7 +38,7 @@ public class PGNStringDecoderTest {
                         "[Black \"Chacarera\"]\n" +
                         "[FEN \"rn1qkbnr/pp2ppp1/2p4p/3pPb2/3P2PP/8/PPP2P2/RNBQKBNR b KQkq g3 0 5\"]\n" +
                         "[Result \"1/2-1/2\"]\n" +
-                        "\n";
+                        "*\n";
         PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
 
         assertEquals("Computer chess game", pgn.getEvent());
