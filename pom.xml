@@ -50,6 +50,7 @@
         <central-publishing-maven-plugin.version>0.6.0</central-publishing-maven-plugin.version>
 
         <!-- Dependencies -->
+        <antlr.version>4.11.1</antlr.version>
         <lombok.version>1.18.30</lombok.version>
         <junit-jupiter.version>5.13.4</junit-jupiter.version>
         <mockito-junit-jupiter.version>5.3.1</mockito-junit-jupiter.version>
@@ -57,6 +58,12 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>${antlr.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -86,6 +93,28 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>${antlr.version}</version>
+                <configuration>
+                    <visitor>false</visitor>
+                    <listener>true</listener>
+                    <arguments>
+                        <argument>-package</argument>
+                        <argument>net.chesstango.gardel.internal.antlr4</argument>
+                        <argument>-o</argument>
+                        <argument>${project.build.directory}/generated-sources/antlr4/net/chesstango/gardel/internal/antlr4</argument>
+                    </arguments>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>

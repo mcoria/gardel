@@ -7,5 +7,6 @@ module net.chesstango.gardel {
     exports net.chesstango.gardel.ascii;
     exports net.chesstango.gardel.minchess;
 
+    requires org.antlr.antlr4.runtime;
     requires static lombok;
 }
