@@ -13,6 +13,10 @@ import java.util.Objects;
 @Getter
 public final class FEN implements PositionExporter, Serializable {
 
+    public static final String START_POSITION_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+    public static final FEN START_POSITION = FEN.of(START_POSITION_STRING);
+
     private final String piecePlacement;
 
     private final String activeColor;

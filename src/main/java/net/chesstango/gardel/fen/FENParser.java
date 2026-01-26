@@ -6,8 +6,7 @@ import java.util.regex.Pattern;
 /**
  * @author Mauricio Coria
  */
-public class FENParser {
-    public static final String INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+class FENParser {
 
     private static final Pattern fenPattern = Pattern.compile("(?<piecePlacement>([rnbqkpRNBQKP12345678]{1,8}/){7}[rnbqkpRNBQKP12345678]{1,8})\\s+" +
             "(?<activeColor>[wb])\\s+" +
@@ -17,7 +16,7 @@ public class FENParser {
             "(?<fullMoveClock>[0-9]*)\\s*");
 
 
-    public FEN parseFEN(String fen) {
+    FEN parseFEN(String fen) {
         String fenString = fen.trim();
 
         Matcher matcher = fenPattern.matcher(fenString);

@@ -1,6 +1,6 @@
 package net.chesstango.gardel.minchess;
 
-import net.chesstango.gardel.fen.FENParser;
+import net.chesstango.gardel.fen.FEN;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Mauricio Coria
  */
 public class InitialPositionTest extends AbstractPerftTest {
-    public static final String POSITION = FENParser.INITIAL_FEN;
+    public static final String POSITION = FEN.START_POSITION_STRING;
+
     private PerftBrute perft;
 
     @BeforeEach

@@ -2,7 +2,6 @@ package net.chesstango.gardel.move;
 
 
 import net.chesstango.gardel.fen.FEN;
-import net.chesstango.gardel.fen.FENParser;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +39,7 @@ public class SANDecoderTest {
 
     @Test
     public void testPawnMove1() {
-        FEN fen = FEN.of(FENParser.INITIAL_FEN);
+        FEN fen = FEN.START_POSITION;
 
         Move expected = Move.of(Move.Square.e2, Move.Square.e3);
         Move actual = decoder.decode("e3", fen);

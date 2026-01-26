@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.chesstango.gardel.epd.EPD;
 import net.chesstango.gardel.fen.FEN;
-import net.chesstango.gardel.fen.FENParser;
 import net.chesstango.gardel.minchess.MinChess;
 import net.chesstango.gardel.move.SANDecoder;
 
@@ -59,6 +58,18 @@ public class PGN implements Serializable {
     private Termination termination;
     private List<String> moveList;
 
+    /**
+     * Creates a new PGN instance from the specified FEN position.
+     *
+     * @param fen the FEN object representing the chess position
+     * @return a PGN object initialized with the given FEN position
+     */
+    public static PGN from(FEN fen) {
+        PGN pgn = new PGN();
+        pgn.setFen(fen);
+        return pgn;
+    }
+
     @Override
     public String toString() {
         return new PGNStringEncoder().encode(this);
@@ -72,7 +83,7 @@ public class PGN implements Serializable {
     public Stream<EPD> toEPD() {
         Stream.Builder<EPD> fenStreamBuilder = Stream.builder();
 
-        MinChess game = MinChess.from(getFen() == null ? FEN.of(FENParser.INITIAL_FEN) : getFen());
+        MinChess game = MinChess.from(getFen() == null ? FEN.START_POSITION : getFen());
 
         List<EPD> epdList = new ArrayList<>(getMoveList().size());
 
@@ -141,14 +152,14 @@ public class PGN implements Serializable {
     }
 
     /**
-     * Cada entrada EPD representa la posicion y el movimiento ejecutado
+     * Cada entrada FEN representa la posicion y el movimiento ejecutado
      *
      * @return
      */
     public Stream<FEN> toFEN() {
         Stream.Builder<FEN> fenBuilder = Stream.builder();
 
-        MinChess game = MinChess.from(getFen() == null ? FEN.of(FENParser.INITIAL_FEN) : getFen());
+        MinChess game = MinChess.from(getFen() == null ? FEN.of(FEN.START_POSITION_STRING) : getFen());
 
         SANDecoder<Short> sanDecoder = new SANDecoder<>(
                 (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->

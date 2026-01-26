@@ -1,7 +1,6 @@
 package net.chesstango.gardel.ascii;
 
 import net.chesstango.gardel.fen.FEN;
-import net.chesstango.gardel.fen.FENParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +49,7 @@ public class ASCIIBuilderTest {
         }
 
         //Actual
-        FEN.of(FENParser.INITIAL_FEN).export(builder);
+        FEN.START_POSITION.export(builder);
 
         final ByteArrayOutputStream baosActual = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baosActual)) {
@@ -70,7 +69,7 @@ public class ASCIIBuilderTest {
         }
 
         //Actual
-        FEN.of(FENParser.INITIAL_FEN).export(builder);
+        FEN.START_POSITION.export(builder);
 
         final ByteArrayOutputStream baosActual = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baosActual)) {
@@ -108,7 +107,7 @@ public class ASCIIBuilderTest {
         }
 
         //Actual
-        FEN.of(FENParser.INITIAL_FEN).export(builder);
+        FEN.START_POSITION.export(builder);
 
         String stringRepresentation = builder.getPositionRepresentation();
 
