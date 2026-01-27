@@ -2,8 +2,6 @@ package net.chesstango.gardel;
 
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.fen.FENBuilder;
-import net.chesstango.gardel.fen.FENParser;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +13,7 @@ public class MirrorBuilderTest {
 
     @Test
     public void mirrorChessPosition01() {
-        FEN fen = FEN.of(FENParser.INITIAL_FEN);
+        FEN fen = FEN.START_POSITION;
 
         MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENBuilder());
 

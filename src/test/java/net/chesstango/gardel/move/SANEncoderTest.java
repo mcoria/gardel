@@ -2,7 +2,6 @@ package net.chesstango.gardel.move;
 
 
 import net.chesstango.gardel.fen.FEN;
-import net.chesstango.gardel.fen.FENParser;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +15,7 @@ public class SANEncoderTest {
 
     @Test
     public void testPawnMovePush() {
-        FEN fen = FEN.of(FENParser.INITIAL_FEN);
+        FEN fen = FEN.START_POSITION;
 
         Move move = Move.of(Move.Square.e2, Move.Square.e3);
         String actual = encoder.encodeAlgebraicNotation(move, fen);

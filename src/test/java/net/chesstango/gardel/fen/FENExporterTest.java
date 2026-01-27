@@ -85,8 +85,8 @@ public class FENExporterTest {
 
         FENExporter fenExporter = new FENExporter(fenStringBuilder);
 
-        fenExporter.export(FEN.of(FENParser.INITIAL_FEN));
+        fenExporter.export(FEN.START_POSITION);
 
-        assertEquals(FENParser.INITIAL_FEN, fenStringBuilder.getPositionRepresentation());
+        assertEquals(FEN.START_POSITION_STRING, fenStringBuilder.getPositionRepresentation());
     }
 }

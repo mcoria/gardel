@@ -17,7 +17,7 @@ public class FENIntegrationTest {
 
         FENExporter exporter = new FENExporter(encoder);
 
-        FEN fen = decoder.parseFEN(FENParser.INITIAL_FEN);
+        FEN fen = decoder.parseFEN(FEN.START_POSITION_STRING);
 
         exporter.export(fen);
 
