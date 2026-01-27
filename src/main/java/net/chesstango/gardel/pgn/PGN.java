@@ -9,6 +9,7 @@ import net.chesstango.gardel.move.SANDecoder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -67,6 +68,7 @@ public class PGN implements Serializable {
     public static PGN from(FEN fen) {
         PGN pgn = new PGN();
         pgn.setFen(fen);
+        pgn.setMoveList(Collections.emptyList());
         return pgn;
     }
 
