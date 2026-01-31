@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Mauricio Coria
@@ -30,6 +30,19 @@ public class PGNTest {
         EPD epdFirst = epdList.getFirst();
 
         assertEquals("a4", epdFirst.getSuppliedMoveStr());
+    }
+
+    @Test
+    public void test_fromFEN() throws IOException {
+        PGN pgn = PGN.from(FEN.START_POSITION);
+
+        assertNull(pgn.getFen());
+
+        assertEquals(PGN.Result.ONGOING, pgn.getResult());
+
+        assertNotNull(pgn.getMoveList());
+
+        System.out.println(pgn);
     }
 
 }
