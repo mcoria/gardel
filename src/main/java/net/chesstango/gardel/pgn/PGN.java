@@ -67,8 +67,15 @@ public class PGN implements Serializable {
      */
     public static PGN from(FEN fen) {
         PGN pgn = new PGN();
-        pgn.setFen(fen);
+
+        if (!FEN.START_POSITION.equals(fen)) {
+            pgn.setFen(fen);
+        }
+
+        pgn.setResult(Result.ONGOING);
+
         pgn.setMoveList(Collections.emptyList());
+
         return pgn;
     }
 
