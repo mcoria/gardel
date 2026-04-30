@@ -1,7 +1,7 @@
 package net.chesstango.gardel.ascii;
 
 import net.chesstango.gardel.AbstractPositionBuilder;
-import net.chesstango.gardel.fen.FENBuilder;
+import net.chesstango.gardel.fen.FENObjectBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -11,7 +11,7 @@ import java.io.PrintStream;
  */
 public class ASCIIBuilder extends AbstractPositionBuilder<String> {
 
-    private FENBuilder fenBuilder = new FENBuilder();
+    private final FENObjectBuilder fenObjectBuilder = new FENObjectBuilder();
 
     @Override
     public String getPositionRepresentation() {
@@ -25,7 +25,7 @@ public class ASCIIBuilder extends AbstractPositionBuilder<String> {
 
 
     public void printFEN(PrintStream printStream) {
-        printStream.printf("FEN: %s%n", fenBuilder.getPositionRepresentation());
+        printStream.printf("FEN: %s%n", fenObjectBuilder.getPositionRepresentation());
     }
 
     public void printPiecePlacement(PrintStream printStream) {
@@ -92,140 +92,140 @@ public class ASCIIBuilder extends AbstractPositionBuilder<String> {
     @Override
     public ASCIIBuilder withWhiteTurn(boolean whiteTurn) {
         super.withWhiteTurn(whiteTurn);
-        fenBuilder.withWhiteTurn(whiteTurn);
+        fenObjectBuilder.withWhiteTurn(whiteTurn);
         return this;
     }
 
     @Override
     public ASCIIBuilder withWhiteKing(int file, int rank) {
         super.withWhiteKing(file, rank);
-        fenBuilder.withWhiteKing(file, rank);
+        fenObjectBuilder.withWhiteKing(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withWhiteQueen(int file, int rank) {
         super.withWhiteQueen(file, rank);
-        fenBuilder.withWhiteQueen(file, rank);
+        fenObjectBuilder.withWhiteQueen(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withWhiteRook(int file, int rank) {
         super.withWhiteRook(file, rank);
-        fenBuilder.withWhiteRook(file, rank);
+        fenObjectBuilder.withWhiteRook(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withWhiteBishop(int file, int rank) {
         super.withWhiteBishop(file, rank);
-        fenBuilder.withWhiteBishop(file, rank);
+        fenObjectBuilder.withWhiteBishop(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withWhiteKnight(int file, int rank) {
         super.withWhiteKnight(file, rank);
-        fenBuilder.withWhiteKnight(file, rank);
+        fenObjectBuilder.withWhiteKnight(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withWhitePawn(int file, int rank) {
         super.withWhitePawn(file, rank);
-        fenBuilder.withWhitePawn(file, rank);
+        fenObjectBuilder.withWhitePawn(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withBlackKing(int file, int rank) {
         super.withBlackKing(file, rank);
-        fenBuilder.withBlackKing(file, rank);
+        fenObjectBuilder.withBlackKing(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withBlackQueen(int file, int rank) {
         super.withBlackQueen(file, rank);
-        fenBuilder.withBlackQueen(file, rank);
+        fenObjectBuilder.withBlackQueen(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withBlackRook(int file, int rank) {
         super.withBlackRook(file, rank);
-        fenBuilder.withBlackRook(file, rank);
+        fenObjectBuilder.withBlackRook(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withBlackBishop(int file, int rank) {
         super.withBlackBishop(file, rank);
-        fenBuilder.withBlackBishop(file, rank);
+        fenObjectBuilder.withBlackBishop(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withBlackKnight(int file, int rank) {
         super.withBlackKnight(file, rank);
-        fenBuilder.withBlackKnight(file, rank);
+        fenObjectBuilder.withBlackKnight(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withBlackPawn(int file, int rank) {
         super.withBlackPawn(file, rank);
-        fenBuilder.withBlackPawn(file, rank);
+        fenObjectBuilder.withBlackPawn(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withEnPassantSquare(int file, int rank) {
         super.withEnPassantSquare(file, rank);
-        fenBuilder.withEnPassantSquare(file, rank);
+        fenObjectBuilder.withEnPassantSquare(file, rank);
         return this;
     }
 
     @Override
     public ASCIIBuilder withCastlingBlackKingAllowed(boolean castlingBlackKingAllowed) {
         super.withCastlingBlackKingAllowed(castlingBlackKingAllowed);
-        fenBuilder.withCastlingBlackKingAllowed(castlingBlackKingAllowed);
+        fenObjectBuilder.withCastlingBlackKingAllowed(castlingBlackKingAllowed);
         return this;
     }
 
     @Override
     public ASCIIBuilder withCastlingBlackQueenAllowed(boolean castlingBlackQueenAllowed) {
         super.withCastlingBlackQueenAllowed(castlingBlackQueenAllowed);
-        fenBuilder.withCastlingBlackQueenAllowed(castlingBlackQueenAllowed);
+        fenObjectBuilder.withCastlingBlackQueenAllowed(castlingBlackQueenAllowed);
         return this;
     }
 
     @Override
     public ASCIIBuilder withCastlingWhiteKingAllowed(boolean castlingWhiteKingAllowed) {
         super.withCastlingWhiteKingAllowed(castlingWhiteKingAllowed);
-        fenBuilder.withCastlingWhiteKingAllowed(castlingWhiteKingAllowed);
+        fenObjectBuilder.withCastlingWhiteKingAllowed(castlingWhiteKingAllowed);
         return this;
     }
 
     @Override
     public ASCIIBuilder withCastlingWhiteQueenAllowed(boolean castlingWhiteQueenAllowed) {
         super.withCastlingWhiteQueenAllowed(castlingWhiteQueenAllowed);
-        fenBuilder.withCastlingWhiteQueenAllowed(castlingWhiteQueenAllowed);
+        fenObjectBuilder.withCastlingWhiteQueenAllowed(castlingWhiteQueenAllowed);
         return this;
     }
 
     @Override
     public ASCIIBuilder withHalfMoveClock(int halfMoveClock) {
         super.withHalfMoveClock(halfMoveClock);
-        fenBuilder.withHalfMoveClock(halfMoveClock);
+        fenObjectBuilder.withHalfMoveClock(halfMoveClock);
         return this;
     }
 
     @Override
     public ASCIIBuilder withFullMoveClock(int fullMoveClock) {
         super.withFullMoveClock(fullMoveClock);
-        fenBuilder.withFullMoveClock(fullMoveClock);
+        fenObjectBuilder.withFullMoveClock(fullMoveClock);
         return this;
     }
 }

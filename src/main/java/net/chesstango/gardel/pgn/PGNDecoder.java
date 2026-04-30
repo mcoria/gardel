@@ -17,7 +17,8 @@ import java.util.stream.Stream;
 /**
  * @author Mauricio Coria
  */
-public class PGNStringDecoder {
+public class PGNDecoder {
+
     public Stream<PGN> decodePGNs(Path pgnFile) throws IOException {
         // 1. Create a CharStream from the input source
         CharStream input = CharStreams.fromPath(pgnFile);
@@ -30,13 +31,15 @@ public class PGNStringDecoder {
         return decodePGNs(input);
     }
 
-    public PGN decodePGN(String input) {
-        return decodePGN(CharStreams.fromString(input));
-    }
-
     Stream<PGN> decodePGNs(CharStream input) {
+        // 2. Create a lexer that feeds off the input CharStream
+        PGNLexer lexer = new PGNLexer(input);
+
+        // 3. Create a buffer of tokens
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+
         // 4. Create a parser that feeds off the tokens buffer
-        PGNParser parser = createParser(input);
+        PGNParser parser = new PGNParser(tokens);
 
         // 5. Begin parsing at the 'prog' rule
         ParseTree tree = parser.parse();
@@ -49,34 +52,6 @@ public class PGNStringDecoder {
         walker.walk(listener, tree); // Initiate the walk through the parse tree
 
         return listener.getPgnList().stream();
-    }
-
-    PGN decodePGN(CharStream input) {
-        // 4. Create a parser that feeds off the tokens buffer
-        PGNParser parser = createParser(input);
-
-        // 5. Begin parsing at the 'prog' rule
-        ParseTree tree = parser.pgn_game();
-
-        // 6. Create the walker and hook up the listener
-        ParseTreeWalker walker = ParseTreeWalker.DEFAULT;
-
-        PGNGardelListener listener = new PGNGardelListener();
-
-        walker.walk(listener, tree); // Initiate the walk through the parse tree
-
-        return listener.getPgn();
-    }
-
-    private PGNParser createParser(CharStream input) {
-        // 2. Create a lexer that feeds off the input CharStream
-        PGNLexer lexer = new PGNLexer(input);
-
-        // 3. Create a buffer of tokens
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        // 4. Create a parser that feeds off the tokens buffer
-        return new PGNParser(tokens);
     }
 
 }

@@ -42,7 +42,6 @@ class PGNGardelListener extends PGNBaseListener {
         }
     }
 
-
     @Override
     public void enterTag_name(PGNParser.Tag_nameContext ctx) {
         tagName = ctx.getText();
@@ -50,7 +49,7 @@ class PGNGardelListener extends PGNBaseListener {
 
     @Override
     public void enterTag_value(PGNParser.Tag_valueContext ctx) {
-        tagValue = ctx.getText().replaceAll("\"", "");
+        tagValue = ctx.getText().replace("\"", "");
     }
 
     @Override
@@ -100,12 +99,14 @@ class PGNGardelListener extends PGNBaseListener {
         }
     }
 
-    @Override public void enterMovetext_section(PGNParser.Movetext_sectionContext ctx) {
+    @Override
+    public void enterMovetext_section(PGNParser.Movetext_sectionContext ctx) {
         moveList = new ArrayList<>();
         recursiveVariation = 0;
     }
 
-    @Override public void exitMovetext_section(PGNParser.Movetext_sectionContext ctx) {
+    @Override
+    public void exitMovetext_section(PGNParser.Movetext_sectionContext ctx) {
         pgn.setMoveList(moveList);
     }
 

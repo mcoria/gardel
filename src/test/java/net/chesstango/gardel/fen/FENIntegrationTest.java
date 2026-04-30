@@ -13,7 +13,7 @@ public class FENIntegrationTest {
     public void testTurnoWhite() {
         FENParser decoder = new FENParser();
 
-        FENBuilder encoder = new FENBuilder();
+        FENObjectBuilder encoder = new FENObjectBuilder();
 
         FENExporter exporter = new FENExporter(encoder);
 

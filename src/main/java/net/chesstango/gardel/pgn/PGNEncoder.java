@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author Mauricio Coria
  */
-public class PGNStringEncoder {
+public class PGNEncoder {
 
     public String encode(PGN pgn) {
         StringBuilder sb = new StringBuilder();

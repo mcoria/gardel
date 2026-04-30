@@ -11,13 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Mauricio Coria
  */
-public class PGNStringEncoderTest {
+public class PGNEncoderTest {
 
-    private PGNStringEncoder encoder;
+    private PGNEncoder encoder;
 
     @BeforeEach
     public void setup() {
-        encoder = new PGNStringEncoder();
+        encoder = new PGNEncoder();
     }
 
     @Test

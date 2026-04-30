@@ -1,0 +1,96 @@
+package net.chesstango.gardel.epd;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * This class reads Extended Position Description files.
+ *
+ * @author Mauricio Coria
+ */
+class EPDParser {
+
+    /**
+     * Decode line components
+     */
+    private static final Pattern edpLinePattern = Pattern.compile(
+            "(?<piecePlacement>([rnbqkpRNBQKP12345678]{1,8}/){7}[rnbqkpRNBQKP12345678]{1,8})\\s+" +
+                    "(?<activeColor>[wb])\\s+" +
+                    "(?<castingsAllowed>([KQkq]{1,4}|-))\\s+" +
+                    "(?<enPassantSquare>(\\w\\d|-))\\s+" +
+                    "(\\s*bm\\s+(?<bestmoves>[^;]*);" +
+                    "|\\s*am\\s+(?<avoidmoves>[^;]*);" +
+                    "|\\s*sm\\s+(?<suppliedmove>[^;]*);" +
+                    "|\\s*c0\\s+\"(?<comment0>[^\"]+)\";" +
+                    "|\\s*c1\\s+\"(?<comment1>[^\"]+)\";" +
+                    "|\\s*c2\\s+\"(?<comment2>[^\"]+)\";" +
+                    "|\\s*c3\\s+\"(?<comment3>[^\"]+)\";" +
+                    "|\\s*c4\\s+\"(?<comment4>[^\"]+)\";" +
+                    "|\\s*c5\\s+\"(?<comment5>[^\"]+)\";" +
+                    "|\\s*c6\\s+\"(?<comment6>[^\"]+)\";" +
+                    "|\\s*id\\s+\"(?<id>[^\"]+)\";" +
+                    "|[^;]+;)*"
+    );
+
+    EPD parseEPD(String epdString) {
+        epdString = epdString.trim();
+
+        EPD epd = new EPD();
+        epd.setText(epdString);
+
+        Matcher matcher = edpLinePattern.matcher(epdString);
+        if (matcher.matches()) {
+
+            epd.setPiecePlacement(matcher.group("piecePlacement"));
+            epd.setActiveColor(matcher.group("activeColor"));
+            epd.setCastingsAllowed(matcher.group("castingsAllowed"));
+            epd.setEnPassantSquare(matcher.group("enPassantSquare"));
+
+            if (matcher.group("suppliedmove") != null) {
+                String suppliedMove = matcher.group("suppliedmove");
+                epd.setSuppliedMoveStr(suppliedMove);
+            }
+            if (matcher.group("bestmoves") != null) {
+                String bestMovesString = matcher.group("bestmoves");
+                epd.setBestMovesStr(bestMovesString);
+            }
+            if (matcher.group("avoidmoves") != null) {
+                String avoidMovesString = matcher.group("avoidmoves");
+                epd.setAvoidMovesStr(avoidMovesString);
+            }
+            if (matcher.group("id") != null) {
+                epd.setId(matcher.group("id"));
+            }
+            if (matcher.group("comment0") != null) {
+                String comment0 = matcher.group("comment0");
+                epd.setC0(comment0);
+            }
+            if (matcher.group("comment1") != null) {
+                String comment1 = matcher.group("comment1");
+                epd.setC1(comment1);
+            }
+            if (matcher.group("comment2") != null) {
+                String comment2 = matcher.group("comment2");
+                epd.setC2(comment2);
+            }
+            if (matcher.group("comment3") != null) {
+                String comment3 = matcher.group("comment3");
+                epd.setC3(comment3);
+            }
+            if (matcher.group("comment4") != null) {
+                String comment4 = matcher.group("comment4");
+                epd.setC4(comment4);
+            }
+            if (matcher.group("comment5") != null) {
+                String comment5 = matcher.group("comment5");
+                epd.setC5(comment5);
+            }
+            if (matcher.group("comment6") != null) {
+                String comment6 = matcher.group("comment6");
+                epd.setC6(comment6);
+            }
+        }
+
+        return epd;
+    }
+}

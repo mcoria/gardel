@@ -3,7 +3,7 @@ package net.chesstango.gardel.fen;
 /**
  * @author Mauricio Coria
  */
-public class FENBuilder extends AbstractFENBuilder<FEN> {
+public class FENObjectBuilder extends AbstractFENBuilder<FEN> {
 
     @Override
     public FEN getPositionRepresentation() {

@@ -40,6 +40,11 @@ public class EPD implements Serializable {
 
     private String suppliedMoveStr;
 
+    public static EPD of(String epdString) {
+        EPDParser parser = new EPDParser();
+        return parser.parseEPD(epdString);
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;

@@ -80,7 +80,7 @@ public abstract class AbstractFENBuilder<T> extends AbstractPositionBuilder<T> {
         return stringBuilder.toString();
     }
 
-    public static String enPassantSquareToString(long enPassantSquare) {
+    static String enPassantSquareToString(long enPassantSquare) {
         int enPassantSquarePosition = Long.numberOfTrailingZeros(enPassantSquare);
         if (enPassantSquarePosition == 64) {
             return "-";

@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Mauricio Coria
  */
 @Disabled
-public class FENBuilderZobristTest {
+public class FENObjectBuilderZobristTest {
     private FENStringBuilder fenStringBuilder;
 
 

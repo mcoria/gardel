@@ -1,7 +1,7 @@
 package net.chesstango.gardel;
 
 import net.chesstango.gardel.fen.FEN;
-import net.chesstango.gardel.fen.FENBuilder;
+import net.chesstango.gardel.fen.FENObjectBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +15,7 @@ public class MirrorBuilderTest {
     public void mirrorChessPosition01() {
         FEN fen = FEN.START_POSITION;
 
-        MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENBuilder());
+        MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENObjectBuilder());
 
         fen.export(mirrorChessPositionBuilder);
 
@@ -29,7 +29,7 @@ public class MirrorBuilderTest {
     public void mirrorChessPosition02() {
         FEN fen = FEN.of("4rr1k/pppb2bp/2q1n1p1/4p3/8/1BPPBN2/PP2QPP1/2KR3R w - - 8 20");
 
-        MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENBuilder());
+        MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENObjectBuilder());
 
         fen.export(mirrorChessPositionBuilder);
 
@@ -42,7 +42,7 @@ public class MirrorBuilderTest {
     public void mirrorChessPosition03() {
         FEN fen = FEN.of("r1bqkb1r/pp3ppp/2nppn2/1N6/2P1P3/2N5/PP3PPP/R1BQKB1R b KQkq - 2 7");
 
-        MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENBuilder());
+        MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENObjectBuilder());
 
         fen.export(mirrorChessPositionBuilder);
 
@@ -55,7 +55,7 @@ public class MirrorBuilderTest {
     public void mirrorChessPosition04() {
         FEN fen = FEN.of("rn1qkbnr/pp2ppp1/2p4p/3pPb2/3P2PP/8/PPP2P2/RNBQKBNR b KQkq g3 0 5");
 
-        MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENBuilder());
+        MirrorPositionBuilder<FEN> mirrorChessPositionBuilder = new MirrorPositionBuilder<>(new FENObjectBuilder());
 
         fen.export(mirrorChessPositionBuilder);
 

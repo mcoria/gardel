@@ -6,6 +6,7 @@ import net.chesstango.gardel.epd.EPD;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.minchess.MinChess;
 import net.chesstango.gardel.move.SANDecoder;
+import org.antlr.v4.runtime.CharStreams;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -59,6 +60,12 @@ public class PGN implements Serializable {
     private Termination termination;
     private List<String> moveList;
 
+
+    public static PGN from(String pgnString) {
+        PGNDecoder pgnDecoder = new PGNDecoder();
+        return pgnDecoder.decodePGNs(CharStreams.fromString(pgnString)).findFirst().orElse(null);
+    }
+
     /**
      * Creates a new PGN instance from the specified FEN position.
      *
@@ -81,7 +88,7 @@ public class PGN implements Serializable {
 
     @Override
     public String toString() {
-        return new PGNStringEncoder().encode(this);
+        return new PGNEncoder().encode(this);
     }
 
     /**

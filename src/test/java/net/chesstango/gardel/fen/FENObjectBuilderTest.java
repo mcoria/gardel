@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Mauricio Coria
  */
-public class FENBuilderTest {
+public class FENObjectBuilderTest {
 
-    private FENBuilder coder;
+    private FENObjectBuilder coder;
 
     @BeforeEach
     public void setUp() throws Exception {
-        coder = new FENBuilder();
+        coder = new FENObjectBuilder();
     }
 
     @Test
@@ -226,22 +226,22 @@ public class FENBuilderTest {
     public void testEnPassantSquareToString() {
         // Valid en passant square (bit 18 -> c3)
         long enPassantBitboard1 = 1L << 18;
-        assertEquals("c3", FENBuilder.enPassantSquareToString(enPassantBitboard1));
+        assertEquals("c3", FENObjectBuilder.enPassantSquareToString(enPassantBitboard1));
 
         // Valid en passant square (bit 0 -> a1)
         long enPassantBitboard2 = 1L;
-        assertEquals("a1", FENBuilder.enPassantSquareToString(enPassantBitboard2));
+        assertEquals("a1", FENObjectBuilder.enPassantSquareToString(enPassantBitboard2));
 
         // Valid en passant square (bit 63 -> h8)
         long enPassantBitboard3 = 1L << 63;
-        assertEquals("h8", FENBuilder.enPassantSquareToString(enPassantBitboard3));
+        assertEquals("h8", FENObjectBuilder.enPassantSquareToString(enPassantBitboard3));
 
         // Valid en passant square (bit 18 -> c3)
         long enPassantBitboard4 = 1L << (5 * 8 + 1);
-        assertEquals("b6", FENBuilder.enPassantSquareToString(enPassantBitboard4));
+        assertEquals("b6", FENObjectBuilder.enPassantSquareToString(enPassantBitboard4));
 
         // Invalid en passant square (no bits set)
         long enPassantBitboardInvalid = 0L;
-        assertEquals("-", FENBuilder.enPassantSquareToString(enPassantBitboardInvalid));
+        assertEquals("-", FENObjectBuilder.enPassantSquareToString(enPassantBitboardInvalid));
     }
 }

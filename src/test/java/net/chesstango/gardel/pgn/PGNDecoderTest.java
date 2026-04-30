@@ -17,18 +17,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Mauricio Coria
  */
-public class PGNStringDecoderTest {
+public class PGNDecoderTest {
 
-    private PGNStringDecoder decoder;
+    private PGNDecoder decoder;
 
     @BeforeEach
     public void setup() {
-        decoder = new PGNStringDecoder();
+        decoder = new PGNDecoder();
     }
 
 
     @Test
-    public void decodePGNHeaders01() throws IOException {
+    public void decodePGNHeaders01() {
         String lines =
                 "[Event \"Computer chess game\"]\n" +
                         "[Site \"KANO-LENOVO\"]\n" +
@@ -39,7 +39,7 @@ public class PGNStringDecoderTest {
                         "[FEN \"rn1qkbnr/pp2ppp1/2p4p/3pPb2/3P2PP/8/PPP2P2/RNBQKBNR b KQkq g3 0 5\"]\n" +
                         "[Result \"1/2-1/2\"]\n" +
                         "*\n";
-        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGNs(CharStreams.fromString(lines)).findFirst().orElse(null);
 
         assertEquals("Computer chess game", pgn.getEvent());
         assertEquals("KANO-LENOVO", pgn.getSite());
@@ -68,7 +68,7 @@ public class PGNStringDecoderTest {
                 "\n" +
                 "1. e4 c6 2. d4 d5 3. e5 Bf5 4. c3 e6 5. Nf3 Nd7 6. Be2 *\n";
 
-        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGNs(CharStreams.fromString(lines)).findFirst().orElse(null);
 
         assertEquals("Balsa - Top 10", pgn.getEvent());
         assertEquals("KANO-LENOVO", pgn.getSite());
@@ -110,7 +110,7 @@ public class PGNStringDecoderTest {
                 "\n" +
                 "1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. a3 Bxc3+ 5. bxc3 c5 6. f3 d5 7. cxd5 Nxd5 8. dxc5 { E25 Nimzo-Indian Defense: Sämisch Variation, Keres Variation } Qa5 9. Bd2 Qxc5 10. e4 Nf6 11. Qb3 O-O 12. Qb4 Re8 13. Qxc5 Na6 14. Bxa6 bxa6 15. e5 Nd7 16. Qc6 Rb8 17. Be3 Rf8 18. Qd6 { White wins on time. } 1-0";
 
-        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGNs(CharStreams.fromString(lines)).findFirst().orElse(null);
 
         assertEquals("Rated Rapid game", pgn.getEvent());
         assertEquals("https://lichess.org/cjatYH5c", pgn.getSite());
@@ -140,7 +140,7 @@ public class PGNStringDecoderTest {
                 "11. Bc3 Qg5 12. Rad1 O-O 13. d6 Qf4 14. g3 Qf3 15. Bxe5 Bxe4\n" +
                 "16. Qb3 Qh1# 0-1\n";
 
-        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGNs(CharStreams.fromString(lines)).findFirst().orElse(null);
 
         assertEquals("b3644c68-3c6a-40ab-870a-3b965dd38c6c", pgn.getEvent());
         assertEquals("LAPTOP-PTVVKHNB", pgn.getSite());
@@ -170,7 +170,7 @@ public class PGNStringDecoderTest {
                 "11. Bc3 Qg5 12. Rad1 O-O 13. d6 Qf4 14. g3 Qf3 15. Bxe5 Bxe4\n" +
                 "16. Qb3 Qh1# 0-1\n";
 
-        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGNs(CharStreams.fromString(lines)).findFirst().orElse(null);
 
         assertEquals("b3644c68-3c6a-40ab-870a-3b965dd38c6c", pgn.getEvent());
         assertEquals("LAPTOP-PTVVKHNB", pgn.getSite());
@@ -205,7 +205,7 @@ public class PGNStringDecoderTest {
                 "10. Nxe5 {[%clk 1:00:00]} Nxe5 {[%clk 0:59:55]} \n" +
                 "1/2-1/2";
 
-        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGNs(CharStreams.fromString(lines)).findFirst().orElse(null);
 
         assertEquals("F/S Return Match", pgn.getEvent());
         assertEquals("Belgrade, Serbia JUG", pgn.getSite());
@@ -305,7 +305,7 @@ public class PGNStringDecoderTest {
                 "[%clk 1:37:24]} 87. ... Rxh5+ {[%clk 0:03:19]} 88. Kxh5 {[%clk 1:37:24]} \n" +
                 "1/2-1/2";
 
-        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGNs(CharStreams.fromString(lines)).findFirst().orElse(null);
 
         assertEquals("Leela Knight Odds vs GM Joel Benjamin", pgn.getEvent());
         assertEquals("?", pgn.getSite());
@@ -344,7 +344,7 @@ public class PGNStringDecoderTest {
                 "14. ... Kh8 ( 14. ... Bxg7 15. Qg4 Kf8 16. Qxg7+ Ke8 17. Qg8# ) 15. Rg8+! \n" +
                 "1-0";
 
-        PGN pgn = decoder.decodePGN(CharStreams.fromString(lines));
+        PGN pgn = decoder.decodePGNs(CharStreams.fromString(lines)).findFirst().orElse(null);
 
         assertEquals("Prague Open B", pgn.getEvent());
         assertEquals("?", pgn.getSite());

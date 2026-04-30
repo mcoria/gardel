@@ -29,6 +29,11 @@ public final class FEN implements PositionExporter, Serializable {
 
     private final String fullMoveClock;
 
+    public static FEN of(String fenString) {
+        FENParser parser = new FENParser();
+        return parser.parseFEN(fenString);
+    }
+
     FEN(String piecePlacement,
         String activeColor,
         String castingsAllowed,
@@ -42,11 +47,6 @@ public final class FEN implements PositionExporter, Serializable {
         this.enPassantSquare = enPassantSquare;
         this.halfMoveClock = halfMoveClock;
         this.fullMoveClock = fullMoveClock;
-    }
-
-    public static FEN of(String fenString) {
-        FENParser parser = new FENParser();
-        return parser.parseFEN(fenString);
     }
 
     @Override
