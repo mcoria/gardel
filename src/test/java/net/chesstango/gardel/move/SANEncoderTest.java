@@ -25,7 +25,7 @@ public class SANEncoderTest {
 
     @Test
     public void testPawnMoveCapture() {
-        FEN fen = FEN.of("rnbqkbnr/ppp1p1pp/8/3p1p2/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq f6 0 3");
+        FEN fen = FEN.from("rnbqkbnr/ppp1p1pp/8/3p1p2/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq f6 0 3");
 
         Move move = null;
         String actual = null;
@@ -46,7 +46,7 @@ public class SANEncoderTest {
 
     @Test
     public void testPawnMoveCaptureEnPassant() {
-        FEN fen = FEN.of("rnbqkbnr/1ppp1pp1/7p/p2PpP2/8/8/PPP1P1PP/RNBQKBNR w KQkq e6 0 5");
+        FEN fen = FEN.from("rnbqkbnr/1ppp1pp1/7p/p2PpP2/8/8/PPP1P1PP/RNBQKBNR w KQkq e6 0 5");
 
         Move move = null;
         String actual = null;
@@ -63,7 +63,7 @@ public class SANEncoderTest {
 
     @Test
     public void testPawnMovePromotion() {
-        FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
+        FEN fen = FEN.from("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
 
         Move move = null;
         String actual = null;
@@ -80,7 +80,7 @@ public class SANEncoderTest {
 
     @Test
     public void testCastling(){
-        FEN fen = FEN.of("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
+        FEN fen = FEN.from("3b3k/2P5/8/8/4P3/8/PP1P1PPP/R3K2R w KQ - 0 1");
 
         Move move = null;
         String actual = null;
@@ -96,7 +96,7 @@ public class SANEncoderTest {
 
     @Test
     public void testKnightMove01(){
-        FEN fen = FEN.of("r1k4r/ppp4p/2nb1pq1/3p1np1/4p1Q1/4P3/PPPPNPPP/RNB1K2R w KQ - 0 1");
+        FEN fen = FEN.from("r1k4r/ppp4p/2nb1pq1/3p1np1/4p1Q1/4P3/PPPPNPPP/RNB1K2R w KQ - 0 1");
 
         Move move = null;
         String actual = null;
@@ -112,7 +112,7 @@ public class SANEncoderTest {
 
     @Test
     public void testKnightMove02(){
-        FEN fen = FEN.of("rk2q3/ppp5/6n1/2b5/4pp2/P1N5/1PPPKPRP/R1B5 b - - 19 47");
+        FEN fen = FEN.from("rk2q3/ppp5/6n1/2b5/4pp2/P1N5/1PPPKPRP/R1B5 b - - 19 47");
 
         Move move = null;
         String actual = null;
@@ -125,7 +125,7 @@ public class SANEncoderTest {
 
     @Test
     public void testKnightMove03(){
-        FEN fen = FEN.of("rk2q3/ppp5/5p2/2b2np1/4p3/P1N1Pn2/1PPPKPRP/R1B5 b - - 3 34");
+        FEN fen = FEN.from("rk2q3/ppp5/5p2/2b2np1/4p3/P1N1Pn2/1PPPKPRP/R1B5 b - - 3 34");
 
         Move move = null;
         String actual = null;
@@ -141,7 +141,7 @@ public class SANEncoderTest {
 
     @Test
     public void testBishopMove01(){
-        FEN fen = FEN.of("r3r1k1/pp1n1ppp/2p5/4Pb2/2B2P2/B1P5/P5PP/R2R2K1 w - - 0 1");
+        FEN fen = FEN.from("r3r1k1/pp1n1ppp/2p5/4Pb2/2B2P2/B1P5/P5PP/R2R2K1 w - - 0 1");
 
         Move move = null;
         String actual = null;
@@ -154,7 +154,7 @@ public class SANEncoderTest {
 
     @Test
     public void testQueenCaptureMove01(){
-        FEN fen = FEN.of("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4");
+        FEN fen = FEN.from("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4");
 
         Move move = null;
         String actual = null;

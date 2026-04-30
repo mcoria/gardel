@@ -61,9 +61,9 @@ public class PGN implements Serializable {
     private List<String> moveList;
 
 
-    public static PGN from(String pgnString) {
+    public static PGN from(String pgn) {
         PGNDecoder pgnDecoder = new PGNDecoder();
-        return pgnDecoder.decodePGNs(CharStreams.fromString(pgnString)).findFirst().orElse(null);
+        return pgnDecoder.decodePGNs(CharStreams.fromString(pgn)).findFirst().orElse(null);
     }
 
     /**
@@ -175,7 +175,7 @@ public class PGN implements Serializable {
     public Stream<FEN> toFEN() {
         Stream.Builder<FEN> fenBuilder = Stream.builder();
 
-        MinChess game = MinChess.from(getFen() == null ? FEN.of(FEN.START_POSITION_STRING) : getFen());
+        MinChess game = MinChess.from(getFen() == null ? FEN.from(FEN.START_POSITION_STRING) : getFen());
 
         SANDecoder<Short> sanDecoder = new SANDecoder<>(
                 (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->

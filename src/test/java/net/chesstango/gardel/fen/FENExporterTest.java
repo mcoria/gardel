@@ -67,14 +67,14 @@ public class FENExporterTest {
 
     @Test
     public void testParseWithEnPassant() {
-        fenExporter.export(FEN.of("rnbqkb1r/5ppp/p2ppn2/1p6/3NP3/2N1BP2/PPP3PP/R2QKB1R w KQkq b6 0 8"));
+        fenExporter.export(FEN.from("rnbqkb1r/5ppp/p2ppn2/1p6/3NP3/2N1BP2/PPP3PP/R2QKB1R w KQkq b6 0 8"));
 
         verify(positionBuilder).withWhiteTurn(true);
     }
 
     @Test
     public void testParseFenWithSpaces() {
-        fenExporter.export(FEN.of("8/5kpp/8/8/1p3P2/6PP/r3KP2/1R1q4  w   -   -    4       10"));
+        fenExporter.export(FEN.from("8/5kpp/8/8/1p3P2/6PP/r3KP2/1R1q4  w   -   -    4       10"));
 
         verify(positionBuilder).withWhiteTurn(true);
     }

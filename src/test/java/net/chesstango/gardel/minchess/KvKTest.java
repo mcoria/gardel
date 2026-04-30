@@ -22,7 +22,7 @@ public class KvKTest extends AbstractPerftTest {
 
     @Test
     public void test_POS1() {
-        FEN fen = FEN.of(POSITION);
+        FEN fen = FEN.from(POSITION);
         fen.export(minChessBuilder);
         MinChess minChess = minChessBuilder.getPositionRepresentation();
         short[] moves = new short[64];

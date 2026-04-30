@@ -28,7 +28,7 @@ public class PGNEncoderTest {
         pgn.setDate("2020.01.01");
         pgn.setWhite("TheWhite");
         pgn.setBlack("TheBlack");
-        pgn.setFen(FEN.of("1nbqk2r/2p2ppp/r3pn2/pp6/PbpP4/5NP1/1PQBPPBP/RN3RK1 b k a3 0 9"));
+        pgn.setFen(FEN.from("1nbqk2r/2p2ppp/r3pn2/pp6/PbpP4/5NP1/1PQBPPBP/RN3RK1 b k a3 0 9"));
         pgn.setResult(PGN.Result.ONGOING);
         pgn.setMoveList(List.of("Ng4", "d5"));
 
@@ -54,7 +54,7 @@ public class PGNEncoderTest {
         pgn.setDate("2020.01.01");
         pgn.setWhite("TheWhite");
         pgn.setBlack("TheBlack");
-        pgn.setFen(FEN.of("1nbqk2r/2p2ppp/r3pn2/pp6/PbpP4/5NP1/1PQBPPBP/RN3RK1 b k a3 0 9"));
+        pgn.setFen(FEN.from("1nbqk2r/2p2ppp/r3pn2/pp6/PbpP4/5NP1/1PQBPPBP/RN3RK1 b k a3 0 9"));
         pgn.setResult(PGN.Result.ONGOING);
         pgn.setTermination(PGN.Termination.NORMAL);
         pgn.setMoveList(List.of("Ng4", "d5"));

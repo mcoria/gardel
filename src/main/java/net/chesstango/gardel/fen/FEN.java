@@ -15,7 +15,7 @@ public final class FEN implements PositionExporter, Serializable {
 
     public static final String START_POSITION_STRING = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-    public static final FEN START_POSITION = FEN.of(START_POSITION_STRING);
+    public static final FEN START_POSITION = FEN.from(START_POSITION_STRING);
 
     private final String piecePlacement;
 
@@ -29,9 +29,9 @@ public final class FEN implements PositionExporter, Serializable {
 
     private final String fullMoveClock;
 
-    public static FEN of(String fenString) {
+    public static FEN from(String fen) {
         FENParser parser = new FENParser();
-        return parser.parseFEN(fenString);
+        return parser.parseFEN(fen);
     }
 
     FEN(String piecePlacement,

@@ -11,7 +11,7 @@ public class FENTest {
 
     @Test
     public void testExportToASCII() {
-        FEN fen = FEN.of("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        FEN fen = FEN.from("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
         // ACSIIBuilder is a class that implements the PositionBuilder interface
         ASCIIBuilder asciiBuilder = new ASCIIBuilder();
@@ -28,7 +28,7 @@ public class FENTest {
 
     @Test
     public void testExportToASCII_Mirror() {
-        FEN fen = FEN.of("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        FEN fen = FEN.from("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
         ASCIIBuilder asciiBuilder = new ASCIIBuilder();
 

@@ -26,7 +26,7 @@ public class FENObjectBuilderZobristTest {
      */
     @Test
     public void test_encode_zobrist_with_EnPassantCapture() {
-        FEN fen = FEN.of("5rk1/1ppb3p/2pb4/6q1/pP1r4/2PQR2P/P2B2P1/6KN b - b3 0 1");
+        FEN fen = FEN.from("5rk1/1ppb3p/2pb4/6q1/pP1r4/2PQR2P/P2B2P1/6KN b - b3 0 1");
 
         fen.export(fenStringBuilder);
 
@@ -41,7 +41,7 @@ public class FENObjectBuilderZobristTest {
      */
     @Test
     public void test_encode_zobrist_without_EnPassantCapture() {
-        FEN fen = FEN.of("5rk1/1ppb3p/p1pb4/6q1/1P1r4/2PQR2P/P2B2P1/6KN b - b3 0 1");
+        FEN fen = FEN.from("5rk1/1ppb3p/p1pb4/6q1/1P1r4/2PQR2P/P2B2P1/6KN b - b3 0 1");
 
         fen.export(fenStringBuilder);
 

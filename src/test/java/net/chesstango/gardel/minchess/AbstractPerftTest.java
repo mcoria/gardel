@@ -15,14 +15,14 @@ public abstract class AbstractPerftTest {
 
     protected MinChess createGame(String string) {
         MinChessBuilder builder = new MinChessBuilder();
-        FEN.of(string).export(builder);
+        FEN.from(string).export(builder);
         return builder.getPositionRepresentation();
     }
 
     protected MinChess createMirrorGame(String string) {
         MinChessBuilder builder = new MinChessBuilder();
         MirrorPositionBuilder<MinChess> mirrorBuilder = new MirrorPositionBuilder<>(builder);
-        FEN.of(string).export(mirrorBuilder);
+        FEN.from(string).export(mirrorBuilder);
         return builder.getPositionRepresentation();
     }
 

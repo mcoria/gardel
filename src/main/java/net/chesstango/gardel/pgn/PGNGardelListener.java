@@ -74,7 +74,7 @@ class PGNGardelListener extends PGNBaseListener {
                 pgn.setBlack(tagValue);
                 break;
             case "FEN":
-                pgn.setFen(FEN.of(tagValue));
+                pgn.setFen(FEN.from(tagValue));
                 break;
             case "RESULT":
                 pgn.setResult(

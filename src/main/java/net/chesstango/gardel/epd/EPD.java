@@ -40,9 +40,9 @@ public class EPD implements Serializable {
 
     private String suppliedMoveStr;
 
-    public static EPD of(String epdString) {
+    public static EPD from(String epd) {
         EPDParser parser = new EPDParser();
-        return parser.parseEPD(epdString);
+        return parser.parseEPD(epd);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class EPD implements Serializable {
     }
 
     List<Move> movesStringToMoves(String movesString) {
-        FEN fen = FEN.of(getFenWithoutClocks() + " 0 1");
+        FEN fen = FEN.from(getFenWithoutClocks() + " 0 1");
         String[] movesStringArray = movesString.split(" ");
         List<Move> moveList = new ArrayList<>(movesStringArray.length);
         AgregateMoveDecoder<Move> moveDecoder = new AgregateMoveDecoder<>(new Move.GardelMoveSupplier());
