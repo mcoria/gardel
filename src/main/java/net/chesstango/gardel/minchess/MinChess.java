@@ -33,6 +33,8 @@ public class MinChess implements Cloneable {
                     boolean castlingWhiteKingAllowed,
                     boolean castlingWhiteQueenAllowed,
                     long enPassantSquare,
+                    int halfMoveClock,
+                    int fullMoveClock,
                     long whitePositions,
                     long blackPositions,
                     long kingPositions,
@@ -48,6 +50,8 @@ public class MinChess implements Cloneable {
                 castlingWhiteKingAllowed,
                 castlingWhiteQueenAllowed,
                 enPassantSquare,
+                halfMoveClock,
+                fullMoveClock,
                 whitePositions,
                 blackPositions,
                 kingPositions,
@@ -184,6 +188,8 @@ public class MinChess implements Cloneable {
                 workspace.castlingWhiteKingAllowed,
                 workspace.castlingWhiteQueenAllowed,
                 workspace.enPassantSquare,
+                workspace.halfMoveClock,
+                workspace.fullMoveClock,
                 workspace.whitePositions,
                 workspace.blackPositions,
                 workspace.kingPositions,
@@ -222,6 +228,14 @@ public class MinChess implements Cloneable {
 
     public boolean getTurn() {
         return workspace.whiteTurn;
+    }
+
+    public int getHalfMoveClock() {
+        return workspace.halfMoveClock;
+    }
+
+    public int getFullMoveClock() {
+        return workspace.fullMoveClock;
     }
 
     public static MinChess from(FEN fen) {

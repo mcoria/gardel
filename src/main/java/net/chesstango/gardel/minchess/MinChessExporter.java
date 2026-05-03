@@ -23,6 +23,8 @@ public class MinChessExporter {
         this.positionBuilder.withCastlingBlackQueenAllowed(workspace.castlingBlackQueenAllowed);
         this.positionBuilder.withCastlingWhiteKingAllowed(workspace.castlingWhiteKingAllowed);
         this.positionBuilder.withCastlingWhiteQueenAllowed(workspace.castlingWhiteQueenAllowed);
+        this.positionBuilder.withHalfMoveClock(workspace.halfMoveClock);
+        this.positionBuilder.withFullMoveClock(workspace.fullMoveClock);
 
         if (workspace.enPassantSquare != 0) {
             final int enPassantSquareIdx = Long.numberOfTrailingZeros(workspace.enPassantSquare);

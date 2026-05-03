@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PGNTest {
 
     @Test
-    public void testToEpd() throws IOException {
+    public void testToEpd(){
         PGN pgn = new PGN();
 
         pgn.setMoveList(List.of("a4"));
@@ -30,10 +30,12 @@ public class PGNTest {
         EPD epdFirst = epdList.getFirst();
 
         assertEquals("a4", epdFirst.getSuppliedMoveStr());
+        assertEquals("0", epdFirst.getHalfMoveClock());
+        assertEquals("1", epdFirst.getFullMoveClock());
     }
 
     @Test
-    public void test_fromFEN() throws IOException {
+    public void test_fromFEN() {
         PGN pgn = PGN.from(FEN.START_POSITION);
 
         assertNull(pgn.getFen());

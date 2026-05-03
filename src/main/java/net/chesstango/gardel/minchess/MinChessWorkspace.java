@@ -11,6 +11,8 @@ class MinChessWorkspace {
     boolean castlingBlackQueenAllowed;
     boolean castlingWhiteKingAllowed;
     boolean castlingWhiteQueenAllowed;
+    int halfMoveClock;
+    int fullMoveClock;
 
     long enPassantSquare = 0;
     long whitePositions = 0;
@@ -29,6 +31,8 @@ class MinChessWorkspace {
                       boolean castlingWhiteKingAllowed,
                       boolean castlingWhiteQueenAllowed,
                       long enPassantSquare,
+                      int halfMoveClock,
+                      int fullMoveClock,
                       long whitePositions,
                       long blackPositions,
                       long kingPositions,
@@ -44,6 +48,9 @@ class MinChessWorkspace {
         this.castlingWhiteKingAllowed = castlingWhiteKingAllowed;
         this.castlingWhiteQueenAllowed = castlingWhiteQueenAllowed;
         this.enPassantSquare = enPassantSquare;
+        this.halfMoveClock = halfMoveClock;
+        this.fullMoveClock = fullMoveClock;
+
         this.whitePositions = whitePositions;
         this.blackPositions = blackPositions;
 
@@ -79,6 +86,7 @@ class MinChessWorkspace {
     }
 
     void doMoveImp(long from, long to) {
+        halfMoveClock++;
         // Capture, clean to square
         if ((to & whitePositions) != 0 || (to & blackPositions) != 0) {
             if ((to & queenPositions) != 0) {
@@ -110,6 +118,7 @@ class MinChessWorkspace {
             } else {
                 whitePositions &= ~to;
             }
+            halfMoveClock = 0;
         }
 
         if ((from & kingPositions) != 0) {
@@ -151,6 +160,7 @@ class MinChessWorkspace {
         if ((from & pawnPositions) != 0) {
             pawnPositions &= ~from;
             pawnPositions |= to;
+            halfMoveClock = 0;
         }
 
         enPassantSquare = 0;
@@ -161,7 +171,9 @@ class MinChessWorkspace {
         } else {
             blackPositions &= ~from;
             blackPositions |= to;
+            fullMoveClock++;
         }
+
         whiteTurn = !whiteTurn;
     }
 

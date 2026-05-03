@@ -16,6 +16,8 @@ public class MinChessBuilder extends AbstractPositionBuilder<MinChess> {
                 castlingWhiteKingAllowed,
                 castlingWhiteQueenAllowed,
                 enPassantSquare,
+                halfMoveClock,
+                fullMoveClock,
                 whitePositions,
                 blackPositions,
                 kingPositions,
