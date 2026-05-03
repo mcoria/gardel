@@ -9,9 +9,7 @@ import net.chesstango.gardel.move.SANDecoder;
 import org.antlr.v4.runtime.CharStreams;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
@@ -58,6 +56,9 @@ public class PGN implements Serializable {
     private FEN fen;
     private Result result;
     private Termination termination;
+
+    private Map<String, String> otherTags = new HashMap<>();
+
     private List<String> moveList;
 
 
@@ -112,19 +113,21 @@ public class PGN implements Serializable {
 
         for (String moveStr : getMoveList()) {
 
-            FEN fenGame = game.toFEN();
+            FEN fen = game.toFEN();
 
-            Short legalMoveToExecute = sanDecoder.decode(moveStr, fenGame);
+            Short legalMoveToExecute = sanDecoder.decode(moveStr, fen);
 
             if (legalMoveToExecute != null) {
                 EPD epd = new EPD();
 
-                epd.setPiecePlacement(fenGame.getPiecePlacement());
-                epd.setActiveColor(fenGame.getActiveColor());
-                epd.setCastingsAllowed(fenGame.getCastingsAllowed());
-                epd.setEnPassantSquare(fenGame.getEnPassantSquare());
+                epd.setPiecePlacement(fen.getPiecePlacement());
+                epd.setActiveColor(fen.getActiveColor());
+                epd.setCastingsAllowed(fen.getCastingsAllowed());
+                epd.setEnPassantSquare(fen.getEnPassantSquare());
+                epd.setHalfMoveClock(fen.getHalfMoveClock());
+                epd.setFullMoveClock(fen.getFullMoveClock());
 
-                epd.setId(String.format("%s", Integer.toHexString(fenGame.hashCode())));
+                epd.setId(String.format("%s %s", fen.getFullMoveClock(), fen.getActiveColor()));
 
                 if (event != null) {
                     epd.setC0(String.format("event='%s'", event));
@@ -154,7 +157,7 @@ public class PGN implements Serializable {
                 game.doMove(legalMoveToExecute);
 
             } else {
-                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), moveStr, fenGame.toString());
+                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), moveStr, fen.toString());
                 return Stream.empty();
             }
         }

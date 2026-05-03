@@ -8,6 +8,7 @@ import net.chesstango.gardel.internal.antlr4.PGNParser;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -95,6 +96,11 @@ class PGNGardelListener extends PGNBaseListener {
                             default -> throw new IllegalStateException("Unexpected value: " + tagValue.toUpperCase());
                         }
                 );
+                break;
+
+            default:
+                Map<String, String> otherTags = pgn.getOtherTags();
+                otherTags.put(tagName, tagValue);
                 break;
         }
     }

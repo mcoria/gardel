@@ -23,6 +23,9 @@ public class EPD implements Serializable {
     private String activeColor;
     private String castingsAllowed;
     private String enPassantSquare;
+    private String halfMoveClock;
+    private String fullMoveClock;
+
 
     private String id;
     private String c0;
@@ -64,14 +67,19 @@ public class EPD implements Serializable {
         return text != null ? text : new EPDEncoder().encode(this);
     }
 
-    public String getFenWithoutClocks() {
-        return piecePlacement +
+
+    public FEN toFEN() {
+        return FEN.from(piecePlacement +
                 " " +
                 activeColor +
                 " " +
                 castingsAllowed +
                 " " +
-                enPassantSquare;
+                enPassantSquare +
+                " " +
+                (halfMoveClock == null ? "0" : halfMoveClock) +
+                " " +
+                (fullMoveClock == null ? "1" : fullMoveClock));
     }
 
     /**
@@ -90,7 +98,6 @@ public class EPD implements Serializable {
         }
     }
 
-
     boolean moveListContainsMove(String movesListStr, String moveStr) {
         Move theMove = Move.of(moveStr);
         List<Move> moveList = movesStringToMoves(movesListStr);
@@ -103,7 +110,7 @@ public class EPD implements Serializable {
     }
 
     List<Move> movesStringToMoves(String movesString) {
-        FEN fen = FEN.from(getFenWithoutClocks() + " 0 1");
+        FEN fen = toFEN();
         String[] movesStringArray = movesString.split(" ");
         List<Move> moveList = new ArrayList<>(movesStringArray.length);
         AgregateMoveDecoder<Move> moveDecoder = new AgregateMoveDecoder<>(new Move.GardelMoveSupplier());

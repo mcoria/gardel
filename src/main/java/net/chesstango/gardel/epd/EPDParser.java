@@ -18,7 +18,9 @@ class EPDParser {
                     "(?<activeColor>[wb])\\s+" +
                     "(?<castingsAllowed>([KQkq]{1,4}|-))\\s+" +
                     "(?<enPassantSquare>(\\w\\d|-))\\s+" +
-                    "(\\s*bm\\s+(?<bestmoves>[^;]*);" +
+                    "(\\s*hmvc\\s+(?<hmvc>[^;]+);" +
+                    "|\\s*fmvn\\s+(?<fmvn>[^;]+);" +
+                    "|\\s*bm\\s+(?<bestmoves>[^;]*);" +
                     "|\\s*am\\s+(?<avoidmoves>[^;]*);" +
                     "|\\s*sm\\s+(?<suppliedmove>[^;]*);" +
                     "|\\s*c0\\s+\"(?<comment0>[^\"]+)\";" +
@@ -57,6 +59,12 @@ class EPDParser {
             if (matcher.group("avoidmoves") != null) {
                 String avoidMovesString = matcher.group("avoidmoves");
                 epd.setAvoidMovesStr(avoidMovesString);
+            }
+            if (matcher.group("hmvc") != null) {
+                epd.setHalfMoveClock(matcher.group("hmvc"));
+            }
+            if (matcher.group("fmvn") != null) {
+                epd.setFullMoveClock(matcher.group("fmvn"));
             }
             if (matcher.group("id") != null) {
                 epd.setId(matcher.group("id"));

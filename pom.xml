@@ -4,7 +4,7 @@
 
     <groupId>net.chesstango</groupId>
     <artifactId>gardel</artifactId>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>gardel</name>
