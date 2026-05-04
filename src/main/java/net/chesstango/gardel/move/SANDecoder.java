@@ -35,8 +35,8 @@ public class SANDecoder<M> implements MoveDecoder<M> {
     }
 
     @Override
-    public M decode(String moveStr, FEN fen) {
-        final Matcher matcher = movePattern.matcher(moveStr);
+    public M decode(String sanMove, FEN fen) {
+        final Matcher matcher = movePattern.matcher(sanMove);
         if (matcher.matches()) {
             MinChess minchess = MinChess.from(fen);
             if (matcher.group("piecemove") != null) {

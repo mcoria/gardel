@@ -98,9 +98,9 @@ public class EPD implements Serializable {
         }
     }
 
-    boolean moveListContainsMove(String movesListStr, String moveStr) {
+    boolean moveListContainsMove(String sanMoves, String moveStr) {
         Move theMove = Move.of(moveStr);
-        List<Move> moveList = movesStringToMoves(movesListStr);
+        List<Move> moveList = sanMovesToGardelMoves(sanMoves);
         for (Move move : moveList) {
             if (move.equals(theMove)) {
                 return true;
@@ -109,9 +109,9 @@ public class EPD implements Serializable {
         return false;
     }
 
-    List<Move> movesStringToMoves(String movesString) {
+    List<Move> sanMovesToGardelMoves(String sanMoves) {
         FEN fen = toFEN();
-        String[] movesStringArray = movesString.split(" ");
+        String[] movesStringArray = sanMoves.split(" ");
         List<Move> moveList = new ArrayList<>(movesStringArray.length);
         AgregateMoveDecoder<Move> moveDecoder = new AgregateMoveDecoder<>(new Move.GardelMoveSupplier());
         for (String moveStr : movesStringArray) {

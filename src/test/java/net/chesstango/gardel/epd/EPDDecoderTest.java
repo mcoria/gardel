@@ -181,7 +181,7 @@ public class EPDDecoderTest {
         assertEquals("Rg3", epd.getBestMovesStr());
         assertEquals("WAC.003", epd.getId());
         assertEquals(1, epd.getBestMovesStr().split(" ").length);
-        assertEquals(Piece.ROOK_WHITE, epd.movesStringToMoves(epd.getBestMovesStr()).getFirst().getFrom().getPiece());
+        assertEquals(Piece.ROOK_WHITE, epd.sanMovesToGardelMoves(epd.getBestMovesStr()).getFirst().getFrom().getPiece());
     }
 
     @Test
@@ -193,7 +193,7 @@ public class EPDDecoderTest {
         assertEquals("WAC.072", epd.getId());
         assertEquals(1, epd.getBestMovesStr().split(" ").length);
 
-        Move firstMove = epd.movesStringToMoves(epd.getBestMovesStr()).getFirst();
+        Move firstMove = epd.sanMovesToGardelMoves(epd.getBestMovesStr()).getFirst();
         assertEquals(Piece.PAWN_WHITE, firstMove.getFrom().getPiece());
     }
 
@@ -206,7 +206,7 @@ public class EPDDecoderTest {
         assertEquals("STS(v12.0) Center Control.081", epd.getId());
         assertEquals(1, epd.getBestMovesStr().split(" ").length);
 
-        Move firstMove = epd.movesStringToMoves(epd.getBestMovesStr()).getFirst();
+        Move firstMove = epd.sanMovesToGardelMoves(epd.getBestMovesStr()).getFirst();
         assertEquals(Piece.KNIGHT_BLACK, firstMove.getFrom().getPiece());
         assertEquals(Square.d7, firstMove.getFrom().getSquare());
         assertEquals(Square.e5, firstMove.getTo().getSquare());
@@ -221,7 +221,7 @@ public class EPDDecoderTest {
         assertEquals("position 03", epd.getId());
         assertEquals(1, epd.getAvoidMovesStr().split(" ").length);
 
-        Move firstMove = epd.movesStringToMoves(epd.getAvoidMovesStr()).getFirst();
+        Move firstMove = epd.sanMovesToGardelMoves(epd.getAvoidMovesStr()).getFirst();
         assertEquals(Piece.ROOK_WHITE, firstMove.getFrom().getPiece());
         assertEquals(Square.e1, firstMove.getFrom().getSquare());
         assertEquals(Square.d1, firstMove.getTo().getSquare());

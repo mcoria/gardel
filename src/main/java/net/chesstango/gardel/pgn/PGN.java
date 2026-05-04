@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.chesstango.gardel.epd.EPD;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.minchess.MinChess;
+import net.chesstango.gardel.move.Move;
 import net.chesstango.gardel.move.SANDecoder;
 import org.antlr.v4.runtime.CharStreams;
 
@@ -248,11 +249,11 @@ public class PGN implements Serializable {
 
         for (String moveStr : getSanMoves()) {
 
-            Short legalMoveToExecute = sanDecoder.decode(moveStr, fenGame);
+            Short minChessMove = sanDecoder.decode(moveStr, fenGame);
 
-            if (legalMoveToExecute != null) {
+            if (minChessMove != null) {
 
-                game.doMove(legalMoveToExecute);
+                game.doMove(minChessMove);
 
                 fenGame = game.toFEN();
 
@@ -265,6 +266,44 @@ public class PGN implements Serializable {
         }
 
         return fenBuilder.build();
+    }
+
+    public List<String> toCoordinateMoves() {
+        List<String> coordinateMoves = new ArrayList<>(getSanMoves().size());
+
+        MinChess game = MinChess.from(getFen() == null ? FEN.from(FEN.START_POSITION_STRING) : getFen());
+
+        SANDecoder<Short> sanDecoder = new SANDecoder<>(
+                (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
+                        get(game, fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)
+        );
+
+        SANDecoder<Move> sanToMoveDecoder = new SANDecoder<>(new Move.GardelMoveSupplier());
+
+
+        FEN fenGame = game.toFEN();
+
+        for (String sanMove : getSanMoves()) {
+
+            Short minChessMove = sanDecoder.decode(sanMove, fenGame);
+
+            Move move = sanToMoveDecoder.decode(sanMove, fenGame);
+
+            if (minChessMove != null && move != null) {
+
+                coordinateMoves.add(move.toString());
+
+                game.doMove(minChessMove);
+
+                fenGame = game.toFEN();
+
+            } else {
+                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), sanMove, fenGame.toString());
+                return Collections.emptyList();
+            }
+        }
+
+        return coordinateMoves;
     }
 
     /**
