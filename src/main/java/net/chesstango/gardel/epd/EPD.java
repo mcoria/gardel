@@ -99,7 +99,7 @@ public class EPD implements Serializable {
     }
 
     boolean moveListContainsMove(String sanMoves, String moveStr) {
-        Move theMove = Move.of(moveStr);
+        Move theMove = Move.from(moveStr);
         List<Move> moveList = sanMovesToGardelMoves(sanMoves);
         for (Move move : moveList) {
             if (move.equals(theMove)) {

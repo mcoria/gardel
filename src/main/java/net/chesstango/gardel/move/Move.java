@@ -5,7 +5,7 @@ import net.chesstango.gardel.minchess.MinChess;
 
 /**
  * Represents a chess move in pure algebraic notation.
- * This record encapsulates the essential parts of a chess move: the source square,
+ * This record encapsulates the essential parts from a chess move: the source square,
  * destination square, and an optional promotion piece for pawn promotions.
  *
  * @author Mauricio Coria
@@ -35,15 +35,15 @@ public record Move(Square from,
             };
         }
 
-        static PromotionPiece from(String promotionStr) {
-            if (promotionStr == null) return null;
-            return switch (promotionStr.toLowerCase()) {
+        static PromotionPiece from(String promotion) {
+            if (promotion == null) return null;
+            return switch (promotion.toLowerCase()) {
                 case "n" -> KNIGHT;
                 case "b" -> BISHOP;
                 case "r" -> ROOK;
                 case "q" -> QUEEN;
                 default ->
-                        throw new IllegalArgumentException(String.format("Promotion piece must be one of the following: n, b, r, q, but was %s", promotionStr));
+                        throw new IllegalArgumentException(String.format("Promotion piece must be one from the following: n, b, r, q, but was %s", promotion));
             };
         }
     }
@@ -94,7 +94,7 @@ public record Move(Square from,
             return array[rank * 8 + file];
         }
 
-        public static Square of(int idx) {
+        public static Square from(int idx) {
             return of(idx % 8, idx / 8);
         }
     }
@@ -108,23 +108,23 @@ public record Move(Square from,
         return new Move(from, to, promotionPiece);
     }
 
-    public static Move of(String moveStr) {
-        if (moveStr.length() < 4 || moveStr.length() > 5) {
-            throw new IllegalArgumentException(String.format("Move string must be of length 4, but was %d", moveStr.length()));
+    public static Move from(String move) {
+        if (move.length() < 4 || move.length() > 5) {
+            throw new IllegalArgumentException(String.format("Move string must be from length 4, but was %d", move.length()));
         }
-        Square from = Square.valueOf(moveStr.substring(0, 2));
-        Square to = Square.valueOf(moveStr.substring(2, 4));
-        PromotionPiece promotionPiece = moveStr.length() == 5 ? PromotionPiece.from(moveStr.substring(4, 5)) : null;
+        Square from = Square.valueOf(move.substring(0, 2));
+        Square to = Square.valueOf(move.substring(2, 4));
+        PromotionPiece promotionPiece = move.length() == 5 ? PromotionPiece.from(move.substring(4, 5)) : null;
 
         return new Move(from, to, promotionPiece);
     }
 
     /**
-     * Returns the string representation of the move in pure algebraic notation.
+     * Returns the string representation from the move in pure algebraic notation.
      * Format: [from square][to square][promotion piece]
      * Example: "e2e4" for a regular move, "e7e8q" for a promotion
      *
-     * @return the string representation of the move
+     * @return the string representation from the move
      */
     @Override
     public String toString() {
@@ -149,11 +149,11 @@ public record Move(Square from,
         public Move get(int fromFile, int fromRank, int toFile, int toRank, int fromPiece, int toPiece, int promotion) {
             final Move.Square fromSquare = Move.Square.of(fromFile, fromRank);
             final Move.Square toSquare = Move.Square.of(toFile, toRank);
-            final Move.PromotionPiece promotionPieceEnum = toMovePromotion(promotion);
-            return new Move(fromSquare, toSquare, promotionPieceEnum);
+            final Move.PromotionPiece promotionPiece = toPromotionPiece(promotion);
+            return new Move(fromSquare, toSquare, promotionPiece);
         }
 
-        private static Move.PromotionPiece toMovePromotion(int promotionPiece) {
+        private static Move.PromotionPiece toPromotionPiece(int promotionPiece) {
             return switch (promotionPiece) {
                 case MinChess.KNIGHT -> Move.PromotionPiece.KNIGHT;
                 case MinChess.BISHOP -> Move.PromotionPiece.BISHOP;

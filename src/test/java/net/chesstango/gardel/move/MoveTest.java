@@ -12,14 +12,14 @@ public class MoveTest {
 
     @Test
     public void testReadMove_c7c8() {
-        Move move = Move.of("c7c8");
+        Move move = Move.from("c7c8");
 
         assertEquals(Move.of(Move.Square.c7, Move.Square.c8), move);
     }
 
     @Test
     public void testReadMove_c7c8_promotion() {
-        Move move = Move.of("c7c8q");
+        Move move = Move.from("c7c8q");
 
         assertEquals(Move.of(Move.Square.c7, Move.Square.c8, Move.PromotionPiece.QUEEN), move);
     }
