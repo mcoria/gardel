@@ -4,7 +4,6 @@ import net.chesstango.gardel.epd.EPD;
 import net.chesstango.gardel.fen.FEN;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -19,7 +18,7 @@ public class PGNTest {
     public void testToEpd(){
         PGN pgn = new PGN();
 
-        pgn.setMoveList(List.of("a4"));
+        pgn.setSanMoves(List.of("a4"));
 
         Stream<EPD> epdStream = pgn.toEPD();
 
@@ -42,7 +41,7 @@ public class PGNTest {
 
         assertEquals(PGN.Result.ONGOING, pgn.getResult());
 
-        assertNotNull(pgn.getMoveList());
+        assertNotNull(pgn.getSanMoves());
 
         System.out.println(pgn);
     }

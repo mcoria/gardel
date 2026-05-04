@@ -113,7 +113,7 @@ class PGNGardelListener extends PGNBaseListener {
 
     @Override
     public void exitMovetext_section(PGNParser.Movetext_sectionContext ctx) {
-        pgn.setMoveList(moveList);
+        pgn.setSanMoves(moveList);
     }
 
     @Override

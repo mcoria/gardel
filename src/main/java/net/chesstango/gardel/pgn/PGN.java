@@ -15,11 +15,19 @@ import java.util.stream.Stream;
 import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
 
 /**
+ * Represents a chess game in Portable Game Notation (PGN) format.
+ * This class encapsulates all the metadata and moves of a chess game,
+ * including standard PGN tags and the ability to convert to other formats
+ * such as EPD and FEN.
+ *
  * @author Mauricio Coria
  */
 @Getter
 @Setter
 public class PGN implements Serializable {
+    /**
+     * Represents the possible results of a chess game.
+     */
     public enum Result {
         WHITE_WINS, BLACK_WINS, DRAW, ONGOING;
 
@@ -34,6 +42,9 @@ public class PGN implements Serializable {
         }
     }
 
+    /**
+     * Represents the type of termination for a chess game.
+     */
     public enum Termination {
         NORMAL, ABANDONED, TIME_FORFEIT;
 
@@ -47,21 +58,60 @@ public class PGN implements Serializable {
         }
     }
 
+    /**
+     * The name of the tournament or match event.
+     */
     private String event;
+    /**
+     * The location where the game was played.
+     */
     private String site;
+    /**
+     * The date when the game was played.
+     */
     private String date;
+    /**
+     * The round number of the tournament.
+     */
     private String round;
+    /**
+     * The name of the player with the white pieces.
+     */
     private String white;
+    /**
+     * The name of the player with the black pieces.
+     */
     private String black;
+    /**
+     * The starting position in FEN notation if different from the standard starting position.
+     */
     private FEN fen;
+    /**
+     * The result of the game.
+     */
     private Result result;
+    /**
+     * The type of termination for the game.
+     */
     private Termination termination;
 
+    /**
+     * Additional PGN tags not covered by the standard fields.
+     */
     private Map<String, String> otherTags = new HashMap<>();
 
-    private List<String> moveList;
+    /**
+     * The list of moves in Standard Algebraic Notation (SAN).
+     */
+    private List<String> sanMoves;
 
 
+    /**
+     * Creates a PGN instance from a PGN format string.
+     *
+     * @param pgn the PGN string to parse
+     * @return a PGN object representing the parsed game, or null if parsing fails
+     */
     public static PGN from(String pgn) {
         PGNDecoder pgnDecoder = new PGNDecoder();
         return pgnDecoder.decodePGNs(CharStreams.fromString(pgn)).findFirst().orElse(null);
@@ -82,27 +132,33 @@ public class PGN implements Serializable {
 
         pgn.setResult(Result.ONGOING);
 
-        pgn.setMoveList(Collections.emptyList());
+        pgn.setSanMoves(Collections.emptyList());
 
         return pgn;
     }
 
+    /**
+     * Converts this PGN object to its string representation in PGN format.
+     *
+     * @return a string representation of this PGN in standard PGN format
+     */
     @Override
     public String toString() {
         return new PGNEncoder().encode(this);
     }
 
     /**
-     * Cada entrada EPD representa la posicion y el movimiento ejecutado
+     * Converts this PGN to a stream of EPD (Extended Position Description) entries.
+     * Each EPD entry represents a position in the game along with metadata and the move executed.
      *
-     * @return
+     * @return a stream of EPD objects representing each position in the game, or an empty stream if conversion fails
      */
     public Stream<EPD> toEPD() {
         Stream.Builder<EPD> fenStreamBuilder = Stream.builder();
 
         MinChess game = MinChess.from(getFen() == null ? FEN.START_POSITION : getFen());
 
-        List<EPD> epdList = new ArrayList<>(getMoveList().size());
+        List<EPD> epdList = new ArrayList<>(getSanMoves().size());
 
         int lastClock = 2;
 
@@ -111,7 +167,7 @@ public class PGN implements Serializable {
                         get(game, fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)
         );
 
-        for (String moveStr : getMoveList()) {
+        for (String moveStr : getSanMoves()) {
 
             FEN fen = game.toFEN();
 
@@ -171,9 +227,10 @@ public class PGN implements Serializable {
     }
 
     /**
-     * Cada entrada FEN representa la posicion y el movimiento ejecutado
+     * Converts this PGN to a stream of FEN (Forsyth-Edwards Notation) positions.
+     * Each FEN entry represents a position after each move in the game.
      *
-     * @return
+     * @return a stream of FEN objects representing each position in the game, or an empty stream if conversion fails
      */
     public Stream<FEN> toFEN() {
         Stream.Builder<FEN> fenBuilder = Stream.builder();
@@ -189,7 +246,7 @@ public class PGN implements Serializable {
 
         fenBuilder.add(fenGame);
 
-        for (String moveStr : getMoveList()) {
+        for (String moveStr : getSanMoves()) {
 
             Short legalMoveToExecute = sanDecoder.decode(moveStr, fenGame);
 
@@ -210,6 +267,19 @@ public class PGN implements Serializable {
         return fenBuilder.build();
     }
 
+    /**
+     * Finds a legal move matching the specified move parameters.
+     *
+     * @param minchess  the chess engine instance
+     * @param fromFile  the source file (column) of the move
+     * @param fromRank  the source rank (row) of the move
+     * @param toFile    the destination file (column) of the move
+     * @param toRank    the destination rank (row) of the move
+     * @param fromPiece the piece type being moved
+     * @param toPiece   the piece type at the destination square (0 if empty, or captured piece)
+     * @param promotion the promotion piece type (0 if no promotion)
+     * @return the encoded move as a Short, or null if no matching legal move is found
+     */
     private Short get(MinChess minchess, int fromFile, int fromRank, int toFile, int toRank, int fromPiece, int toPiece, int promotion) {
         short[] moves = new short[MAX_MOVES];
         int size = minchess.generateMoves(moves);

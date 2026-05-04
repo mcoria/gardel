@@ -29,7 +29,7 @@ public class PGNEncoder {
         sb.append("\n");
 
 
-        List<String> moveList = pgn.getMoveList();
+        List<String> moveList = pgn.getSanMoves();
 
 
         if (!moveList.isEmpty()) {
