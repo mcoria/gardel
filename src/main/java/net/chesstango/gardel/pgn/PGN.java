@@ -268,7 +268,7 @@ public class PGN implements Serializable {
         return fenBuilder.build();
     }
 
-    public List<String> toCoordinateMoves() {
+    public List<String> getCoordinateMoves() {
         List<String> coordinateMoves = new ArrayList<>(getSanMoves().size());
 
         MinChess game = MinChess.from(getFen() == null ? FEN.from(FEN.START_POSITION_STRING) : getFen());

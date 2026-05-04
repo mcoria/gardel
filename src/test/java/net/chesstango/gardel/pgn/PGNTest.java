@@ -45,7 +45,7 @@ public class PGNTest {
     }
 
     @Test
-    public void test_toCoordinateMoves() {
+    public void test_getCoordinateMoves() {
         PGN pgn = PGN.from("""
                 [Event "188c6255-5216-463a-bfc6-300b98a14ff9"]
                 [Site "LAPTOP-PTVVKHNB"]
@@ -74,7 +74,7 @@ public class PGNTest {
                 71. Kc1 e1=Q+ 72. Kb2 Qd2+ 73. Kb1 Qc2+ 74. Ka1 Qc1# 0-1
                 """);
 
-        assertEquals("[g1f3, g8f6, d2d4, d7d5, e2e3, c8g4, f1e2, g4f3, e2f3, e7e6, b1c3, b8c6, e1g1, a8c8, h2h3, f8d6, e3e4, d5e4, f3e4, f6e4, c3e4, c6d4, c1g5, d6e7, g5e7, e8e7, c2c3, d4f5, d1e2, c7c5, a1d1, d8c7, e2h5, h7h6, e4g3, f5g3, f2g3, h8f8, h5g4, g7g6, g4h4, g6g5, h4g4, c5c4, f1f2, f7f5, g4f3, f5f4, g3g4, c8d8, d1d4, b7b5, f3e4, e7f6, f2e2, d8e8, e2d2, c7c5, e4h7, f8h8, h7e4, h6h5, d2d1, h5g4, h3g4, h8h4, e4f3, e8c8, g1f1, h4h1, f1e2, c8h8, f3e4, h8h2, d1h1, h2h1, d4d8, c5g1, e4d4, g1d4, d8d4, h1b1, d4d2, a7a5, e2f3, a5a4, f3e2, b1a1, a2a3, a1g1, e2f2, g1b1, f2f3, f6e7, f3e4, b1h1, e4f3, h1c1, f3e2, c1b1, e2f2, e7f7, d2e2, f7f6, e2d2, f6g6, d2e2, g6f7, e2d2, e6e5, d2e2, f7e6, f2f3, b1f1, f3e4, f1d1, e4f3, d1d3, f3f2, e6d5, e2e1, e5e4, f2e2, e4e3, e2f3, d3d2, e1e2, d2e2, f3e2, d5e4, e2d1, f4f3, g2f3, e4f3, d1e1, e3e2, e1d2, f3f2, b2b4, c4b3, d2c1, e2e1q, c1b2, e1d2, b2b1, d2c2, b1a1, c2c1]", pgn.toCoordinateMoves().toString());
+        assertEquals("[g1f3, g8f6, d2d4, d7d5, e2e3, c8g4, f1e2, g4f3, e2f3, e7e6, b1c3, b8c6, e1g1, a8c8, h2h3, f8d6, e3e4, d5e4, f3e4, f6e4, c3e4, c6d4, c1g5, d6e7, g5e7, e8e7, c2c3, d4f5, d1e2, c7c5, a1d1, d8c7, e2h5, h7h6, e4g3, f5g3, f2g3, h8f8, h5g4, g7g6, g4h4, g6g5, h4g4, c5c4, f1f2, f7f5, g4f3, f5f4, g3g4, c8d8, d1d4, b7b5, f3e4, e7f6, f2e2, d8e8, e2d2, c7c5, e4h7, f8h8, h7e4, h6h5, d2d1, h5g4, h3g4, h8h4, e4f3, e8c8, g1f1, h4h1, f1e2, c8h8, f3e4, h8h2, d1h1, h2h1, d4d8, c5g1, e4d4, g1d4, d8d4, h1b1, d4d2, a7a5, e2f3, a5a4, f3e2, b1a1, a2a3, a1g1, e2f2, g1b1, f2f3, f6e7, f3e4, b1h1, e4f3, h1c1, f3e2, c1b1, e2f2, e7f7, d2e2, f7f6, e2d2, f6g6, d2e2, g6f7, e2d2, e6e5, d2e2, f7e6, f2f3, b1f1, f3e4, f1d1, e4f3, d1d3, f3f2, e6d5, e2e1, e5e4, f2e2, e4e3, e2f3, d3d2, e1e2, d2e2, f3e2, d5e4, e2d1, f4f3, g2f3, e4f3, d1e1, e3e2, e1d2, f3f2, b2b4, c4b3, d2c1, e2e1q, c1b2, e1d2, b2b1, d2c2, b1a1, c2c1]", pgn.getCoordinateMoves().toString());
     }
 
 }
