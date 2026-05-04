@@ -31,7 +31,7 @@ public record Move(Square from,
                 case KNIGHT -> "n";
                 case BISHOP -> "b";
                 case ROOK -> "r";
-                case QUEEN -> "w";
+                case QUEEN -> "q";
             };
         }
 
