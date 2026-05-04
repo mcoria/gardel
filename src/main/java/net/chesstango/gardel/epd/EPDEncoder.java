@@ -10,6 +10,18 @@ public class EPDEncoder {
 
         stringBuilder.append(String.format("%s %s %s %s", epd.getPiecePlacement(), epd.getActiveColor(), epd.getCastingsAllowed(), epd.getEnPassantSquare()));
 
+        if (epd.getHalfMoveClock() != null) {
+            stringBuilder.append(" hmvc ");
+            stringBuilder.append(epd.getHalfMoveClock());
+            stringBuilder.append(";");
+        }
+
+        if (epd.getFullMoveClock() != null) {
+            stringBuilder.append(" fmvn ");
+            stringBuilder.append(epd.getFullMoveClock());
+            stringBuilder.append(";");
+        }
+
         if (epd.getSuppliedMoveStr() != null) {
             stringBuilder.append(" sm ");
             stringBuilder.append(epd.getSuppliedMoveStr());
