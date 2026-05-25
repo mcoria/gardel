@@ -37,4 +37,12 @@ public class EPDTest {
         assertEquals("123", epd.getCentiPawnEvaluation());
         assertEquals(epdStr, epd.toString());
     }
+
+    @Test
+    public void testPv() {
+        String epdStr = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - pv e2e4 e7e5;";
+        EPD epd = EPD.from(epdStr);
+        assertEquals("e2e4 e7e5", epd.getPredictedVariation());
+        assertEquals(epdStr, epd.toString());
+    }
 }

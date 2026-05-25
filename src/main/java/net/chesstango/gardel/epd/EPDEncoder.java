@@ -34,6 +34,12 @@ public class EPDEncoder {
             stringBuilder.append(";");
         }
 
+        if (epd.getPredictedVariation() != null) {
+            stringBuilder.append(" pv ");
+            stringBuilder.append(epd.getPredictedVariation());
+            stringBuilder.append(";");
+        }
+
         if (epd.getC0() != null) {
             stringBuilder.append(" c0 \"");
             stringBuilder.append(epd.getC0());

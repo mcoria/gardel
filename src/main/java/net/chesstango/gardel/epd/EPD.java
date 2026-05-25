@@ -43,6 +43,8 @@ public class EPD implements Serializable {
 
     private String suppliedMoveStr;
 
+    private String predictedVariation;
+
     private String centiPawnEvaluation;
 
     public static EPD from(String epd) {
