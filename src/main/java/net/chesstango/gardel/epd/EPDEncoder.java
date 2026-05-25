@@ -28,6 +28,12 @@ public class EPDEncoder {
             stringBuilder.append(";");
         }
 
+        if (epd.getCentiPawnEvaluation() != null) {
+            stringBuilder.append(" ce ");
+            stringBuilder.append(epd.getCentiPawnEvaluation());
+            stringBuilder.append(";");
+        }
+
         if (epd.getC0() != null) {
             stringBuilder.append(" c0 \"");
             stringBuilder.append(epd.getC0());

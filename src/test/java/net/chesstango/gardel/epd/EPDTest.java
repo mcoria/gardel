@@ -3,6 +3,7 @@ package net.chesstango.gardel.epd;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -27,5 +28,13 @@ public class EPDTest {
     public void testIsMoveSuccess03() {
         EPD epd = EPD.from("3r2k1/1p3ppp/2pq4/p1n5/P6P/1P6/1PB2QP1/1K2R3 w - - am Rd1; id \"position 03\";");
         assertTrue(epd.isMoveSuccess("e1f8"));
+    }
+
+    @Test
+    public void testCE() {
+        String epdStr = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - ce 123;";
+        EPD epd = EPD.from(epdStr);
+        assertEquals("123", epd.getCentiPawnEvaluation());
+        assertEquals(epdStr, epd.toString());
     }
 }

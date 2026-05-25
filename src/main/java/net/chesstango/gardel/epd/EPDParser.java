@@ -23,6 +23,7 @@ class EPDParser {
                     "|\\s*bm\\s+(?<bestmoves>[^;]*);" +
                     "|\\s*am\\s+(?<avoidmoves>[^;]*);" +
                     "|\\s*sm\\s+(?<suppliedmove>[^;]*);" +
+                    "|\\s*ce\\s+(?<ce>[^;]+);" +
                     "|\\s*c0\\s+\"(?<comment0>[^\"]+)\";" +
                     "|\\s*c1\\s+\"(?<comment1>[^\"]+)\";" +
                     "|\\s*c2\\s+\"(?<comment2>[^\"]+)\";" +
@@ -51,6 +52,9 @@ class EPDParser {
             if (matcher.group("suppliedmove") != null) {
                 String suppliedMove = matcher.group("suppliedmove");
                 epd.setSuppliedMoveStr(suppliedMove);
+            }
+            if (matcher.group("ce") != null) {
+                epd.setCentiPawnEvaluation(matcher.group("ce"));
             }
             if (matcher.group("bestmoves") != null) {
                 String bestMovesString = matcher.group("bestmoves");
