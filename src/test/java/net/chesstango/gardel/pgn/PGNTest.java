@@ -18,7 +18,7 @@ public class PGNTest {
     public void test_toEPD(){
         PGN pgn = new PGN();
 
-        pgn.setSanMoves(List.of("a4"));
+        pgn.setPgnMoves(List.of(new PGNMove("a4")));
 
         Stream<EPD> epdStream = pgn.toEPD();
 
@@ -41,7 +41,7 @@ public class PGNTest {
 
         assertEquals(PGN.Result.ONGOING, pgn.getResult());
 
-        assertNotNull(pgn.getSanMoves());
+        assertNotNull(pgn.getPgnMoves());
     }
 
     @Test

@@ -104,7 +104,7 @@ public class PGN implements Serializable {
     /**
      * The list of moves in Standard Algebraic Notation (SAN).
      */
-    private List<String> sanMoves;
+    private List<PGNMove> pgnMoves;
 
 
     /**
@@ -133,7 +133,7 @@ public class PGN implements Serializable {
 
         pgn.setResult(Result.ONGOING);
 
-        pgn.setSanMoves(Collections.emptyList());
+        pgn.setPgnMoves(Collections.emptyList());
 
         return pgn;
     }
@@ -159,7 +159,7 @@ public class PGN implements Serializable {
 
         MinChess game = MinChess.from(getFen() == null ? FEN.START_POSITION : getFen());
 
-        List<EPD> epdList = new ArrayList<>(getSanMoves().size());
+        List<EPD> epdList = new ArrayList<>(getPgnMoves().size());
 
         int lastClock = 2;
 
@@ -168,11 +168,11 @@ public class PGN implements Serializable {
                         get(game, fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)
         );
 
-        for (String moveStr : getSanMoves()) {
+        for (PGNMove move : getPgnMoves()) {
 
             FEN fen = game.toFEN();
 
-            Short legalMoveToExecute = sanDecoder.decode(moveStr, fen);
+            Short legalMoveToExecute = sanDecoder.decode(move.getSanMove(), fen);
 
             if (legalMoveToExecute != null) {
                 EPD epd = new EPD();
@@ -207,14 +207,14 @@ public class PGN implements Serializable {
 
                 epd.setC6(String.format("clock=%d", lastClock++ / 2));
 
-                epd.setSuppliedMoveStr(moveStr);
+                epd.setSuppliedMoveStr(move.getSanMove());
 
                 epdList.add(epd);
 
                 game.doMove(legalMoveToExecute);
 
             } else {
-                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), moveStr, fen.toString());
+                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), move.getSanMove(), fen.toString());
                 return Stream.empty();
             }
         }
@@ -247,9 +247,9 @@ public class PGN implements Serializable {
 
         fenBuilder.add(fenGame);
 
-        for (String moveStr : getSanMoves()) {
+        for (PGNMove move : getPgnMoves()) {
 
-            Short minChessMove = sanDecoder.decode(moveStr, fenGame);
+            Short minChessMove = sanDecoder.decode(move.getSanMove(), fenGame);
 
             if (minChessMove != null) {
 
@@ -260,7 +260,7 @@ public class PGN implements Serializable {
                 fenBuilder.add(fenGame);
 
             } else {
-                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), moveStr, fenGame.toString());
+                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), move.getSanMove(), fenGame.toString());
                 return Stream.empty();
             }
         }
@@ -269,7 +269,7 @@ public class PGN implements Serializable {
     }
 
     public List<String> getCoordinateMoves() {
-        List<String> coordinateMoves = new ArrayList<>(getSanMoves().size());
+        List<String> coordinateMoves = new ArrayList<>(getPgnMoves().size());
 
         MinChess game = MinChess.from(getFen() == null ? FEN.from(FEN.START_POSITION_STRING) : getFen());
 
@@ -283,11 +283,11 @@ public class PGN implements Serializable {
 
         FEN fenGame = game.toFEN();
 
-        for (String sanMove : getSanMoves()) {
+        for (PGNMove sanMove : getPgnMoves()) {
 
-            Short minChessMove = sanDecoder.decode(sanMove, fenGame);
+            Short minChessMove = sanDecoder.decode(sanMove.getSanMove(), fenGame);
 
-            Move move = sanToMoveDecoder.decode(sanMove, fenGame);
+            Move move = sanToMoveDecoder.decode(sanMove.getSanMove(), fenGame);
 
             if (minChessMove != null && move != null) {
 

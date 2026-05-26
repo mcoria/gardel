@@ -78,10 +78,10 @@ public class PGNDecoderTest {
         assertEquals("Chacarera", pgn.getBlack());
         assertEquals(PGN.Result.DRAW, pgn.getResult());
 
-        List<String> moves = pgn.getSanMoves();
-        assertEquals("e4", moves.get(0));
-        assertEquals("c6", moves.get(1));
-        assertEquals("Be2", moves.get(10));
+        List<PGNMove> moves = pgn.getPgnMoves();
+        assertEquals("e4", moves.get(0).getSanMove());
+        assertEquals("c6", moves.get(1).getSanMove());
+        assertEquals("Be2", moves.get(10).getSanMove());
     }
 
 
@@ -120,8 +120,8 @@ public class PGNDecoderTest {
         assertEquals(PGN.Result.WHITE_WINS, pgn.getResult());
         assertEquals(PGN.Termination.TIME_FORFEIT, pgn.getTermination());
 
-        List<String> moves = pgn.getSanMoves();
-        assertEquals("Qb4", moves.get(22));
+        List<PGNMove> moves = pgn.getPgnMoves();
+        assertEquals("Qb4", moves.get(22).getSanMove());
     }
 
     @Test
@@ -149,8 +149,8 @@ public class PGNDecoderTest {
         assertEquals("Spike 1.4", pgn.getBlack());
         assertEquals(PGN.Result.BLACK_WINS, pgn.getResult());
 
-        List<String> moves = pgn.getSanMoves();
-        assertEquals("Qh1#", moves.get(31));
+        List<PGNMove> moves = pgn.getPgnMoves();
+        assertEquals("Qh1#", moves.get(31).getSanMove());
     }
 
     @Test
@@ -180,8 +180,8 @@ public class PGNDecoderTest {
         assertEquals(PGN.Result.BLACK_WINS, pgn.getResult());
         assertEquals(PGN.Termination.NORMAL, pgn.getTermination());
 
-        List<String> moves = pgn.getSanMoves();
-        assertEquals("Qh1#", moves.get(31));
+        List<PGNMove> moves = pgn.getPgnMoves();
+        assertEquals("Qh1#", moves.get(31).getSanMove());
     }
 
     @Test
@@ -214,8 +214,8 @@ public class PGNDecoderTest {
         assertEquals("Spassky, Boris V.", pgn.getBlack());
         assertEquals(PGN.Result.DRAW, pgn.getResult());
 
-        List<String> moves = pgn.getSanMoves();
-        assertEquals("Nxe5", moves.get(19));
+        List<PGNMove> moves = pgn.getPgnMoves();
+        assertEquals("Nxe5", moves.get(19).getSanMove());
     }
 
     @Test
@@ -314,7 +314,7 @@ public class PGNDecoderTest {
         assertEquals("Benjamin, Joel", pgn.getBlack());
         assertEquals(PGN.Result.DRAW, pgn.getResult());
 
-        List<String> moves = pgn.getSanMoves();
+        List<PGNMove> moves = pgn.getPgnMoves();
         assertEquals(88 * 2 - 1, moves.size());
     }
 
@@ -353,7 +353,7 @@ public class PGNDecoderTest {
         assertEquals("Kotvalt, Antonin", pgn.getBlack());
         assertEquals(PGN.Result.WHITE_WINS, pgn.getResult());
 
-        List<String> moves = pgn.getSanMoves();
+        List<PGNMove> moves = pgn.getPgnMoves();
         assertEquals(15 * 2 - 1, moves.size());
     }
 
@@ -367,11 +367,11 @@ public class PGNDecoderTest {
 
         // 1st Game
         assertEquals("Balsa - Top 10", pgnList.get(0).getEvent());
-        assertEquals("Be2", pgnList.get(0).getSanMoves().get(10));
+        assertEquals("Be2", pgnList.get(0).getPgnMoves().get(10).getSanMove());
 
         // 10th Game
         assertEquals("13", pgnList.get(9).getRound());
-        assertEquals("Bd2", pgnList.get(9).getSanMoves().get(10));
+        assertEquals("Bd2", pgnList.get(9).getPgnMoves().get(10).getSanMove());
     }
 
 

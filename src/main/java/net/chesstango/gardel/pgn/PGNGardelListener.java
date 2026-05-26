@@ -23,7 +23,7 @@ class PGNGardelListener extends PGNBaseListener {
 
     private String tagName;
     private String tagValue;
-    private List<String> moveList;
+    private List<PGNMove> moveList;
     private int recursiveVariation;
 
     @Override
@@ -113,13 +113,13 @@ class PGNGardelListener extends PGNBaseListener {
 
     @Override
     public void exitMovetext_section(PGNParser.Movetext_sectionContext ctx) {
-        pgn.setSanMoves(moveList);
+        pgn.setPgnMoves(moveList);
     }
 
     @Override
     public void enterSan_move(PGNParser.San_moveContext ctx) {
         if (recursiveVariation == 0) {
-            moveList.add(ctx.getText());
+            moveList.add(new PGNMove(ctx.getText()));
         }
     }
 

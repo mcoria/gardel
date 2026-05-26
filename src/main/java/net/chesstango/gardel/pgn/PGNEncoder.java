@@ -29,7 +29,7 @@ public class PGNEncoder {
         sb.append("\n");
 
 
-        List<String> moveList = pgn.getSanMoves();
+        List<PGNMove> moveList = pgn.getPgnMoves();
 
 
         if (!moveList.isEmpty()) {
@@ -47,7 +47,7 @@ public class PGNEncoder {
                 if (whiteTurn) {
                     sb.append(clock)
                             .append(". ")
-                            .append(moveList.get(i))
+                            .append(moveList.get(i).getSanMove())
                             .append(" ");
                     whiteTurn = false;
                 } else {
@@ -55,7 +55,7 @@ public class PGNEncoder {
                         sb.append(clock)
                                 .append("... ");
                     }
-                    sb.append(moveList.get(i))
+                    sb.append(moveList.get(i).getSanMove())
                             .append(" ");
                     whiteTurn = true;
                     clock++;

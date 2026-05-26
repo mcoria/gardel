@@ -30,7 +30,7 @@ public class PGNEncoderTest {
         pgn.setBlack("TheBlack");
         pgn.setFen(FEN.from("1nbqk2r/2p2ppp/r3pn2/pp6/PbpP4/5NP1/1PQBPPBP/RN3RK1 b k a3 0 9"));
         pgn.setResult(PGN.Result.ONGOING);
-        pgn.setSanMoves(List.of("Ng4", "d5"));
+        pgn.setPgnMoves(List.of(new PGNMove("Ng4"), new PGNMove("d5")));
 
         assertEquals("""
                 [Event "TheEvent"]
@@ -57,7 +57,7 @@ public class PGNEncoderTest {
         pgn.setFen(FEN.from("1nbqk2r/2p2ppp/r3pn2/pp6/PbpP4/5NP1/1PQBPPBP/RN3RK1 b k a3 0 9"));
         pgn.setResult(PGN.Result.ONGOING);
         pgn.setTermination(PGN.Termination.NORMAL);
-        pgn.setSanMoves(List.of("Ng4", "d5"));
+        pgn.setPgnMoves(List.of(new PGNMove("Ng4"), new PGNMove("d5")));
 
         assertEquals("""
                 [Event "TheEvent"]
