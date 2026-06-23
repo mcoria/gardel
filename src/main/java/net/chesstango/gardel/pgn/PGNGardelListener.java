@@ -111,8 +111,7 @@ class PGNGardelListener extends PGNBaseListener {
                 break;
 
             default:
-                Map<String, String> otherTags = pgn.getOtherTags();
-                otherTags.put(tagName, tagValue);
+                pgn.setTag(tagName, tagValue);
                 break;
         }
     }

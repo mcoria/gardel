@@ -1,5 +1,6 @@
 package net.chesstango.gardel.pgn;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import net.chesstango.gardel.epd.EPD;
@@ -23,8 +24,6 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
  *
  * @author Mauricio Coria
  */
-@Getter
-@Setter
 public class PGN implements Serializable {
     /**
      * Represents the possible results of a chess game.
@@ -62,50 +61,87 @@ public class PGN implements Serializable {
     /**
      * The name of the tournament or match event.
      */
+    @Getter
+    @Setter
     private String event;
+
     /**
      * The location where the game was played.
      */
+    @Getter
+    @Setter
     private String site;
+
     /**
      * The date when the game was played.
      */
+    @Getter
+    @Setter
     private String date;
+
     /**
      * The round number of the tournament.
      */
+    @Getter
+    @Setter
     private String round;
+
     /**
      * The name of the player with the white pieces.
      */
+    @Getter
+    @Setter
     private String white;
+
     /**
      * The name of the player with the black pieces.
      */
+    @Getter
+    @Setter
     private String black;
+
     /**
      * The starting position in FEN notation if different from the standard starting position.
      */
+    @Getter
+    @Setter
     private FEN fen;
+
     /**
      * The result of the game.
      */
+    @Getter
+    @Setter
     private Result result;
+
     /**
      * The type of termination for the game.
      */
+    @Getter
+    @Setter
     private Termination termination;
 
     /**
      * Additional PGN tags not covered by the standard fields.
      */
-    private Map<String, String> otherTags = new HashMap<>();
+    @Getter(AccessLevel.PACKAGE)
+    private final Map<String, String> otherTags = new TreeMap<>();
 
     /**
      * The list of moves in Standard Algebraic Notation (SAN).
      */
+    @Getter
+    @Setter
     private List<PGNMove> pgnMoves;
 
+
+    public String setTag(String tagName, String tagValue) {
+        return otherTags.put(tagName, tagValue);
+    }
+
+    public String getTag(String tagName) {
+        return otherTags.get(tagName);
+    }
 
     /**
      * Creates a PGN instance from a PGN format string.

@@ -26,6 +26,10 @@ public class PGNEncoder {
         if (pgn.getTermination() != null) {
             sb.append("[Termination \"").append(pgn.getTermination()).append("\"]\n");
         }
+
+        pgn.getOtherTags()
+                .forEach((key, value) -> sb.append("[").append(key).append(" \"").append(value).append("\"]\n"));
+
         sb.append("\n");
 
 
