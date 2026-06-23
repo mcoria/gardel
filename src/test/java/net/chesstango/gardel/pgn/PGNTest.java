@@ -4,6 +4,7 @@ import net.chesstango.gardel.epd.EPD;
 import net.chesstango.gardel.fen.FEN;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -15,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PGNTest {
 
     @Test
-    public void test_toEPD(){
+    public void test_toEPD() {
         PGN pgn = new PGN();
 
-        pgn.setPgnMoves(List.of(new PGNMove("a4")));
+        pgn.setPgnMoves(List.of(new PGNMove("a4", Collections.emptyMap())));
 
         Stream<EPD> epdStream = pgn.toEPD();
 

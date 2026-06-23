@@ -4,6 +4,7 @@ import net.chesstango.gardel.fen.FEN;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +31,7 @@ public class PGNEncoderTest {
         pgn.setBlack("TheBlack");
         pgn.setFen(FEN.from("1nbqk2r/2p2ppp/r3pn2/pp6/PbpP4/5NP1/1PQBPPBP/RN3RK1 b k a3 0 9"));
         pgn.setResult(PGN.Result.ONGOING);
-        pgn.setPgnMoves(List.of(new PGNMove("Ng4"), new PGNMove("d5")));
+        pgn.setPgnMoves(List.of(new PGNMove("Ng4", Collections.emptyMap()), new PGNMove("d5", Collections.emptyMap())));
 
         assertEquals("""
                 [Event "TheEvent"]
@@ -57,7 +58,7 @@ public class PGNEncoderTest {
         pgn.setFen(FEN.from("1nbqk2r/2p2ppp/r3pn2/pp6/PbpP4/5NP1/1PQBPPBP/RN3RK1 b k a3 0 9"));
         pgn.setResult(PGN.Result.ONGOING);
         pgn.setTermination(PGN.Termination.NORMAL);
-        pgn.setPgnMoves(List.of(new PGNMove("Ng4"), new PGNMove("d5")));
+        pgn.setPgnMoves(List.of(new PGNMove("Ng4", Collections.emptyMap()), new PGNMove("d5", Collections.emptyMap())));
 
         assertEquals("""
                 [Event "TheEvent"]

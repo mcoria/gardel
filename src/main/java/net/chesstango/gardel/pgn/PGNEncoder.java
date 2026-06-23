@@ -23,7 +23,7 @@ public class PGNEncoder {
             sb.append("[FEN \"").append(pgn.getFen()).append("\"]\n");
         }
         sb.append("[Result \"").append(pgn.getResult()).append("\"]\n");
-        if(pgn.getTermination()!=null){
+        if (pgn.getTermination() != null) {
             sb.append("[Termination \"").append(pgn.getTermination()).append("\"]\n");
         }
         sb.append("\n");
@@ -31,11 +31,10 @@ public class PGNEncoder {
 
         List<PGNMove> moveList = pgn.getPgnMoves();
 
-
         if (!moveList.isEmpty()) {
             int clock = pgn.getFen() != null ? Integer.parseInt(pgn.getFen().getFullMoveClock()) : 1;
 
-            boolean whiteTurn = pgn.getFen() != null ? pgn.getFen().getActiveColor().equals("w") : true;
+            boolean whiteTurn = pgn.getFen() == null || "w".equals(pgn.getFen().getActiveColor());
 
             boolean firstMovePrinted = false;
 
