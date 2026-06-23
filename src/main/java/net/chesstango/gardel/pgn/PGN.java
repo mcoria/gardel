@@ -135,12 +135,25 @@ public class PGN implements Serializable {
     private List<PGNMove> pgnMoves;
 
 
+    /**
+     * Sets a custom PGN tag with the specified name and value.
+     *
+     * @param tagName  the name of the tag to set
+     * @param tagValue the value of the tag
+     * @return the previous value associated with the tag name, or null if there was no mapping
+     */
     public String setTag(String tagName, String tagValue) {
         return otherTags.put(tagName, tagValue);
     }
 
-    public String getTag(String tagName) {
-        return otherTags.get(tagName);
+    /**
+     * Retrieves the value of a custom PGN tag by its name.
+     *
+     * @param tagName the name of the tag to retrieve
+     * @return an Optional containing the tag value if present, or an empty Optional if not found
+     */
+    public Optional<String> getTag(String tagName) {
+        return Optional.ofNullable(otherTags.get(tagName));
     }
 
     /**

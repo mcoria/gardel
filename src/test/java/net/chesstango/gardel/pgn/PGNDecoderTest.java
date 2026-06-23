@@ -412,7 +412,7 @@ public class PGNDecoderTest {
                 [Black "B"]
                 [Result "*"]
                 
-                1. e4 {[%eval 0.22] [%clk 0:03:00]} e5 {[%eval 0.18] [%clk 0:03:00]} *
+                1. e4 {[%eval 0.22] [%clk 0:03:00]} e5 {[%eval 0.18] [%clk 0:04:00]} *
                 """;
         PGN pgn = PGN.from(pgnStr);
 
@@ -422,9 +422,17 @@ public class PGNDecoderTest {
 
         assertEquals(2, moves.size());
 
-        PGNMove firstMove = moves.getFirst();
+        PGNMove pgnMove = moves.getFirst();
 
-        assertEquals("e4", firstMove.getSanMove());
+        assertEquals("e4", pgnMove.getSanMove());
+        assertEquals("0.22", pgnMove.getCommand("eval"));
+        assertEquals("0:03:00", pgnMove.getCommand("clk"));
+
+        pgnMove = moves.getLast();
+
+        assertEquals("e5", pgnMove.getSanMove());
+        assertEquals("0.18", pgnMove.getCommand("eval"));
+        assertEquals("0:04:00", pgnMove.getCommand("clk"));
     }
 
 
