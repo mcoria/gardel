@@ -33,16 +33,16 @@ public class PGNEncoder {
         sb.append("\n");
 
 
-        List<PGNMove> moveList = pgn.getPgnMoves();
+        List<PGNMove> moves = pgn.getPgnMoves();
 
-        if (!moveList.isEmpty()) {
+        if (!moves.isEmpty()) {
             int clock = pgn.getFen() != null ? Integer.parseInt(pgn.getFen().getFullMoveClock()) : 1;
 
             boolean whiteTurn = pgn.getFen() == null || "w".equals(pgn.getFen().getActiveColor());
 
             boolean firstMovePrinted = false;
 
-            for (int i = 0; i < moveList.size(); i++) {
+            for (int i = 0; i < moves.size(); i++) {
                 if (i > 0 && i % 10 == 0) {
                     sb.append("\n");
                 }
@@ -50,7 +50,7 @@ public class PGNEncoder {
                 if (whiteTurn) {
                     sb.append(clock)
                             .append(". ")
-                            .append(moveList.get(i).getSanMove())
+                            .append(moves.get(i).toString())
                             .append(" ");
                     whiteTurn = false;
                 } else {
@@ -58,7 +58,7 @@ public class PGNEncoder {
                         sb.append(clock)
                                 .append("... ");
                     }
-                    sb.append(moveList.get(i).getSanMove())
+                    sb.append(moves.get(i).toString())
                             .append(" ");
                     whiteTurn = true;
                     clock++;

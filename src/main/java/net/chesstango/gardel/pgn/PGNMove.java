@@ -19,4 +19,28 @@ import java.util.Map;
 public class PGNMove {
     private String sanMove;
     private Map<String, String> commands;
+
+    public String putCommand(String name, String value) {
+        if (commands == null) commands = new HashMap<>();
+        return commands.put(name, value);
+    }
+
+    public String getCommand(String name) {
+        if (commands == null) return null;
+        return commands.get(name);
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(sanMove);
+        if (commands != null && !commands.isEmpty()) {
+            sb.append(" {");
+            commands.forEach((key, value) -> sb.append(String.format("[%%%s %s]", key, value)));
+            sb.append("}");
+        }
+        return sb.toString();
+    }
+
 }
