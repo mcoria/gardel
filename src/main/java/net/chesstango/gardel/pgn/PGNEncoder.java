@@ -1,9 +1,6 @@
 package net.chesstango.gardel.pgn;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Mauricio Coria
@@ -14,8 +11,8 @@ public class PGNEncoder {
         StringBuilder sb = new StringBuilder();
 
         sb.append("[Event \"").append(pgn.getEvent() == null ? "?" : pgn.getEvent()).append("\"]\n");
-        sb.append("[Site \"").append(pgn.getSite() == null ? getComputerName() : pgn.getSite()).append("\"]\n");
-        sb.append("[Date \"").append(pgn.getDate() == null ? getToday() : pgn.getDate()).append("\"]\n");
+        sb.append("[Site \"").append(pgn.getSite() == null ? "?" : pgn.getSite()).append("\"]\n");
+        sb.append("[Date \"").append(pgn.getDate() == null ? "?" : pgn.getDate()).append("\"]\n");
         sb.append("[Round \"").append(pgn.getRound() == null ? "?" : pgn.getRound()).append("\"]\n");
         sb.append("[White \"").append(pgn.getWhite() == null ? "X" : pgn.getWhite()).append("\"]\n");
         sb.append("[Black \"").append(pgn.getBlack() == null ? "X" : pgn.getBlack()).append("\"]\n");
@@ -71,19 +68,6 @@ public class PGNEncoder {
         sb.append(pgn.getResult()).append("\n");
 
         return sb.toString();
-    }
-
-    private String getToday() {
-        String pattern = "yyyy.MM.dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.format(new Date());
-    }
-
-    private String getComputerName() {
-        Map<String, String> env = System.getenv();
-        if (env.containsKey("COMPUTERNAME"))
-            return env.get("COMPUTERNAME");
-        else return env.getOrDefault("HOSTNAME", "Unknown Computer");
     }
 
 }
