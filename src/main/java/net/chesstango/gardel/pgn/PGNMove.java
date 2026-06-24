@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Mauricio Coria
@@ -17,6 +18,8 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PGNMove {
+    public static final String EVAL_COMMAND = "eval";
+
     private String sanMove;
     private Map<String, String> commands;
 
@@ -25,9 +28,9 @@ public class PGNMove {
         return commands.put(name, value);
     }
 
-    public String getCommand(String name) {
-        if (commands == null) return null;
-        return commands.get(name);
+    public Optional<String> getCommand(String name) {
+        if (commands == null) return Optional.empty();
+        return Optional.ofNullable(commands.get(name));
     }
 
 

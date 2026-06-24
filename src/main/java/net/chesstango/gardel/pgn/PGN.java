@@ -335,6 +335,8 @@ public class PGN implements Serializable {
             epd.setC5(String.format("result='%s'", result));
         }
 
+        move.getCommand(PGNMove.EVAL_COMMAND).ifPresent(epd::setCentiPawnEvaluation);
+
         epd.setSuppliedMoveStr(move.getSanMove());
 
         return epd;

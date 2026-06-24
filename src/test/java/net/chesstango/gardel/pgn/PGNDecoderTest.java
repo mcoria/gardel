@@ -425,14 +425,14 @@ public class PGNDecoderTest {
         PGNMove pgnMove = moves.getFirst();
 
         assertEquals("e4", pgnMove.getSanMove());
-        assertEquals("0.22", pgnMove.getCommand("eval"));
-        assertEquals("0:03:00", pgnMove.getCommand("clk"));
+        assertEquals("0.22", pgnMove.getCommand("eval").orElse(null));
+        assertEquals("0:03:00", pgnMove.getCommand("clk").orElse(null));
 
         pgnMove = moves.getLast();
 
         assertEquals("e5", pgnMove.getSanMove());
-        assertEquals("0.18", pgnMove.getCommand("eval"));
-        assertEquals("0:04:00", pgnMove.getCommand("clk"));
+        assertEquals("0.18", pgnMove.getCommand("eval").orElse(null));
+        assertEquals("0:04:00", pgnMove.getCommand("clk").orElse(null));
     }
 
 
