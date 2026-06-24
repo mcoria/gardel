@@ -207,9 +207,6 @@ public class PGN implements Serializable {
 
         MinChess game = MinChess.from(getFen() == null ? FEN.START_POSITION : getFen());
 
-        List<EPD> epdList = new ArrayList<>(getPgnMoves().size());
-        //int lastClock = 2;
-
         SANDecoder<Short> sanDecoder = new SANDecoder<>(new MinChessMoveSupplier(game));
 
         for (PGNMove move : getPgnMoves()) {
@@ -222,7 +219,7 @@ public class PGN implements Serializable {
 
                 EPD epd = createEPD(move, fen);
 
-                epdList.add(epd);
+                fenStreamBuilder.add(epd);
 
                 game.doMove(legalMoveToExecute);
 
@@ -230,11 +227,6 @@ public class PGN implements Serializable {
                 System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), move.getSanMove(), fen.toString());
                 return Stream.empty();
             }
-        }
-
-        for (EPD epd : epdList) {
-            //epd.setC6(String.format("totalClock=%d", lastClock - 2));
-            fenStreamBuilder.add(epd);
         }
 
         return fenStreamBuilder.build();
