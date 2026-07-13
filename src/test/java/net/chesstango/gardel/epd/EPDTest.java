@@ -31,11 +31,12 @@ public class EPDTest {
     }
 
     @Test
-    public void testCE() {
+    public void testCentiPawnEvaluation() {
         String epdStr = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - ce 123;";
         EPD epd = EPD.from(epdStr);
         assertEquals("123", epd.getCentiPawnEvaluation());
         assertEquals(epdStr, epd.toString());
+        assertTrue(epd.isEvaluationSuccess("123"));
     }
 
     @Test
