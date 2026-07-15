@@ -87,6 +87,15 @@ public class EPD implements Serializable {
     }
 
     /**
+     *
+     * @param evaluation
+     * @return
+     */
+    public boolean isEvaluationSuccess(String evaluation) {
+        return centiPawnEvaluation != null && centiPawnEvaluation.equals(evaluation);
+    }
+
+    /**
      * @param move coordinate encoding
      * @return
      */

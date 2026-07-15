@@ -5,10 +5,7 @@ import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.internal.antlr4.PGNBaseListener;
 import net.chesstango.gardel.internal.antlr4.PGNParser;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -23,8 +20,13 @@ class PGNGardelListener extends PGNBaseListener {
 
     private String tagName;
     private String tagValue;
-    private List<String> moveList;
+    private List<PGNMove> moveList;
     private int recursiveVariation;
+
+    private PGNMove pgnMove;
+    private String commandName;
+    private String commandValue;
+    private Map<String, String> commands;
 
     @Override
     public void enterPgn_database(PGNParser.Pgn_databaseContext ctx) {
@@ -34,6 +36,16 @@ class PGNGardelListener extends PGNBaseListener {
     @Override
     public void enterPgn_game(PGNParser.Pgn_gameContext ctx) {
         pgn = new PGN();
+
+        tagName = null;
+        tagValue = null;
+        moveList = null;
+        recursiveVariation = 0;
+
+        pgnMove = null;
+        commands = null;
+        commandName = null;
+        commandValue = null;
     }
 
     @Override
@@ -99,8 +111,7 @@ class PGNGardelListener extends PGNBaseListener {
                 break;
 
             default:
-                Map<String, String> otherTags = pgn.getOtherTags();
-                otherTags.put(tagName, tagValue);
+                pgn.setTag(tagName, tagValue);
                 break;
         }
     }
@@ -113,15 +124,9 @@ class PGNGardelListener extends PGNBaseListener {
 
     @Override
     public void exitMovetext_section(PGNParser.Movetext_sectionContext ctx) {
-        pgn.setSanMoves(moveList);
+        pgn.setPgnMoves(moveList);
     }
 
-    @Override
-    public void enterSan_move(PGNParser.San_moveContext ctx) {
-        if (recursiveVariation == 0) {
-            moveList.add(ctx.getText());
-        }
-    }
 
     @Override
     public void enterRecursive_variation(PGNParser.Recursive_variationContext ctx) {
@@ -131,5 +136,67 @@ class PGNGardelListener extends PGNBaseListener {
     @Override
     public void exitRecursive_variation(PGNParser.Recursive_variationContext ctx) {
         recursiveVariation--;
+    }
+
+    @Override
+    public void enterSan_move(PGNParser.San_moveContext ctx) {
+        if (recursiveVariation == 0) {
+            if (pgnMove != null) {
+                moveList.add(pgnMove);
+            }
+            pgnMove = new PGNMove();
+            pgnMove.setSanMove(ctx.getText());
+        }
+    }
+
+    @Override
+    public void enterMove_annotation(PGNParser.Move_annotationContext ctx) {
+        if (recursiveVariation == 0) {
+            commands = new HashMap<>();
+        }
+    }
+
+
+    @Override
+    public void exitMove_annotation(PGNParser.Move_annotationContext ctx) {
+        pgnMove.setCommands(commands);
+    }
+
+
+    @Override
+    public void enterCommand(PGNParser.CommandContext ctx) {
+        if (recursiveVariation == 0) {
+            commandName = "";
+            commandValue = "";
+        }
+    }
+
+    @Override
+    public void exitCommand(PGNParser.CommandContext ctx) {
+        if (recursiveVariation == 0) {
+            commands.put(commandName, commandValue);
+        }
+    }
+
+    @Override
+    public void enterCommand_name(PGNParser.Command_nameContext ctx) {
+        if (recursiveVariation == 0) {
+            commandName = ctx.getText();
+        }
+    }
+
+
+    @Override
+    public void enterCommand_value(PGNParser.Command_valueContext ctx) {
+        if (recursiveVariation == 0) {
+            commandValue = ctx.getText();
+        }
+    }
+
+    @Override
+    public void enterGame_termination(PGNParser.Game_terminationContext ctx) {
+        if (pgnMove != null) {
+            moveList.add(pgnMove);
+        }
     }
 }

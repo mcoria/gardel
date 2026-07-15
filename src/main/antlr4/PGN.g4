@@ -42,14 +42,15 @@ tag_value
 
 /// <movetext-section> ::= <element-sequence> <game-termination>
 movetext_section
-    : element_sequence game_termination
+    : element_sequence* game_termination
     ;
 
 /// <element-sequence> ::= <element> <element-sequence>
 ///                        <recursive-variation> <element-sequence>
 ///                        <empty>
 element_sequence
-    : (element | recursive_variation)*
+    : element
+    | recursive_variation
     ;
 
 /// <element> ::= <move-number-indication>
@@ -58,14 +59,31 @@ element_sequence
 element
     : move_number_indication
     | san_move
+    | move_annotation
     | NUMERIC_ANNOTATION_GLYPH
+    ;
+
+move_annotation
+    : LEFT_BRACE (command | SYMBOL)* RIGHT_BRACE
+    ;
+
+command
+    : LEFT_BRACKET COMMAND_ESCAPE command_name command_value RIGHT_BRACKET
+    ;
+
+command_name
+    : SYMBOL
+    ;
+
+command_value
+    : ~RIGHT_BRACKET*
     ;
 
 move_number_indication
     : INTEGER
-    | INTEGER PERIOD
-    | INTEGER PERIOD PERIOD PERIOD
-    | INTEGER PERIOD PERIOD PERIOD PERIOD
+    | INTEGER PERIOD                            // White move
+    | INTEGER PERIOD PERIOD PERIOD              // Black move
+    | INTEGER PERIOD PERIOD PERIOD PERIOD       // Black move (first PGN move)
     ;
 
 san_move
@@ -77,10 +95,7 @@ recursive_variation
     : LEFT_PARENTHESIS element_sequence RIGHT_PARENTHESIS
     ;
 
-/// <game-termination> ::= 1-0
-///                        0-1
-///                        1/2-1/2
-///                        *
+
 game_termination
     : WHITE_WINS
     | BLACK_WINS
@@ -109,14 +124,6 @@ REST_OF_LINE_COMMENT
     : ';' ~[\r\n]* -> skip
     ;
 
-/// Brace comments do not nest; a left brace character appearing in a brace comment
-/// loses its special meaning and is ignored.  A semicolon appearing inside of a
-/// brace comment loses its special meaning and is ignored.  Braces appearing
-/// inside of a semicolon comments lose their special meaning and are ignored.
-BRACE_COMMENT
-    : '{' ~'}'* '}' -> skip
-    ;
-
 /// There is a special escape mechanism for PGN data.  This mechanism is triggered
 /// by a percent sign character ("%") appearing in the first column of a line; the
 /// data on the rest of the line is ignored by publicly available PGN scanning
@@ -125,9 +132,9 @@ BRACE_COMMENT
 ///
 /// A percent sign appearing in any other place other than the first position in a
 /// line does not trigger the escape mechanism.
-ESCAPE
-    : {getCharPositionInLine() == 0}? '%' ~[\r\n]* -> skip
-    ;
+///ESCAPE
+///    : {getCharPositionInLine() == 0}? '%' ~[\r\n]* -> skip
+///    ;
 
 SPACES
     : [ \t\r\n]+ -> skip
@@ -167,6 +174,20 @@ PERIOD
 /// terminating.
 ASTERISK
     : '*'
+    ;
+
+COMMAND_ESCAPE
+    : '%'
+    ;
+
+/// The left and right bracket characters ("[" and "]") are tokens.  They are used
+/// to delimit tag pairs (see below).  Both are self terminating.
+LEFT_BRACE
+    : '{'
+    ;
+
+RIGHT_BRACE
+    : '}'
     ;
 
 /// The left and right bracket characters ("[" and "]") are tokens.  They are used

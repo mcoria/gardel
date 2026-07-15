@@ -1,10 +1,12 @@
 package net.chesstango.gardel.pgn;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import net.chesstango.gardel.epd.EPD;
 import net.chesstango.gardel.fen.FEN;
 import net.chesstango.gardel.minchess.MinChess;
+import net.chesstango.gardel.minchess.MinChessMoveSupplier;
 import net.chesstango.gardel.move.Move;
 import net.chesstango.gardel.move.SANDecoder;
 import org.antlr.v4.runtime.CharStreams;
@@ -12,8 +14,6 @@ import org.antlr.v4.runtime.CharStreams;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Stream;
-
-import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
 
 /**
  * Represents a chess game in Portable Game Notation (PGN) format.
@@ -23,8 +23,6 @@ import static net.chesstango.gardel.minchess.MinChess.MAX_MOVES;
  *
  * @author Mauricio Coria
  */
-@Getter
-@Setter
 public class PGN implements Serializable {
     /**
      * Represents the possible results of a chess game.
@@ -62,50 +60,100 @@ public class PGN implements Serializable {
     /**
      * The name of the tournament or match event.
      */
+    @Getter
+    @Setter
     private String event;
+
     /**
      * The location where the game was played.
      */
+    @Getter
+    @Setter
     private String site;
+
     /**
      * The date when the game was played.
      */
+    @Getter
+    @Setter
     private String date;
+
     /**
      * The round number of the tournament.
      */
+    @Getter
+    @Setter
     private String round;
+
     /**
      * The name of the player with the white pieces.
      */
+    @Getter
+    @Setter
     private String white;
+
     /**
      * The name of the player with the black pieces.
      */
+    @Getter
+    @Setter
     private String black;
+
     /**
      * The starting position in FEN notation if different from the standard starting position.
      */
+    @Getter
+    @Setter
     private FEN fen;
+
     /**
      * The result of the game.
      */
+    @Getter
+    @Setter
     private Result result;
+
     /**
      * The type of termination for the game.
      */
+    @Getter
+    @Setter
     private Termination termination;
 
     /**
      * Additional PGN tags not covered by the standard fields.
      */
-    private Map<String, String> otherTags = new HashMap<>();
+    @Getter(AccessLevel.PACKAGE)
+    private final Map<String, String> otherTags = new TreeMap<>();
 
     /**
      * The list of moves in Standard Algebraic Notation (SAN).
      */
-    private List<String> sanMoves;
+    @Getter
+    @Setter
+    private List<PGNMove> pgnMoves;
 
+
+    /**
+     * Sets a custom PGN tag with the specified name and value.
+     *
+     * @param tagName  the name of the tag to set
+     * @param tagValue the value of the tag
+     * @return the previous value associated with the tag name, or null if there was no mapping
+     */
+    public String setTag(String tagName, String tagValue) {
+        return otherTags.put(tagName, tagValue);
+    }
+
+    /**
+     * Retrieves the value of a custom PGN tag by its name.
+     *
+     * @param tagName the name of the tag to retrieve
+     * @return an Optional containing the tag value if present, or an empty Optional if not found
+     */
+    public Optional<String> getTag(String tagName) {
+        return Optional.ofNullable(otherTags.get(tagName));
+    }
 
     /**
      * Creates a PGN instance from a PGN format string.
@@ -133,7 +181,7 @@ public class PGN implements Serializable {
 
         pgn.setResult(Result.ONGOING);
 
-        pgn.setSanMoves(Collections.emptyList());
+        pgn.setPgnMoves(Collections.emptyList());
 
         return pgn;
     }
@@ -159,69 +207,26 @@ public class PGN implements Serializable {
 
         MinChess game = MinChess.from(getFen() == null ? FEN.START_POSITION : getFen());
 
-        List<EPD> epdList = new ArrayList<>(getSanMoves().size());
+        SANDecoder<Short> sanDecoder = new SANDecoder<>(new MinChessMoveSupplier(game));
 
-        int lastClock = 2;
-
-        SANDecoder<Short> sanDecoder = new SANDecoder<>(
-                (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
-                        get(game, fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)
-        );
-
-        for (String moveStr : getSanMoves()) {
+        for (PGNMove move : getPgnMoves()) {
 
             FEN fen = game.toFEN();
 
-            Short legalMoveToExecute = sanDecoder.decode(moveStr, fen);
+            Short legalMoveToExecute = sanDecoder.decode(move.getSanMove(), fen);
 
             if (legalMoveToExecute != null) {
-                EPD epd = new EPD();
 
-                epd.setPiecePlacement(fen.getPiecePlacement());
-                epd.setActiveColor(fen.getActiveColor());
-                epd.setCastingsAllowed(fen.getCastingsAllowed());
-                epd.setEnPassantSquare(fen.getEnPassantSquare());
-                epd.setHalfMoveClock(fen.getHalfMoveClock());
-                epd.setFullMoveClock(fen.getFullMoveClock());
+                EPD epd = createEPD(move, fen);
 
-                epd.setId(String.format("%s %s", fen.getFullMoveClock(), fen.getActiveColor()));
-
-                if (event != null) {
-                    epd.setC0(String.format("event='%s'", event));
-                }
-                if (site != null) {
-                    epd.setC1(String.format("site='%s'", site));
-                }
-                if (date != null) {
-                    epd.setC2(String.format("date='%s'", date));
-                }
-                if (white != null) {
-                    epd.setC3(String.format("white='%s'", white));
-                }
-                if (black != null) {
-                    epd.setC4(String.format("black='%s'", black));
-                }
-                if (result != null) {
-                    epd.setC5(String.format("result='%s'", result));
-                }
-
-                epd.setC6(String.format("clock=%d", lastClock++ / 2));
-
-                epd.setSuppliedMoveStr(moveStr);
-
-                epdList.add(epd);
+                fenStreamBuilder.add(epd);
 
                 game.doMove(legalMoveToExecute);
 
             } else {
-                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), moveStr, fen.toString());
+                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), move.getSanMove(), fen.toString());
                 return Stream.empty();
             }
-        }
-
-        for (EPD epd : epdList) {
-            epd.setC7(String.format("totalClock=%d", lastClock - 2));
-            fenStreamBuilder.add(epd);
         }
 
         return fenStreamBuilder.build();
@@ -238,18 +243,15 @@ public class PGN implements Serializable {
 
         MinChess game = MinChess.from(getFen() == null ? FEN.from(FEN.START_POSITION_STRING) : getFen());
 
-        SANDecoder<Short> sanDecoder = new SANDecoder<>(
-                (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
-                        get(game, fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)
-        );
+        SANDecoder<Short> sanDecoder = new SANDecoder<>(new MinChessMoveSupplier(game));
 
         FEN fenGame = game.toFEN();
 
         fenBuilder.add(fenGame);
 
-        for (String moveStr : getSanMoves()) {
+        for (PGNMove move : getPgnMoves()) {
 
-            Short minChessMove = sanDecoder.decode(moveStr, fenGame);
+            Short minChessMove = sanDecoder.decode(move.getSanMove(), fenGame);
 
             if (minChessMove != null) {
 
@@ -260,7 +262,7 @@ public class PGN implements Serializable {
                 fenBuilder.add(fenGame);
 
             } else {
-                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), moveStr, fenGame.toString());
+                System.err.printf("[%s] %s is not in the list of legal moves for %s%n", getEvent(), move.getSanMove(), fenGame.toString());
                 return Stream.empty();
             }
         }
@@ -269,25 +271,21 @@ public class PGN implements Serializable {
     }
 
     public List<String> getCoordinateMoves() {
-        List<String> coordinateMoves = new ArrayList<>(getSanMoves().size());
+        List<String> coordinateMoves = new ArrayList<>(getPgnMoves().size());
 
         MinChess game = MinChess.from(getFen() == null ? FEN.from(FEN.START_POSITION_STRING) : getFen());
 
-        SANDecoder<Short> sanDecoder = new SANDecoder<>(
-                (fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion) ->
-                        get(game, fromFile, fromRank, toFile, toRank, fromPiece, toPiece, promotion)
-        );
+        SANDecoder<Short> sanDecoder = new SANDecoder<>(new MinChessMoveSupplier(game));
 
         SANDecoder<Move> sanToMoveDecoder = new SANDecoder<>(new Move.GardelMoveSupplier());
 
-
         FEN fenGame = game.toFEN();
 
-        for (String sanMove : getSanMoves()) {
+        for (PGNMove sanMove : getPgnMoves()) {
 
-            Short minChessMove = sanDecoder.decode(sanMove, fenGame);
+            Short minChessMove = sanDecoder.decode(sanMove.getSanMove(), fenGame);
 
-            Move move = sanToMoveDecoder.decode(sanMove, fenGame);
+            Move move = sanToMoveDecoder.decode(sanMove.getSanMove(), fenGame);
 
             if (minChessMove != null && move != null) {
 
@@ -306,40 +304,42 @@ public class PGN implements Serializable {
         return coordinateMoves;
     }
 
-    /**
-     * Finds a legal move matching the specified move parameters.
-     *
-     * @param minchess  the chess engine instance
-     * @param fromFile  the source file (column) of the move
-     * @param fromRank  the source rank (row) of the move
-     * @param toFile    the destination file (column) of the move
-     * @param toRank    the destination rank (row) of the move
-     * @param fromPiece the piece type being moved
-     * @param toPiece   the piece type at the destination square (0 if empty, or captured piece)
-     * @param promotion the promotion piece type (0 if no promotion)
-     * @return the encoded move as a Short, or null if no matching legal move is found
-     */
-    private Short get(MinChess minchess, int fromFile, int fromRank, int toFile, int toRank, int fromPiece, int toPiece, int promotion) {
-        short[] moves = new short[MAX_MOVES];
-        int size = minchess.generateMoves(moves);
-        for (int i = 0; i < size; i++) {
-            final short move = moves[i];
-            final int fromFileFilter = MinChess.fromFile(move);
-            final int fromRankFilter = MinChess.fromRank(move);
-            final int fromPieceFilter = minchess.getFromPiece(move);
+    EPD createEPD(PGNMove move, FEN fen) {
+        EPD epd = new EPD();
 
-            final int toFileFilter = MinChess.toFile(move);
-            final int toRankFilter = MinChess.toRank(move);
-            final int toPieceFilter = minchess.getToPiece(move);
+        epd.setPiecePlacement(fen.getPiecePlacement());
+        epd.setActiveColor(fen.getActiveColor());
+        epd.setCastingsAllowed(fen.getCastingsAllowed());
+        epd.setEnPassantSquare(fen.getEnPassantSquare());
+        epd.setHalfMoveClock(fen.getHalfMoveClock());
+        epd.setFullMoveClock(fen.getFullMoveClock());
 
-            final int promotionFilter = MinChess.getPromotionPiece(move);
+        epd.setId(String.format("%s %s", fen.getFullMoveClock(), fen.getActiveColor()));
 
-            if (fromFile == fromFileFilter && fromRank == fromRankFilter && fromPiece == fromPieceFilter &&
-                    toFile == toFileFilter && toRank == toRankFilter && toPiece == toPieceFilter &&
-                    promotion == promotionFilter) {
-                return move;
-            }
+        if (event != null) {
+            epd.setC0(String.format("event='%s'", event));
         }
-        return null;
+        if (site != null) {
+            epd.setC1(String.format("site='%s'", site));
+        }
+        if (date != null) {
+            epd.setC2(String.format("date='%s'", date));
+        }
+        if (white != null) {
+            epd.setC3(String.format("white='%s'", white));
+        }
+        if (black != null) {
+            epd.setC4(String.format("black='%s'", black));
+        }
+        if (result != null) {
+            epd.setC5(String.format("result='%s'", result));
+        }
+
+        move.getCommand(PGNMove.EVAL_COMMAND).ifPresent(epd::setCentiPawnEvaluation);
+
+        epd.setSuppliedMoveStr(move.getSanMove());
+
+        return epd;
     }
+
 }

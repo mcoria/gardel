@@ -1,6 +1,8 @@
 package net.chesstango.gardel.epd;
 
 import net.chesstango.gardel.fen.FEN;
+import net.chesstango.gardel.minchess.Piece;
+import net.chesstango.gardel.move.Move;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -136,6 +138,74 @@ public class EPDParserTest {
     }
 
     @Test
+    public void testReadEDP09() {
+        EPD epd = epdParser.parseEPD("5rk1/1ppb3p/p1pb4/6q1/3P1p1r/2P1R2P/PP1BQ1P1/5RKN w - - bm Rg3; id \"WAC.003\";");
+
+        assertEquals("5rk1/1ppb3p/p1pb4/6q1/3P1p1r/2P1R2P/PP1BQ1P1/5RKN", epd.getPiecePlacement());
+        assertEquals("w", epd.getActiveColor());
+        assertEquals("-", epd.getCastingsAllowed());
+        assertEquals("-", epd.getEnPassantSquare());
+        assertEquals("Rg3", epd.getBestMovesStr());
+        assertEquals("WAC.003", epd.getId());
+        assertEquals(1, epd.getBestMovesStr().split(" ").length);
+
+        Move firstMove = epd.sanMovesToGardelMoves(epd.getBestMovesStr()).getFirst();
+        assertEquals(Move.Square.e3, firstMove.from());
+        assertEquals(Move.Square.g3, firstMove.to());
+    }
+
+    @Test
+    public void testReadEDP10() {
+        EPD epd = epdParser.parseEPD("r3r1k1/pp1n1ppp/2p5/4Pb2/2B2P2/B1P5/P5PP/R2R2K1 w - - bm e6; id \"WAC.072\";");
+
+        assertEquals("r3r1k1/pp1n1ppp/2p5/4Pb2/2B2P2/B1P5/P5PP/R2R2K1", epd.getPiecePlacement());
+        assertEquals("w", epd.getActiveColor());
+        assertEquals("-", epd.getCastingsAllowed());
+        assertEquals("-", epd.getEnPassantSquare());
+        assertEquals("e6", epd.getBestMovesStr());
+        assertEquals("WAC.072", epd.getId());
+        assertEquals(1, epd.getBestMovesStr().split(" ").length);
+
+        Move firstMove = epd.sanMovesToGardelMoves(epd.getBestMovesStr()).getFirst();
+        assertEquals(Move.Square.e5, firstMove.from());
+        assertEquals(Move.Square.e6, firstMove.to());
+    }
+
+    @Test
+    public void testReadEDP11() {
+        EPD epd = epdParser.parseEPD("r2r2k1/p2n1p2/4q2p/3p2p1/1PpB4/P1NnPP2/2Q3PP/R2R2K1 b - - bm N7e5; c0 \"N7e5=10, a5=6, a6=6, Nb8=5\"; id \"STS(v12.0) Center Control.081\";");
+
+        assertEquals("r2r2k1/p2n1p2/4q2p/3p2p1/1PpB4/P1NnPP2/2Q3PP/R2R2K1", epd.getPiecePlacement());
+        assertEquals("b", epd.getActiveColor());
+        assertEquals("-", epd.getCastingsAllowed());
+        assertEquals("-", epd.getEnPassantSquare());
+        assertEquals("N7e5", epd.getBestMovesStr());
+        assertEquals("STS(v12.0) Center Control.081", epd.getId());
+        assertEquals(1, epd.getBestMovesStr().split(" ").length);
+
+        Move firstMove = epd.sanMovesToGardelMoves(epd.getBestMovesStr()).getFirst();
+        assertEquals(Move.Square.d7, firstMove.from());
+        assertEquals(Move.Square.e5, firstMove.to());
+    }
+
+    @Test
+    public void testReadEDP12() {
+        EPD epd = epdParser.parseEPD("3r2k1/1p3ppp/2pq4/p1n5/P6P/1P6/1PB2QP1/1K2R3 w - - am Rd1; id \"position 03\";");
+
+        assertEquals("3r2k1/1p3ppp/2pq4/p1n5/P6P/1P6/1PB2QP1/1K2R3", epd.getPiecePlacement());
+        assertEquals("w", epd.getActiveColor());
+        assertEquals("-", epd.getCastingsAllowed());
+        assertEquals("-", epd.getEnPassantSquare());
+        assertEquals("Rd1", epd.getAvoidMovesStr());
+        assertEquals("position 03", epd.getId());
+        assertEquals(1, epd.getAvoidMovesStr().split(" ").length);
+
+        Move firstMove = epd.sanMovesToGardelMoves(epd.getAvoidMovesStr()).getFirst();
+        assertEquals(Move.Square.e1, firstMove.from());
+        assertEquals(Move.Square.d1, firstMove.to());
+    }
+
+    @Test
     public void testReadSM() {
         EPD epd = epdParser.parseEPD("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - sm a4; c0 \"c0\"; c1 \"c1\"; c2 \"c2\"; c3 \"c3\"; c4 \"c4\"; c5 \"c5\"; c6 \"c6\"; id \"1\";");
 
@@ -190,4 +260,6 @@ public class EPDParserTest {
 
         assertEquals(FEN.START_POSITION, epd.toFEN());
     }
+
+
 }
