@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static net.chesstango.gardel.pgn.PGNMove.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -412,7 +413,7 @@ public class PGNDecoderTest {
                 [Black "B"]
                 [Result "*"]
                 
-                1. e4 {[%eval 0.22] [%clk 0:03:00]} e5 {[%eval 0.18] [%clk 0:04:00]} *
+                1. e4 {[%eval 0.22] [%clk 0:03:00] [%emt 0:10:00]} e5 {[%eval 0.18] [%clk 0:04:00] [%emt 0:20:00]} *
                 """;
         PGN pgn = PGN.from(pgnStr);
 
@@ -425,14 +426,16 @@ public class PGNDecoderTest {
         PGNMove pgnMove = moves.getFirst();
 
         assertEquals("e4", pgnMove.getSanMove());
-        assertEquals("0.22", pgnMove.getCommand("eval").orElse(null));
-        assertEquals("0:03:00", pgnMove.getCommand("clk").orElse(null));
+        assertEquals("0.22", pgnMove.getCommand(EVAL_COMMAND).orElse(null));
+        assertEquals("0:03:00", pgnMove.getCommand(CLOCK_COMMAND).orElse(null));
+        assertEquals("0:10:00", pgnMove.getCommand(ELAPSED_MOVE_TIME_COMMAND).orElse(null));
 
         pgnMove = moves.getLast();
 
         assertEquals("e5", pgnMove.getSanMove());
-        assertEquals("0.18", pgnMove.getCommand("eval").orElse(null));
-        assertEquals("0:04:00", pgnMove.getCommand("clk").orElse(null));
+        assertEquals("0.18", pgnMove.getCommand(EVAL_COMMAND).orElse(null));
+        assertEquals("0:04:00", pgnMove.getCommand(CLOCK_COMMAND).orElse(null));
+        assertEquals("0:20:00", pgnMove.getCommand(ELAPSED_MOVE_TIME_COMMAND).orElse(null));
     }
 
 
