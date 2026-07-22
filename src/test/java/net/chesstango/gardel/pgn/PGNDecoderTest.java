@@ -413,7 +413,7 @@ public class PGNDecoderTest {
                 [Black "B"]
                 [Result "*"]
                 
-                1. e4 {[%eval 0.22] [%clk 0:03:00] [%emt 0:10:00]} e5 {[%eval 0.18] [%clk 0:04:00] [%emt 0:20:00]} *
+                1. e4 {[%eval 0.22][%clk 0:03:00][%emt 0:10:00]} e5 {[%eval 0.18][%clk 0:04:00][%emt 0:20:00]} *
                 """;
         PGN pgn = PGN.from(pgnStr);
 
